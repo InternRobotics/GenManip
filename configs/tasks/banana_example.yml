@@ -1,0 +1,121 @@
+demonstration_configs:
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position:
+        - top
+    mode: manual
+    planner: curobo
+  instruction: put the banana on the top of the vintage rusty frying pan.
+  layout_config:
+    ignored_objects: []
+    random_range_angle: 0
+    random_range_h: 0.35
+    random_range_w: 0.4
+    random_range_x: -0.15
+    random_range_y: 0.1
+    type: random_obj1_range
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - fb1b6fc41f7e49adbf467e5e5988d190
+    '1':
+      type: existed_object
+      uid_list:
+      - 1fdc84a7be2c4348b281490c89d76062
+  preprocess_config:
+  - config:
+      config: default
+      type: convexDecomposition
+    type: collider
+  - type: ccd
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: Banana/banana_plate_4035_none-wow-wot-woh-now
+  usd_name: scene_usds/debug_scenes/banana_plate_scenes/base
+evaluation_configs:
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position:
+        - top
+    mode: manual
+    planner: curobo
+  instruction: put the banana on the top of the vintage rusty frying pan.
+  layout_config:
+    ignored_objects: []
+    random_range_angle: 0
+    random_range_h: 0.35
+    random_range_w: 0.4
+    random_range_x: -0.15
+    random_range_y: 0.1
+    type: random_obj1_range
+  mode: manual
+  num_test: 100
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - fb1b6fc41f7e49adbf467e5e5988d190
+    '1':
+      type: existed_object
+      uid_list:
+      - 1fdc84a7be2c4348b281490c89d76062
+  preprocess_config:
+  - config:
+      config: default
+      type: convexDecomposition
+    type: collider
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: Banana/banana_plate_4035_none-wow-wot-woh-now
+  usd_name: scene_usds/debug_scenes/banana_plate_scenes/base

@@ -1,0 +1,8 @@
+{
+    "exclude": [
+        "assets/**",
+        "saved/**",
+        "tmp/**",
+        "configs/**",
+    ]
+}

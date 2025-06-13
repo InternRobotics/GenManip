@@ -1,0 +1,108 @@
+camera1:
+  clipping_range_max: 10000.0
+  clipping_range_min: 0.001
+  exists: false
+  focal_length: 5.0
+  frequency: 60
+  horizontal_aperture: 10.0
+  name: camera1
+  orientation:
+  - -0.0071865058262247095
+  - -0.5792785229595211
+  - -0.005107428795172445
+  - 0.815081996576386
+  position:
+  - 0.28070902824401855
+  - -0.02326910011470318
+  - 1.6857764720916748
+  prim_path: /camera1
+  resolution:
+  - 1280
+  - 720
+  vertical_aperture: 5.625
+  with_distance: true
+  with_semantic: false
+  with_bbox2d: false
+  with_bbox3d: false
+  with_motion_vector: false
+obs_camera:
+  clipping_range_max: 10000.0
+  clipping_range_min: 0.01
+  exists: false
+  focal_length: 2.0
+  frequency: 60
+  horizontal_aperture: 6.4
+  name: obs_camera
+  orientation:
+  - 0.0
+  - 0.70710678
+  - 0.0
+  - -0.70710678
+  position:
+  - 0.0
+  - 0.0
+  - 1.4
+  prim_path: /obs_camera
+  resolution:
+  - 640
+  - 480
+  vertical_aperture: 4.8
+  with_distance: true
+  with_semantic: false
+  with_bbox2d: false
+  with_bbox3d: false
+  with_motion_vector: false
+obs_camera_2:
+  clipping_range_max: 10000.0
+  clipping_range_min: 0.01
+  exists: false
+  focal_length: 4.5
+  frequency: 60
+  horizontal_aperture: 6.4
+  name: obs_camera_2
+  orientation:
+  - 0.83057843
+  - -0.1464534
+  - 0.34536953
+  - 0.41159539
+  position:
+  - -0.60
+  - -0.75
+  - 1.85
+  prim_path: /obs_camera_2
+  resolution:
+  - 640
+  - 480
+  vertical_aperture: 4.8
+  with_distance: true
+  with_semantic: false
+  with_bbox2d: false
+  with_bbox3d: false
+  with_motion_vector: false
+realsense:
+  clipping_range_max: 10000.0
+  clipping_range_min: 0.01
+  exists: true
+  focal_length: 4.5
+  frequency: 60
+  horizontal_aperture: 10.0
+  name: realsense
+  orientation:
+  - 0.0
+  - 0.707106781
+  - 0.0
+  - 0.707106781
+  position:
+  - 0.03
+  - 0.0
+  - 0.025
+  prim_path: /franka/panda_hand/geometry/realsense
+  resolution:
+  - 640
+  - 480
+  vertical_aperture: 5.625
+  with_distance: true
+  with_semantic: false
+  with_bbox2d: false
+  with_bbox3d: false
+  with_motion_vector: false

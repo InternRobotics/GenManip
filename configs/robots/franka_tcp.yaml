@@ -1,0 +1,72 @@
+- idx: 0
+  name: tcp0
+  orientation:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  parent_prim_path: panda_hand
+  position:
+  - 0.0
+  - 0.0
+  - 0.0
+- idx: 1
+  name: tcp1
+  orientation:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  parent_prim_path: panda_hand
+  position:
+  - 0
+  - 0
+  - 0.112
+- idx: 2
+  name: tcp2
+  orientation:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  parent_prim_path: panda_leftfinger
+  position:
+  - 0
+  - 0.006
+  - 0.054
+- idx: 3
+  name: tcp3
+  orientation:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  parent_prim_path: panda_rightfinger
+  position:
+  - 0
+  - -0.006
+  - 0.054
+- idx: 4
+  name: tcp4
+  orientation:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  parent_prim_path: panda_leftfinger
+  position:
+  - -0.0008
+  - 0.02
+  - 0.0275
+- idx: 5
+  name: tcp5
+  orientation:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  parent_prim_path: panda_rightfinger
+  position:
+  - -0.0008
+  - -0.02
+  - 0.0275

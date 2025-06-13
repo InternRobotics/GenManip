@@ -1,0 +1,1152 @@
+demonstration_configs:
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: top
+      - obj1_uid:
+        - '2'
+        obj2_uid:
+        - '3'
+        position: top
+    - - obj1_uid:
+        - '2'
+        obj2_uid:
+        - '1'
+        position: top
+      - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '3'
+        position: top
+    mode: manual
+    planner: curobo
+  instruction: Organize the yellow fruits on the desk and place them on different
+    plates.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects:
+    - 3cedf6c5c7b54bf3a28e74e64897f380
+    - 1864f9b3e9e74993b2e9b735dc488a9e
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - 7650a398a5f742309cfcb66b7235122d
+    '1':
+      type: existed_object
+      uid_list:
+      - 3188a1d863f246f49457bb63035e37db
+    '2':
+      type: existed_object
+      uid_list:
+      - fb1b6fc41f7e49adbf467e5e5988d190
+    '3':
+      type: existed_object
+      uid_list:
+      - 1fdc84a7be2c4348b281490c89d76062
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/000
+  usd_name: scene_usds/genmanip_bench_scenes/000
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: near
+    mode: manual
+    planner: curobo
+  instruction: Put the smaller cup next to the computer.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - e0f6159fe9e34e6f9867173ad654fcc1
+    '1':
+      type: existed_object
+      uid_list:
+      - 58dbf3ae0cb649a4ad91094f30034844
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/006
+  usd_name: scene_usds/genmanip_bench_scenes/006
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: in
+    mode: manual
+    planner: curobo
+  instruction: Help me clean up the dining table and throw the leftover food into
+    the trash can.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    partial_ignore:
+      0d6f1b3b07174a169d518ad12f6e2c0b:
+      - 216b83b4dc9d4a8b97a8ee40d237b9e5
+      216b83b4dc9d4a8b97a8ee40d237b9e5:
+      - 0d6f1b3b07174a169d518ad12f6e2c0b
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - 0d6f1b3b07174a169d518ad12f6e2c0b
+    '1':
+      type: existed_object
+      uid_list:
+      - f17fabee2d65436a85de1ae61a50bbca
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/010
+  usd_name: scene_usds/genmanip_bench_scenes/010
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: 'on'
+      - obj1_uid:
+        - '2'
+        obj2_uid:
+        - '1'
+        position: 'on'
+      - obj1_uid:
+        - '3'
+        obj2_uid:
+        - '1'
+        position: 'on'
+    mode: manual
+    planner: curobo
+  instruction: Organize all the cups on the table and place them on the tray.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - 733014b7ca454482a3428f559b84932e_01
+    '1':
+      type: existed_object
+      uid_list:
+      - 733014b7ca454482a3428f559b84932e
+    '2':
+      type: existed_object
+      uid_list:
+      - 733014b7ca454482a3428f559b84932e_03
+    '3':
+      type: existed_object
+      uid_list:
+      - 733014b7ca454482a3428f559b84932e_02
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/012
+  usd_name: scene_usds/genmanip_bench_scenes/012
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: in
+    mode: manual
+    planner: curobo
+  instruction: I want to eat something sweet, put a sweet fruit in the bowl.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - 4883d6cbb2a04f7597b324021593dee1
+    '1':
+      type: existed_object
+      uid_list:
+      - 4cb1ff4e9b064c4f906d1b985c4c4008
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/013
+  usd_name: scene_usds/genmanip_bench_scenes/013
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: in
+    mode: manual
+    planner: curobo
+  instruction: Put the square-shaped bread on the plate.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - 08771a1077b446b79f3c2634829b6296
+    '1':
+      type: existed_object
+      uid_list:
+      - afcf163c24474919a02b361a7f4e71e3
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/016
+  usd_name: scene_usds/genmanip_bench_scenes/016
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: in
+    mode: manual
+    planner: curobo
+  instruction: Please put the black cups with the word "coffee" into the utensil storage
+    box.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - e458cf96b19e4b6fac25433e1808ac10
+    '1':
+      type: existed_object
+      uid_list:
+      - ce69014964624fbb808a028e5c55d88b
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/017
+  usd_name: scene_usds/genmanip_bench_scenes/017
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: top
+      - obj1_uid:
+        - '2'
+        obj2_uid:
+        - '1'
+        position: top
+    mode: manual
+    planner: curobo
+  instruction: Place triangular-shaped food on the tray.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - 1e260037ef3a403ea4da2f78a643dcb6
+    '1':
+      type: existed_object
+      uid_list:
+      - 1c9ac559f08a42fc87648be971aec607
+    '2':
+      type: existed_object
+      uid_list:
+      - 421f8eabd94e447c8f63711279221ac3
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/021
+  usd_name: scene_usds/genmanip_bench_scenes/021
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: top
+    mode: manual
+    planner: curobo
+  instruction: Place the yellow bottle on the tray.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - 531e4af02ee34e9bacc83c21b0114500
+    '1':
+      type: existed_object
+      uid_list:
+      - 01cace88a48c42438dbd8d1a6f23a55a
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/022
+  usd_name: scene_usds/genmanip_bench_scenes/022
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: top
+    mode: manual
+    planner: curobo
+  instruction: Put the chili on the basin filled with vegetables and fruits.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - cd80232e4ce145daa0d4c22045c22b55
+    '1':
+      type: existed_object
+      uid_list:
+      - ae04942bf9264acfb40db2772602c773
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/023
+  usd_name: scene_usds/genmanip_bench_scenes/023
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: top
+    mode: manual
+    planner: curobo
+  instruction: Place the cup in the second column of the first row onto the empty
+    tray.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.05
+    ignored_objects:
+    - 6acbec139ac04331992e2b60e234712f
+    - 95ea9360e2a24e35ba56c2c9e020bc2a
+    partial_ignore:
+      427e5402aafc47a19d4e071988e81956:
+      - 733014b7ca454482a3428f559b84932e
+      733014b7ca454482a3428f559b84932e:
+      - 427e5402aafc47a19d4e071988e81956
+    type: centric_random_range
+    w: 0.05
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - 733014b7ca454482a3428f559b84932e_02
+    '1':
+      type: existed_object
+      uid_list:
+      - 733014b7ca454482a3428f559b84932e
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/025
+  usd_name: scene_usds/genmanip_bench_scenes/025
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: top
+    mode: manual
+    planner: curobo
+  instruction: Place the pencil case on top of the computer.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - 4e22aca5a799466aa194b173ff53b815
+    '1':
+      type: existed_object
+      uid_list:
+      - eeef6b210bf448bba80723d0783939a9
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/027
+  usd_name: scene_usds/genmanip_bench_scenes/027
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: left
+    mode: manual
+    planner: curobo
+  instruction: Please place the yellow cup at the spout of the teapot for pouring
+    tea.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - 83656b0d234748ceb4fa962b84679197
+    '1':
+      type: existed_object
+      uid_list:
+      - 0047fa5e44334d3e9bd171ad2bf95ff5
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/029
+  usd_name: scene_usds/genmanip_bench_scenes/029
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: near
+    mode: manual
+    planner: curobo
+  instruction: I want to trim the plants and move the available tools nearby.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - b8b60a3a9f2e48d9880a2bd29027d8a8
+    '1':
+      type: existed_object
+      uid_list:
+      - b59ed57ceb2f4e9eb63d22ea8ee0e9fc
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/031
+  usd_name: scene_usds/genmanip_bench_scenes/031
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: top
+    mode: manual
+    planner: curobo
+  instruction: Place the round bread on the plate.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects:
+    - 3188a1d863f246f49457bb63035e37db_01
+    - 3188a1d863f246f49457bb63035e37db
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - 5dcf9300148243b1b95f3d1c3769f307
+    '1':
+      type: existed_object
+      uid_list:
+      - c5a76a7936614ff085960477840e1a9a
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/032
+  usd_name: scene_usds/genmanip_bench_scenes/032
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: top
+    mode: manual
+    planner: curobo
+  instruction: I want to pack food, please put the sandwich in a suitable place for
+    packaging.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - 3152adeef0934984b8c2830113cab821_01
+    '1':
+      type: existed_object
+      uid_list:
+      - 3152adeef0934984b8c2830113cab821
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/033
+  usd_name: scene_usds/genmanip_bench_scenes/033
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: in
+      - obj1_uid:
+        - '2'
+        obj2_uid:
+        - '1'
+        position: in
+    mode: manual
+    planner: curobo
+  instruction: Put all the round-shaped food into the plate.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - ae04942bf9264acfb40db2772602c773_02
+    '1':
+      type: existed_object
+      uid_list:
+      - ae04942bf9264acfb40db2772602c773
+    '2':
+      type: existed_object
+      uid_list:
+      - ae04942bf9264acfb40db2772602c773_03
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/034
+  usd_name: scene_usds/genmanip_bench_scenes/034
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: back
+    mode: manual
+    planner: curobo
+  instruction: Put the chewing gum at the back of the hamburger.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - f42ca5e2b3ab4305abeb1cacf2e1ce38
+    '1':
+      type: existed_object
+      uid_list:
+      - f0c6f83eda934bc59e0d1d9a7cdc4b58
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/036
+  usd_name: scene_usds/genmanip_bench_scenes/036
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: near
+      - obj1_uid:
+        - '2'
+        obj2_uid:
+        - '1'
+        position: near
+    mode: manual
+    planner: curobo
+  instruction: Please group and place tools of the same type.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - e3757fce61064938bddb229d43cd819a
+    '1':
+      type: existed_object
+      uid_list:
+      - 87c2025f6472417ba2603a9c2cb0ba82
+    '2':
+      type: existed_object
+      uid_list:
+      - 79c2da8927fd4c39be40f35f05edf857
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/038
+  usd_name: scene_usds/genmanip_bench_scenes/038
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position: in
+    mode: manual
+    planner: curobo
+  instruction: Put the pliers into the bucket.
+  layout_config:
+    angle: 15
+    angle_bilateral: true
+    h: 0.1
+    ignored_objects: []
+    type: centric_random_range
+    w: 0.1
+  mode: manual
+  num_episode: 1000
+  object_config:
+    '0':
+      type: existed_object
+      uid_list:
+      - 9de3f48d263849698925b97047e7855f
+    '1':
+      type: existed_object
+      uid_list:
+      - 66fd712372f14a8f8d83d4d1e4ff6dce
+  preprocess_config: []
+  robots:
+  - config:
+      gripper_type: panda_hand
+    type: franka
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: GenManipBench/040
+  usd_name: scene_usds/genmanip_bench_scenes/040
+evaluation_configs: []
