@@ -7,7 +7,7 @@
 
 <p align="center"> <a href="https://www.youtube.com/watch?v=FnoFvzVlM6E" target="_blank"> <img src="readme_assets/teaser.png" alt="GenManip Video" width="100%"/> </a> </p>
 
-[![Paper](https://img.shields.io/badge/Paper-arXiv%20\(CVPR%202025\)-blue)](https://openaccess.thecvf.com//content/CVPR2025/papers/Gao_GENMANIP_LLM-driven_Simulation_for_Generalizable_Instruction-Following_Manipulation_CVPR_2025_paper.pdf) &nbsp;[![Project Page](https://img.shields.io/badge/Website-genmanip.axi404.top-%231877F2)](https://genmanip.axi404.top/) &nbsp;[![Docs](https://img.shields.io/badge/Docs-Available-brightgreen)](https://genmanip.axi404.top/overview) &nbsp;[![Code](https://img.shields.io/badge/Code- Available%20now-orange)](#)
+[![Paper](https://img.shields.io/badge/Paper-arXiv%20\(CVPR%202025\)-blue)](https://openaccess.thecvf.com//content/CVPR2025/papers/Gao_GENMANIP_LLM-driven_Simulation_for_Generalizable_Instruction-Following_Manipulation_CVPR_2025_paper.pdf) &nbsp;[![Project Page](https://img.shields.io/badge/Website-genmanip.axi404.top-%231877F2)](https://genmanip.axi404.top/) &nbsp;[![Docs](https://img.shields.io/badge/Docs-Available-brightgreen)](https://genmanip.axi404.top/overview) &nbsp;
 
 </div>
 
