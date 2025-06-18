@@ -33,7 +33,25 @@ Built on [NVIDIA Isaac Sim](https://developer.nvidia.com/isaac-sim), GenManip of
 
 ## 🛠️ Getting Started
 
-Code release is in preparation. Stay tuned!
+Code is released!
+
+You can visit our [official website](https://genmanip.axi404.top) for more information, documentation, and updates.
+
+## TODO List
+
+### Completed
+
+- GenManip Website for setup, using VLM Agents, and leaderborad
+- Code for demogen, render and evaluation
+
+### To Release
+
+- GenManip Bench (20 tasks)
+- Full GenManip Bench with evaluation metrics
+- GenManip Assets (10K+ objects)
+- More models: Seer, ACT, and beyond
+- Objaverse scaling pipeline
+- etc.
 
 ## 📚 Citation
 
