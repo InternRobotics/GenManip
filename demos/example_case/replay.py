@@ -94,7 +94,7 @@ for eval_config in eval_config_list:
         layout = recovery_scene(
             scene, meta_info["task_data"], scene_config.task_name, default_config
         )
-        eval_config["generation_config"]["goal"] = meta_info["task_data"]["goal"]
+        scene_config.generation_config.goal = meta_info["task_data"]["goal"]
         if "defaultGroundPlane" in scene.object_list:
             remove_colliders(scene.object_list["defaultGroundPlane"].prim_path)
         for _ in range(50):
