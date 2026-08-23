@@ -40,7 +40,7 @@ class CuroboPlanner:
     # A secondary servo-speed bound for the exceptional case where every
     # successful IK candidate is on a distant branch.  The primary fix is the
     # continuity-regularized solve below; this bound is only a last fallback.
-    max_ik_joint_step = 0.1
+    max_ik_joint_step = 0.2
 
     def __init__(self, robot_cfg: dict, robot_prim_path: str) -> None:
         self.robot_prim_path = robot_prim_path
