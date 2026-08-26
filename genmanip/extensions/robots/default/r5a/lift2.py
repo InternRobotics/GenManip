@@ -46,7 +46,13 @@ class Lift2Embodiment(DualArmEmbodiment):
         )
         super().__init__(config, *args, **kwargs)
 
-        self.robot_view.set_max_joint_velocities([2.0] * 26)
+    def _initialize(self, default_joint_positions: list[float] | None = None) -> None:
+        super()._initialize(default_joint_positions)
+
+        # The articulation view is valid only after Robot.initialize().  Apply
+        # the intended velocity cap here and preserve stricter USD limits.
+        max_joint_velocities = self.robot_view.get_joint_max_velocities()
+        self.robot_view.set_max_joint_velocities(np.minimum(max_joint_velocities, 2.0))
 
     def create_robot(
         self, scene_uid: str, default_config: dict, robot_config: RobotConfig
