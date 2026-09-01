@@ -11,6 +11,7 @@ from typing import List
 
 from omni.isaac.core.robots.robot import Robot  # type: ignore
 from omni.isaac.core.utils.prims import create_prim, get_prim_at_path  # type: ignore
+from pxr import PhysxSchema, Usd, UsdPhysics  # type: ignore
 
 from genmanip.core.robot.dualarm_manip import DualArmEmbodiment, ManipDualArmRobotConfig
 from genmanip.core.robot.utils import RobotFactory
@@ -21,6 +22,8 @@ from genmanip.core.scene.scene_config import RobotConfig
 
 @RobotFactory.register("manip/lift2/R5a")
 class Lift2Embodiment(DualArmEmbodiment):
+    ARM_JOINT_ARMATURE = 0.01
+
     def __init__(self, *args, **kwargs) -> None:
         config = ManipDualArmRobotConfig(
             embodiment_name="lift2",
@@ -45,14 +48,6 @@ class Lift2Embodiment(DualArmEmbodiment):
             base_joint_path_rotate="/lift2/lift2/dummy_base_rotate/mobile_rotate",
         )
         super().__init__(config, *args, **kwargs)
-
-    def _initialize(self, default_joint_positions: list[float] | None = None) -> None:
-        super()._initialize(default_joint_positions)
-
-        # The articulation view is valid only after Robot.initialize().  Apply
-        # the intended velocity cap here and preserve stricter USD limits.
-        max_joint_velocities = self.robot_view.get_joint_max_velocities()
-        self.robot_view.set_max_joint_velocities(np.minimum(max_joint_velocities, 2.0))
 
     def create_robot(
         self, scene_uid: str, default_config: dict, robot_config: RobotConfig
@@ -91,6 +86,23 @@ class Lift2Embodiment(DualArmEmbodiment):
         lift2.set_solver_position_iteration_count(128)
         lift2.set_stabilization_threshold(0.005)
         lift2.set_solver_velocity_iteration_count(4)
+
+        # Add a small motor-side inertia to suppress impulsive articulation
+        # acceleration under hard contacts without limiting joint velocity or
+        # reducing the position-drive stiffness/force.
+        for joint_prim in Usd.PrimRange(get_prim_at_path(lift2.prim_path)):
+            joint_path = str(joint_prim.GetPath())
+            is_arm_joint = (
+                joint_prim.IsA(UsdPhysics.Joint)
+                and ("/fl/" in joint_path or "/fr/" in joint_path)
+                and joint_path.endswith(
+                    ("joint1", "joint2", "joint3", "joint4", "joint5", "joint6")
+                )
+            )
+            if is_arm_joint:
+                PhysxSchema.PhysxJointAPI.Apply(joint_prim).CreateArmatureAttr().Set(
+                    self.ARM_JOINT_ARMATURE
+                )
         return lift2
 
     def set_planner(self, current_dir: str) -> List[CuroboPlanner]:
