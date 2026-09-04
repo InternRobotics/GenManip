@@ -23,6 +23,7 @@ from genmanip.core.scene.scene_config import RobotConfig
 @RobotFactory.register("manip/lift2/R5a")
 class Lift2Embodiment(DualArmEmbodiment):
     ARM_JOINT_ARMATURE = 0.01
+    MAX_DEPENETRATION_VELOCITY = 1.0
 
     def __init__(self, *args, **kwargs) -> None:
         config = ManipDualArmRobotConfig(
@@ -86,6 +87,22 @@ class Lift2Embodiment(DualArmEmbodiment):
         lift2.set_solver_position_iteration_count(128)
         lift2.set_stabilization_threshold(0.005)
         lift2.set_solver_velocity_iteration_count(4)
+
+        for body_prim in Usd.PrimRange(get_prim_at_path(lift2.prim_path)):
+            schema_list = body_prim.GetAppliedSchemas()
+            if (
+                "PhysicsRigidBodyAPI" in schema_list
+                or "PhysxRigidBodyAPI" in schema_list
+            ):
+                rb_api = PhysxSchema.PhysxRigidBodyAPI.Get(
+                    body_prim.GetStage(), body_prim.GetPath()
+                )
+                if not rb_api:
+                    rb_api = PhysxSchema.PhysxRigidBodyAPI.Apply(body_prim)
+
+                rb_api.CreateMaxDepenetrationVelocityAttr().Set(
+                    self.MAX_DEPENETRATION_VELOCITY
+                )
 
         # Add a small motor-side inertia to suppress impulsive articulation
         # acceleration under hard contacts without limiting joint velocity or
