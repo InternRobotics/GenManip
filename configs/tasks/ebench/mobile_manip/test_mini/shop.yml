@@ -1459,7 +1459,7 @@ evaluation_configs:
       config_path: configs/cameras/fixed_camera_lift2_simbox.yml
       type: fixed
   num_test: 20
-  num_steps: 3000
+  num_steps: 5000
   robots:
   - type: manip/lift2/R5a
     position:
