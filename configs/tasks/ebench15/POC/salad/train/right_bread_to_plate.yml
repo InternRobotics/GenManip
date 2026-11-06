@@ -1,0 +1,420 @@
+# Right hand picks bread4 using the lettuce-style edge grasp and staged flattening.
+# Validation: doc/salad_food_right_hand_on_bowl_20260911.md
+demonstration_configs:
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera_lift2_simbox.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: manual
+      robot: 0
+      actions:
+      - type: move_to
+        name: align_base_to_bread
+        arm: right
+        grasp: false
+        move_type: alignv2
+        linear_step: 0.003
+        rel_object_uid: bread4
+        delta_position:
+          x: -0.45
+          y: -0.1
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: settle_at_bread
+            type: pending
+            grasp: false
+            cnt: 15
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: approach_bread
+            type: object_frame
+            grasp: false
+            translation:
+            - -0.038822857
+            - -5.32e-05
+            - 0.168867074
+            orientation:
+            - 0.79335334
+            - 0.0
+            - 0.608761429
+            - 0.0
+            rel_object_uid: bread4
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: align_bread
+            type: object_frame
+            grasp: false
+            translation:
+            - -0.038822857
+            - -5.32e-05
+            - 0.143867074
+            orientation:
+            - 0.79335334
+            - 0.0
+            - 0.608761429
+            - 0.0
+            rel_object_uid: bread4
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: grasp_bread
+            type: object_frame
+            grasp: false
+            translation:
+            - -0.038822857
+            - -5.32e-05
+            - 0.123867074
+            orientation:
+            - 0.79335334
+            - 0.0
+            - 0.608761429
+            - 0.0
+            rel_object_uid: bread4
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: close_bread
+            type: pending
+            grasp: true
+            cnt: 45
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: lift_bread
+            type: object_frame
+            grasp: true
+            translation:
+            - -0.038822857
+            - -5.32e-05
+            - 0.363867074
+            orientation:
+            - 0.79335334
+            - 0.0
+            - 0.608761429
+            - 0.0
+            rel_object_uid: bread4
+      - type: move_to
+        name: carry_bread_to_plate
+        arm: right
+        grasp: true
+        move_type: alignv2
+        linear_step: 0.002
+        rel_object_uid: plate
+        delta_position:
+          x: -0.45
+          y: -0.24842
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: settle_before_placing_bread
+            type: pending
+            grasp: true
+            cnt: 15
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: above_bread
+            type: object_position
+            grasp: true
+            translation:
+            - -0.018822857
+            - 0.0
+            - 0.404888874
+            orientation:
+            - 0.79335334
+            - 0.0
+            - 0.608761429
+            - 0.0
+            rel_object_uid: plate
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: turn_half_bread
+            type: object_position
+            grasp: true
+            translation:
+            - -0.018822857
+            - -0.124728444
+            - 0.362549273
+            orientation:
+            - 0.751250181
+            - 0.255015073
+            - 0.576454539
+            - 0.195679948
+            rel_object_uid: plate
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: flatten_bread
+            type: object_position
+            grasp: true
+            translation:
+            - -0.018822857
+            - -0.197907455
+            - 0.253029143
+            orientation:
+            - 0.629409523
+            - 0.482962913
+            - 0.482962913
+            - 0.370590477
+            rel_object_uid: plate
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: lower_bread
+            type: object_position
+            grasp: true
+            translation:
+            - -0.018822857
+            - -0.197907455
+            - 0.118029143
+            orientation:
+            - 0.629409523
+            - 0.482962913
+            - 0.482962913
+            - 0.370590477
+            rel_object_uid: plate
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: release_bread
+            type: pending
+            grasp: false
+            cnt: 30
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: withdraw_bread
+            type: object_position
+            grasp: false
+            translation:
+            - -0.138822857
+            - -0.197907455
+            - 0.118029143
+            orientation:
+            - 0.629409523
+            - 0.482962913
+            - 0.482962913
+            - 0.370590477
+            rel_object_uid: plate
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: retreat_bread
+            type: object_position
+            grasp: false
+            translation:
+            - -0.138822857
+            - -0.197907455
+            - 0.298029143
+            orientation:
+            - 0.629409523
+            - 0.482962913
+            - 0.482962913
+            - 0.370590477
+            rel_object_uid: plate
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: settle_bread
+            type: pending
+            grasp: false
+            cnt: 90
+    articulation: {}
+    goal:
+    - - type: manip/default/sr_based_genmanip_axis_align
+        not_set_mass: true
+        obj1_uid: bread4
+        obj2_uid: plate
+        obj1_axis: y
+        obj2_axis: y
+        comparison: <=
+        threshold_deg: 8.0
+      - type: manip/default/sr_based_genmanip_range
+        not_set_mass: true
+        obj1_uid: bread4
+        x_type: relative
+        y_type: relative
+        z_type: relative
+        x_range:
+        - -0.025
+        - 0.025
+        y_range:
+        - -0.025
+        - 0.025
+        z_range:
+        - 0.005
+        - 0.045
+        x_rel_object_uid: plate
+        y_rel_object_uid: plate
+        z_rel_object_uid: plate
+        obj1_local_offset:
+        - 0
+        - -5.32e-05
+        - -0.0810218
+    mode: manual
+    planner: curobo
+  instruction: Pick up the bread on the right and lay it flat on the plate.
+  layout_config:
+    type: random_custom_tableset
+    in_order: true
+    custom_tableset:
+      plate:
+        type: global_range
+        keep_original_orientation: true
+        allow_rotation_fallback: false
+        random_range_x: -0.29
+        random_range_y: -0.2
+        random_range_w: 0.335
+        random_range_h: 0.63
+        random_range_angle: 0
+        buffer_size: 0.01
+      bowl:
+        type: global_range
+        keep_original_orientation: true
+        allow_rotation_fallback: false
+        random_range_x: -0.29
+        random_range_y: -0.2
+        random_range_w: 0.335
+        random_range_h: 0.63
+        random_range_angle: 0
+        buffer_size: 0.01
+      salt:
+        type: global_range
+        keep_original_orientation: true
+        allow_rotation_fallback: false
+        random_range_x: 0.065
+        random_range_y: -0.12
+        random_range_w: 0.125
+        random_range_h: 0.42
+        random_range_angle: 0
+        buffer_size: 0.06
+      pepper:
+        type: global_range
+        keep_original_orientation: true
+        allow_rotation_fallback: false
+        random_range_x: 0.065
+        random_range_y: -0.12
+        random_range_w: 0.125
+        random_range_h: 0.42
+        random_range_angle: 0
+        buffer_size: 0.06
+      banana:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      bread2:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      bread4:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      apple:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      green_apple:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      beef:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      lettuce:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+  mode: manual
+  num_episode: 300
+  object_config:
+    apple:
+      type: existed_object
+      uid_list:
+      - apple
+      is_not_rigid: true
+      without_colliders: true
+    green_apple:
+      type: existed_object
+      uid_list:
+      - apple1
+      is_not_rigid: true
+      without_colliders: true
+    banana:
+      type: existed_object
+      uid_list:
+      - banana
+    salt:
+      type: existed_object
+      mass: 0.18
+      uid_list:
+      - salt
+    pepper:
+      type: existed_object
+      uid_list:
+      - pepper
+    bowl:
+      type: existed_object
+      uid_list:
+      - bowl
+    beef:
+      type: existed_object
+      uid_list:
+      - beef
+      is_not_rigid: true
+      without_colliders: true
+    plate:
+      type: existed_object
+      uid_list:
+      - plate
+      is_not_rigid: true
+      without_colliders: true
+    bread2:
+      type: existed_object
+      uid_list:
+      - bread2
+      is_not_rigid: true
+      without_colliders: true
+    lettuce:
+      type: existed_object
+      uid_list:
+      - lettuce
+      is_not_rigid: true
+      without_colliders: true
+    bread4:
+      type: existed_object
+      uid_list:
+      - bread4
+      is_not_rigid: true
+      without_colliders: true
+  preprocess_config: []
+  robots:
+  - type: manip/lift2/R5a
+    position:
+    - -0.7
+    - 0.0
+    - 0.5
+  table_uid: instance
+  task_name: ebench15/salad/train/right_bread_to_plate
+  usd_name: scene_usds/ebench15/salad/base
+  env_vars:
+    MDL_SYSTEM_PATH: /isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench15/salad/SubUSDs/materials
+evaluation_configs: []

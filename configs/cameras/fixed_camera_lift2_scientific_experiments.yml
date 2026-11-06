@@ -1,0 +1,124 @@
+left_camera:
+  exists: true
+  frequency: 60
+  name: left_camera
+  camera_params:
+  - 433.8968505859375
+  - 433.3829040527344
+  - 322.78765869140625
+  - 243.13734436035156
+  position:
+  - 0.07
+  - 0.01
+  - 0.08
+  orientation:
+  - 0.62
+  - 0.33
+  - -0.33
+  - -0.62
+  prim_path: /lift2/lift2/lift2/fl/link6/Camera
+  resolution:
+  - 640
+  - 480
+  pixel_size: 3.0
+  f_number: 2.0
+  focus_distance: 0.6
+  with_distance: false
+  with_semantic: false
+  with_bbox2d: false
+  with_bbox3d: false
+  with_motion_vector: false
+  camera_axes: usd
+right_camera:
+  exists: true
+  frequency: 60
+  name: right_camera
+  camera_params:
+  - 434.83709716796875
+  - 434.3604736328125
+  - 322.2248840332031
+  - 240.8503875732422
+  position:
+  - 0.07
+  - 0.01
+  - 0.08
+  orientation:
+  - 0.62
+  - 0.33
+  - -0.33
+  - -0.62
+  prim_path: /lift2/lift2/lift2/fr/link6/Camera
+  resolution:
+  - 640
+  - 480
+  pixel_size: 3.0
+  f_number: 2.0
+  focus_distance: 0.6
+  with_distance: false
+  with_semantic: false
+  with_bbox2d: false
+  with_bbox3d: false
+  with_motion_vector: false
+  camera_axes: usd
+top_camera:
+  exists: true
+  frequency: 60
+  name: top_camera
+  camera_params:
+  - 635.8182373046875
+  - 635.2656860351562
+  - 636.7947998046875
+  - 367.1285095214844
+  position:
+  - 0.1
+  - 0.02
+  - 0.03
+  orientation:
+  - 0.6602
+  - 0.2534
+  - -0.2534
+  - -0.6602
+  prim_path: /lift2/lift2/lift2/h_link6/Camera
+  resolution:
+  - 1280
+  - 960
+  pixel_size: 3.0
+  f_number: 2.0
+  focus_distance: 0.6
+  with_distance: false
+  with_semantic: false
+  with_bbox2d: false
+  with_bbox3d: false
+  with_motion_vector: false
+  camera_axes: usd
+overlook_camera:
+  exists: true
+  frequency: 60
+  name: overlook_camera
+  camera_params:
+  - 635.8182373046875
+  - 635.2656860351562
+  - 636.7947998046875
+  - 367.1285095214844
+  position:
+  - 0.3
+  - 0.0
+  - 1.5
+  orientation:
+  - 0.70106
+  - 0.0923
+  - -0.0923
+  - -0.70106
+  prim_path: /lift2/lift2/lift2/base_link/Camera_overlook
+  resolution:
+  - 1280
+  - 960
+  pixel_size: 3.0
+  f_number: 2.0
+  focus_distance: 0.6
+  with_distance: false
+  with_semantic: false
+  with_bbox2d: false
+  with_bbox3d: false
+  with_motion_vector: false
+  camera_axes: usd

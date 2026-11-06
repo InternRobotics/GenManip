@@ -1,0 +1,6 @@
+[
+    "scientific_experiments/task_08_place_container_in_oven/validation/mixed/mixed.json",
+    "scientific_experiments/task_08_place_container_in_oven/validation/unseen_background/unseen_background.json",
+    "scientific_experiments/task_08_place_container_in_oven/validation/unseen_instruction/unseen_instruction.json",
+    "scientific_experiments/task_08_place_container_in_oven/validation/unseen_prospect/unseen_prospect.json"
+]

@@ -1,0 +1,6 @@
+[
+    "scientific_experiments/task_01_pour_flask_to_cylinder/test/mixed/mixed.json",
+    "scientific_experiments/task_01_pour_flask_to_cylinder/test/unseen_background/unseen_background.json",
+    "scientific_experiments/task_01_pour_flask_to_cylinder/test/unseen_instruction/unseen_instruction.json",
+    "scientific_experiments/task_01_pour_flask_to_cylinder/test/unseen_prospect/unseen_prospect.json"
+]

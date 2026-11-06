@@ -123,27 +123,27 @@ def merge_prim_mesh(path):
 from tqdm import tqdm
 
 if __name__ == "__main__":
-    src_path = "/home/gaoning/GenManip-Sim/scene_usds/scene_drink"
+    src_path = "saved/assets/scene_usds/scene_drink"
     for path in tqdm(os.listdir(src_path)):
         if path.endswith(".usd"):
             merge_prim_mesh(os.path.join(src_path, path))
             print(f"finished {path}")
-    src_path = "/home/gaoning/GenManip-Sim/scene_usds/scene_drink/bottles"
+    src_path = "saved/assets/scene_usds/scene_drink/bottles"
     for path in tqdm(os.listdir(src_path)):
         if path.endswith(".usd"):
             merge_prim_mesh(os.path.join(src_path, path))
             print(f"finished {path}")
-    src_path = "/home/gaoning/GenManip-Sim/scene_usds/scene_cup"
+    src_path = "saved/assets/scene_usds/scene_cup"
     for path in tqdm(os.listdir(src_path)):
         if path.endswith(".usd"):
             merge_prim_mesh(os.path.join(src_path, path))
             print(f"finished {path}")
-    src_path = "/home/gaoning/GenManip-Sim/scene_usds/scene_cup/cups"
+    src_path = "saved/assets/scene_usds/scene_cup/cups"
     for path in tqdm(os.listdir(src_path)):
         if path.endswith(".usd"):
             merge_prim_mesh(os.path.join(src_path, path))
             print(f"finished {path}")
-    src_path = "/home/gaoning/GenManip-Sim/scene_usds/scene_cup/plates"
+    src_path = "saved/assets/scene_usds/scene_cup/plates"
     for path in tqdm(os.listdir(src_path)):
         if path.endswith(".usd"):
             merge_prim_mesh(os.path.join(src_path, path))

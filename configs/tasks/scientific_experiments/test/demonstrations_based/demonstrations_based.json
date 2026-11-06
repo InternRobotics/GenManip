@@ -1,0 +1,16 @@
+[
+    "scientific_experiments/task_01_pour_flask_to_cylinder/task_01_pour_flask_to_cylinder.json",
+    "scientific_experiments/task_02_pour_liquid_and_stir/task_02_pour_liquid_and_stir.json",
+    "scientific_experiments/task_03_magnetic_beaker_stirrer/task_03_magnetic_beaker_stirrer.json",
+    "scientific_experiments/task_04_pour_liquid_with_funnel/task_04_pour_liquid_with_funnel.json",
+    "scientific_experiments/task_05_remove_container_lid/task_05_remove_container_lid.json",
+    "scientific_experiments/task_06_remove_centrifuge_tubes/task_06_remove_centrifuge_tubes.json",
+    "scientific_experiments/task_07_insert_centrifuge_tubes/task_07_insert_centrifuge_tubes.json",
+    "scientific_experiments/task_08_place_container_in_oven/task_08_place_container_in_oven.json",
+    "scientific_experiments/task_09_solid_weighing/task_09_solid_weighing.json",
+    "scientific_experiments/task_10_titration_experiment/task_10_titration_experiment.json",
+    "scientific_experiments/task_11_remove_container_from_oven/task_11_remove_container_from_oven.json",
+    "scientific_experiments/task_12_fehling_test/task_12_fehling_test.json",
+    "scientific_experiments/task_13_blue_bottle_reaction/task_13_blue_bottle_reaction.json",
+    "scientific_experiments/task_14_fixed_weight_weighing/task_14_fixed_weight_weighing.json"
+]

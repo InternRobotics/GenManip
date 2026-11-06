@@ -1,0 +1,204 @@
+demonstration_configs:
+- domain_randomization: &id003
+    cameras:
+      config_path: configs/cameras/fixed_camera_lift2_simbox.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config: &id004
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    reset_tcp: 0.2
+    goal:
+    - - obj1_uid:
+        - cup2
+        obj2_uid:
+        - plate2
+        position:
+        - top
+        fixed_position: true
+        force_fixed_grasp: true
+        allow_fixed_grasp: true
+        arm: left
+      - obj1_uid:
+        - cup1
+        obj2_uid:
+        - plate1
+        position:
+        - top
+        fixed_position: true
+        force_fixed_grasp: true
+        allow_fixed_grasp: true
+        arm: right
+    mode: manual
+    planner: curobo
+  instruction: put the cups to the plates with relative color.
+  layout_config: &id011
+    ignored_objects: []
+    custom_tableset:
+      cup1: &id005
+        pos_x: -0.14
+        pos_y: -0.22
+        random_range_w: -0.05
+        random_range_h: -0.05
+        random_range_angle: 360
+        additional_height: 0.01
+        reset_orientation: true
+        type: fixed_random_global_range
+      cup2: &id006
+        pos_x: -0.14
+        pos_y: 0.22
+        random_range_w: -0.05
+        random_range_h: 0.05
+        random_range_angle: 360
+        additional_height: 0.01
+        reset_orientation: true
+        type: fixed_random_global_range
+      plate1: &id008
+        pos_x: -0.25
+        pos_y: 0.0
+        random_range_w: 0.05
+        random_range_h: -0.05
+        random_range_angle: 360
+        additional_height: 0.01
+        reset_orientation: true
+        type: fixed_random_global_range
+      plate2: &id007
+        pos_x: 0.0
+        pos_y: 0.0
+        random_range_w: -0.05
+        random_range_h: -0.05
+        random_range_angle: 360
+        additional_height: 0.01
+        reset_orientation: true
+        type: fixed_random_global_range
+    type: random_custom_tableset
+  mode: manual
+  num_episode: 2500
+  object_config: &id009
+    cup1: &id001
+      type: load_object_from_path
+      filter_rule: []
+      max_cached_num: 10
+      path: scene_usds/IROS_scenes_aloha_final/scene_cup/cups
+      fixed_scale: 0.0003
+      option:
+      - plain_replace
+      - cup_plate_replace
+      without_colliders: true
+    plate1: &id002
+      type: load_object_from_path
+      filter_rule: []
+      max_cached_num: 10
+      path: scene_usds/IROS_scenes_aloha_final/scene_cup/plates
+      fixed_scale: 0.0005
+      option:
+      - plain_replace
+      - cup_plate_replace
+      without_colliders: true
+      is_not_rigid: true
+    cup2: *id001
+    plate2: *id002
+    book1:
+      type: existed_object
+      uid_list:
+      - daf860020fdf4ed392f07933977ee89b
+      is_not_rigid: true
+    book2:
+      type: existed_object
+      uid_list:
+      - c594cb43f36140c8a422b069d6d9714d
+      is_not_rigid: true
+    book3:
+      type: existed_object
+      uid_list:
+      - 49d47c6c27648a6af26d6c912c03826
+      is_not_rigid: true
+    book4:
+      type: existed_object
+      uid_list:
+      - 97e7c7f61104b6785c3bd0fdb99c74d
+      is_not_rigid: true
+    plant:
+      type: existed_object
+      uid_list:
+      - 2704c1bafd44bfd9e98538276ad5614
+      is_not_rigid: true
+    radio:
+      type: existed_object
+      uid_list:
+      - f79ee359a23478ab9d2cc0d0da3fc39
+      is_not_rigid: true
+    keyboard:
+      type: existed_object
+      uid_list:
+      - f0a9fc8b51004680904f320e7133e951
+      is_not_rigid: true
+    pen:
+      type: existed_object
+      uid_list:
+      - b6c09ed6acaa45ebb20c53696372ce3a
+      is_not_rigid: true
+  preprocess_config: []
+  robots:
+  - &id010
+    type: manip/lift2/R5a
+  table_uid: instance
+  task_name: IROS_C_Lift2_Simbox/colorful_cups
+  usd_name: scene_usds/IROS_scenes_aloha_final/scene_cup/base_2
+- domain_randomization: *id003
+  generation_config: *id004
+  instruction: put the cups to the plates with relative color.
+  layout_config:
+    ignored_objects: []
+    custom_tableset:
+      cup1: *id005
+      cup2: *id006
+      plate1: *id007
+      plate2: *id008
+    type: random_custom_tableset
+  mode: manual
+  num_episode: 5000
+  object_config: *id009
+  preprocess_config: []
+  robots:
+  - *id010
+  table_uid: instance
+  task_name: IROS_C_Lift2_Simbox/colorful_cups
+  usd_name: scene_usds/IROS_scenes_aloha_final/scene_cup/base_2
+evaluation_configs:
+- domain_randomization: *id003
+  generation_config: *id004
+  instruction: put the cups to the plates with relative color.
+  layout_config: *id011
+  mode: manual
+  num_test: 20
+  object_config: *id009
+  preprocess_config: []
+  robots:
+  - *id010
+  table_uid: instance
+  task_name: IROS_C_Lift2_Simbox_seen_renamed/organize_colorful_cups
+  usd_name: scene_usds/IROS_scenes_aloha_final/scene_cup/base_2
+- domain_randomization: *id003
+  generation_config: *id004
+  instruction: put the cups to the plates with relative color.
+  layout_config: *id011
+  mode: manual
+  num_test: 20
+  object_config: *id009
+  preprocess_config: []
+  robots:
+  - *id010
+  table_uid: instance
+  task_name: IROS_C_Lift2_Simbox_unseen_renamed/organize_colorful_cups
+  usd_name: scene_usds/IROS_scenes_aloha_final/scene_cup/base_2

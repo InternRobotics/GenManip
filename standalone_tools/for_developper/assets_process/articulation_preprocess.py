@@ -379,5 +379,9 @@ def set_articulation(usd_path, is_articulation=True):
 
 
 if __name__ == "__main__":
-    usd_path = "/home/pjlab/chenxinyi/chenxinyi1/gaoning/Collected_Arti_60/data/grutopia/target/models/object/articulated_clean/faucet/2c166669cee90e02810581544e53a9b4/instance.usd"
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("usd_path", help="USD asset to preprocess")
+    usd_path = parser.parse_args().usd_path
     set_articulation(usd_path, is_articulation=True)

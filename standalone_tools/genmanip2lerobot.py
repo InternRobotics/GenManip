@@ -417,7 +417,7 @@ def create_dataset(
                 "width",
             ],
         }
-    print(HF_LEROBOT_HOME)  # /root/.cache/huggingface/lerobot
+    print(HF_LEROBOT_HOME)
     if Path(HF_LEROBOT_HOME / repo_id).exists():
         if not overwrite:
             raise FileExistsError(
@@ -523,6 +523,23 @@ def _decode_color_frame(
     if (img.shape[1], img.shape[0]) != target_size:
         img = cv2.resize(img, target_size, interpolation=cv2.INTER_LINEAR)
     return img
+
+
+def _compute_absolute_base_action(
+    state_base: np.ndarray, action_base_delta: np.ndarray
+) -> np.ndarray:
+    if state_base.shape != action_base_delta.shape:
+        raise ValueError(
+            "Base state/action shape mismatch: "
+            f"{state_base.shape} != {action_base_delta.shape}"
+        )
+
+    action_base_offset = action_base_delta.copy()
+    if action_base_offset.shape[1] >= 3:
+        # delta_move_to accepts yaw in degrees, while base qpos stores yaw in
+        # radians. Keep action.base in the state coordinate units.
+        action_base_offset[:, 2] = np.deg2rad(action_base_offset[:, 2])
+    return state_base + action_base_offset
 
 
 def ee_pose_list_to_np(ee_pose_action_list) -> np.ndarray:
@@ -681,11 +698,9 @@ def add_single_episode_to_dataset(
                         (action_joints.shape[0], len(base_indices)), dtype=np.float32
                     )
 
-                action_base = np.zeros_like(action_base_delta, dtype=np.float32)
-                if action_base_delta.shape[0] > 1:
-                    action_base[1:] = np.cumsum(
-                        action_base_delta[:-1], axis=0, dtype=np.float32
-                    )
+                action_base = _compute_absolute_base_action(
+                    state_base, action_base_delta
+                )
 
             _validate_episode_data(
                 state_joints=state_joints,

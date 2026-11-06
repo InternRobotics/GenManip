@@ -1,0 +1,354 @@
+# Right means the robot right-hand side: world -Y (same convention as right bread).
+# Keep salt upright beside, not on, the plate. Legacy relationship right uses +Y.
+demonstration_configs: []
+evaluation_configs:
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera_lift2_simbox.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: manual
+      robot: 0
+      actions:
+      - type: move_to
+        name: align_base_to_salt
+        linear_step: 0.003
+        move_type: alignv2
+        arm: left
+        grasp: false
+        rel_object_uid: salt
+        delta_position:
+          x: -0.617
+          y: 0.136
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: settle_base_at_salt
+            type: pending
+            cnt: 15
+            grasp: false
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: approach_salt
+            type: object_frame
+            rel_object_uid: salt
+            translation:
+            - -0.225
+            - 0.12990381
+            - 0.24
+            orientation:
+            - 0.9330127
+            - 0.0669873
+            - 0.25
+            - -0.25
+            grasp: false
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: align_bottle_side
+            type: object_frame
+            rel_object_uid: salt
+            translation:
+            - -0.1875
+            - 0.10825318
+            - 0.14
+            orientation:
+            - 0.9330127
+            - 0.0669873
+            - 0.25
+            - -0.25
+            grasp: false
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: grasp_bottle_side
+            type: object_frame
+            rel_object_uid: salt
+            translation:
+            - -0.1125
+            - 0.06495191
+            - 0.09
+            orientation:
+            - 0.9330127
+            - 0.0669873
+            - 0.25
+            - -0.25
+            grasp: false
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: close_gripper
+            type: pending
+            cnt: 45
+            grasp: true
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: lift_salt
+            type: object_frame
+            rel_object_uid: salt
+            translation:
+            - -0.1125
+            - 0.06495191
+            - 0.29
+            orientation:
+            - 0.9330127
+            - 0.0669873
+            - 0.25
+            - -0.25
+            grasp: true
+      - type: move_to
+        name: carry_salt_right_of_plate
+        linear_step: 0.002
+        move_type: alignv2
+        arm: left
+        grasp: true
+        rel_object_uid: plate
+        delta_position:
+          x: -0.5
+          y: 0.01842
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: above_right_of_plate
+            type: object_position
+            rel_object_uid: plate
+            translation:
+            - -0.1625
+            - -0.16504809
+            - 0.29
+            orientation: &id001
+            - 0.9330127
+            - 0.0669873
+            - 0.25
+            - -0.25
+            grasp: true
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: lower_right_of_plate
+            type: object_position
+            rel_object_uid: plate
+            translation:
+            - -0.1625
+            - -0.16504809
+            - 0.125
+            orientation: *id001
+            grasp: true
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: release_salt
+            type: pending
+            grasp: false
+            cnt: 45
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: withdraw_salt
+            type: object_position
+            rel_object_uid: plate
+            translation:
+            - -0.1625
+            - -0.16504809
+            - 0.3
+            orientation: *id001
+            grasp: false
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: settle_salt
+            type: pending
+            grasp: false
+            cnt: 90
+    articulation: {}
+    goal:
+    - - type: manip/default/sr_based_genmanip_range
+        not_set_mass: true
+        obj1_uid: salt
+        x_type: relative
+        y_type: relative
+        z_type: relative
+        x_rel_object_uid: plate
+        y_rel_object_uid: plate
+        z_rel_object_uid: plate
+        x_range:
+        - -0.085
+        - -0.015
+        y_range:
+        - -0.27
+        - -0.2
+        z_range:
+        - 0.015
+        - 0.065
+      - type: manip/default/sr_based_genmanip_axis_align
+        not_set_mass: true
+        obj1_uid: salt
+        obj2_uid: plate
+        obj1_axis: z
+        obj2_axis: y
+        comparison: <=
+        threshold_deg: 15
+    mode: manual
+    planner: curobo
+  instruction: Put the white seasoning to the right of the plate.
+  layout_config:
+    type: random_custom_tableset
+    in_order: true
+    custom_tableset:
+      plate:
+        type: global_range
+        keep_original_orientation: true
+        allow_rotation_fallback: false
+        random_range_x: -0.29
+        random_range_y: -0.2
+        random_range_w: 0.335
+        random_range_h: 0.63
+        random_range_angle: 0
+        buffer_size: 0.01
+      bowl:
+        type: global_range
+        keep_original_orientation: true
+        allow_rotation_fallback: false
+        random_range_x: -0.29
+        random_range_y: -0.2
+        random_range_w: 0.335
+        random_range_h: 0.63
+        random_range_angle: 0
+        buffer_size: 0.01
+      salt:
+        type: global_range
+        keep_original_orientation: true
+        allow_rotation_fallback: false
+        random_range_x: 0.065
+        random_range_y: -0.12
+        random_range_w: 0.125
+        random_range_h: 0.42
+        random_range_angle: 0
+        buffer_size: 0.06
+      pepper:
+        type: global_range
+        keep_original_orientation: true
+        allow_rotation_fallback: false
+        random_range_x: 0.065
+        random_range_y: -0.12
+        random_range_w: 0.125
+        random_range_h: 0.42
+        random_range_angle: 0
+        buffer_size: 0.06
+      banana:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      bread2:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      bread4:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      apple:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      green_apple:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      beef:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      lettuce:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+  mode: manual
+  object_config:
+    apple:
+      type: existed_object
+      uid_list:
+      - apple
+      is_not_rigid: true
+      without_colliders: true
+    green_apple:
+      type: existed_object
+      uid_list:
+      - apple1
+      is_not_rigid: true
+      without_colliders: true
+    banana:
+      type: existed_object
+      uid_list:
+      - banana
+    salt:
+      type: existed_object
+      mass: 0.18
+      uid_list:
+      - salt
+    pepper:
+      type: existed_object
+      uid_list:
+      - pepper
+    bowl:
+      type: existed_object
+      uid_list:
+      - bowl
+    beef:
+      type: existed_object
+      uid_list:
+      - beef
+      is_not_rigid: true
+      without_colliders: true
+    plate:
+      type: existed_object
+      uid_list:
+      - plate
+      is_not_rigid: true
+      without_colliders: true
+    bread2:
+      type: existed_object
+      uid_list:
+      - bread2
+      is_not_rigid: true
+      without_colliders: true
+    lettuce:
+      type: existed_object
+      uid_list:
+      - lettuce
+      is_not_rigid: true
+      without_colliders: true
+    bread4:
+      type: existed_object
+      uid_list:
+      - bread4
+      is_not_rigid: true
+      without_colliders: true
+  preprocess_config: []
+  robots:
+  - type: manip/lift2/R5a
+    position:
+    - -0.7
+    - 0.0
+    - 0.5
+  table_uid: instance
+  task_name: ebench15/salad/test/white_seasoning_right_of_plate
+  usd_name: scene_usds/ebench15/salad/base
+  env_vars:
+    MDL_SYSTEM_PATH: /isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench15/salad/SubUSDs/materials
+  num_test: 20
+  num_steps: 1000

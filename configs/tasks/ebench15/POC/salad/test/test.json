@@ -1,0 +1,12 @@
+[
+    "ebench15/POC/salad/test/apple_to_bowl.yml",
+    "ebench15/POC/salad/test/fruit_to_bowl_then_steak_to_plate.yml",
+    "ebench15/POC/salad/test/left_banana_to_plate.yml",
+    "ebench15/POC/salad/test/make_fruit_smoothie.yml",
+    "ebench15/POC/salad/test/make_sandwich.yml",
+    "ebench15/POC/salad/test/red_fruit_to_bowl.yml",
+    "ebench15/POC/salad/test/salt_to_plate_rotate.yml",
+    "ebench15/POC/salad/test/steak_then_salt.yml",
+    "ebench15/POC/salad/test/vegetable_then_steak_stack.yml",
+    "ebench15/POC/salad/test/white_seasoning_right_of_plate.yml"
+]

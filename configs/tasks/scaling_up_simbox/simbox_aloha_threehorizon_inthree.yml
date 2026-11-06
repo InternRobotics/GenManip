@@ -1,0 +1,140 @@
+demonstration_configs:
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera_aloha_simbox.yml
+      type: fixed
+    object_data_path: objaverse_annotation_refined_pnp
+    random_environment:
+      has_wall: true
+      hdr: true
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: true
+      table_type: true
+      wall_texture: true
+    rewrite_instruction: true
+    record_arm_info: true
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - fixed_position: true
+        ignored_uid: []
+        obj1_uid:
+        - obj1_0
+        obj2_uid:
+        - obj2_0
+        position:
+        - top
+        arm: auto
+      - fixed_position: true
+        ignored_uid: []
+        obj1_uid:
+        - obj1_1
+        obj2_uid:
+        - obj2_1
+        position:
+        - top
+        arm: auto
+      - fixed_position: true
+        ignored_uid: []
+        obj1_uid:
+        - obj1_2
+        obj2_uid:
+        - obj2_2
+        position:
+        - top
+        arm: auto
+    mode: random_all
+    planner: curobo
+    reset_tcp: true
+  instruction: ''
+  layout_config:
+    custom_tableset:
+      obj2_0: &id002
+        buffer_size: 0.02
+        random_range_angle: 360
+        random_range_h: 1.0
+        random_range_w: 0.25
+        random_range_x: -0.15
+        random_range_y: -0.5
+        reset_orientation: true
+        type: global_range
+      obj2_1: *id002
+      obj2_2: *id002
+      obj1_0: *id002
+      obj1_1: *id002
+      obj1_2: *id002
+      background_0: &id001
+        random_range_angle: 360
+        random_range_h: 20
+        random_range_w: 20
+        random_range_x: -10
+        random_range_y: -10
+        type: global_range
+      background_1: *id001
+      background_2: *id001
+      background_3: *id001
+      background_4: *id001
+    ignored_objects: []
+    in_order: true
+    type: random_custom_tableset
+  mode: manual
+  num_episode: 10000
+  object_config:
+    background_0: &id003
+      clip_range:
+        max: 0.2
+        min: 0.05
+      filter_rule: []
+      is_not_rigid: true
+      max_cached_num: 50
+      path: object_usds/objaverse_usd_cooked
+      type: load_object_from_path
+    background_1: *id003
+    background_2: *id003
+    background_3: *id003
+    background_4: *id003
+    obj1_0: &id004
+      clip_range:
+        max: 0.15
+        min: 0.05
+      filter_rule:
+      - can_grasp
+      max_cached_num: 50
+      option:
+      - adjust_thickness
+      path: object_usds/objaverse_usd_cooked
+      type: load_object_from_path
+    obj1_1: *id004
+    obj1_2: *id004
+    obj2_0: &id005
+      clip_range:
+        max: 0.20
+        min: 0.15
+      filter_rule:
+      - is_container
+      max_cached_num: 50
+      option:
+      - force_top
+      path: object_usds/objaverse_usd_cooked
+      type: load_object_from_path
+    obj2_1: *id005
+    obj2_2: *id005
+  preprocess_config:
+  - config:
+      type: ccd
+    type: ccd
+  - config:
+      config: default
+      type: convexDecomposition
+    type: collider
+  restart_per_success: 30
+  robots:
+  - type: manip/mobile_aloha/piper
+  table_uid: aa49db8a801d402dac6cf1579536502c
+  task_name: simbox_scaling/simbox_aloha_threehorizon_inthree
+  usd_name: scene_usds/sim2real_scenes_align_for_scaling/base
+evaluation_configs: []

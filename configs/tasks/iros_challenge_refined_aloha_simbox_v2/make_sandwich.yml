@@ -1,0 +1,390 @@
+demonstration_configs:
+- domain_randomization: &id003
+    cameras:
+      config_path: configs/cameras/fixed_camera_aloha_simbox_v2.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path: &id004
+      mode: auto
+      robot: 0
+    articulation: []
+    reset_tcp: 0.2
+    randomization_hack_flag: true
+    goal:
+    - - - &id005
+          obj1_uid:
+          - bread2
+          obj2_uid:
+          - plate
+          position:
+          - top
+          fixed_position: true
+          fixed_position_config:
+            translation:
+            - -0.05
+            - 0.0
+            - 0.05
+            orientation:
+            - 0.924
+            - 0.383
+            - 0.0
+            - 0.0
+          force_fixed_grasp: true
+          fixed_grasp_config: &id002
+            translation:
+            - 0.0
+            - 0.0
+            - -0.03
+          allow_fixed_grasp: true
+          mesh_top_only: true
+          arm: auto
+          motion_config: &id013
+            pre_grasp_distance: 0.08
+            post_grasp_distance: 0.24
+            pre_place_distance: null
+            post_place_distance: 0.08
+        - &id006
+          obj1_uid:
+          - beef
+          obj2_uid:
+          - bread2
+          position:
+          - top
+          fixed_position: true
+          fixed_position_config:
+            translation:
+            - 0.0
+            - -0.04
+            - 0.05
+            orientation:
+            - 0.924
+            - -0.383
+            - 0.0
+            - 0.0
+          force_fixed_grasp: true
+          fixed_grasp_config: &id001
+            translation:
+            - -0.04
+            - 0.0
+            - -0.03
+          allow_fixed_grasp: true
+          mesh_top_only: true
+          arm: auto
+          ignored_uid:
+          - plate
+          motion_config:
+            pre_grasp_distance: 0.08
+            post_grasp_distance: 0.18
+            pre_place_distance: null
+            post_place_distance: 0.08
+        - obj1_uid:
+          - lettuce
+          obj2_uid:
+          - beef
+          position:
+          - top
+          fixed_position: true
+          fixed_position_config: &id012
+            translation:
+            - 0.0
+            - 0.05
+            - 0.05
+            orientation:
+            - 0.924
+            - 0.383
+            - 0.0
+            - 0.0
+          force_fixed_grasp: true
+          fixed_grasp_config: *id001
+          allow_fixed_grasp: true
+          mesh_top_only: true
+          ignored_uid:
+          - plate
+          - bread2
+          arm: auto
+          motion_config:
+            pre_grasp_distance: 0.08
+            post_grasp_distance: 0.15
+            pre_place_distance: null
+            post_place_distance: 0.08
+        - obj1_uid:
+          - bread4
+          obj2_uid:
+          - lettuce
+          position:
+          - top
+          fixed_position: true
+          fixed_position_config: &id007
+            translation:
+            - 0.0
+            - 0.02
+            - -0.01
+            orientation:
+            - 0.924
+            - -0.383
+            - 0.0
+            - 0.0
+          force_fixed_grasp: true
+          fixed_grasp_config: *id002
+          allow_fixed_grasp: true
+          mesh_top_only: true
+          ignored_uid:
+          - plate
+          - bread2
+          - beef
+          arm: auto
+          motion_config: &id008
+            pre_grasp_distance: 0.08
+            post_grasp_distance: 0.16
+            pre_place_distance: null
+            post_place_distance: 0.08
+    mode: manual
+    planner: curobo
+  instruction: put the box in the basket.
+  layout_config: &id009
+    ignored_objects: []
+    custom_tableset:
+    - plate:
+        pos_x: -0.0301
+        pos_y: 0.0
+        additional_height: 0.01
+        random_range_angle: 0
+        reset_orientation: true
+        orientation:
+        - 0.70711
+        - 0.70711
+        - 0.0
+        - 0.0
+        type: fixed_global_range
+      bread2:
+        pos_x: -0.17217
+        pos_y: -0.45642
+        additional_height: 0.01
+        random_range_angle: 0
+        reset_orientation: true
+        orientation:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+        type: fixed_global_range
+      lettuce:
+        pos_x: 0.21254
+        pos_y: -0.31369
+        additional_height: 0.01
+        random_range_angle: 0
+        reset_orientation: true
+        orientation:
+        - 0.91684
+        - -0.008
+        - -0.39917
+        - 0.00348
+        type: fixed_global_range
+      beef:
+        pos_x: 0.21254
+        pos_y: 0.33561
+        additional_height: 0.01
+        random_range_angle: 0
+        reset_orientation: true
+        orientation:
+        - 0.73057
+        - 0.0
+        - 0.68284
+        - 0.0
+        type: fixed_global_range
+      bread4:
+        pos_x: -0.15623
+        pos_y: 0.49199
+        additional_height: 0.01
+        random_range_angle: 0
+        reset_orientation: true
+        orientation:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+        type: fixed_global_range
+    type: random_custom_tableset
+  mode: manual
+  num_episode: 2000
+  object_config: &id010
+    beef:
+      type: existed_object
+      uid_list:
+      - beef
+      is_not_rigid: true
+      without_colliders: true
+    plate:
+      type: existed_object
+      uid_list:
+      - plate
+      is_not_rigid: true
+      without_colliders: true
+    bread2:
+      type: existed_object
+      uid_list:
+      - bread2
+      is_not_rigid: true
+      without_colliders: true
+    lettuce:
+      type: existed_object
+      uid_list:
+      - lettuce
+      is_not_rigid: true
+      without_colliders: true
+    bread4:
+      type: existed_object
+      uid_list:
+      - bread4
+      is_not_rigid: true
+      without_colliders: true
+  preprocess_config: []
+  robots:
+  - &id011
+    type: manip/mobile_aloha/piper
+  table_uid: instance
+  task_name: IROS_C_Aloha_Simbox/make_sandwich
+  usd_name: scene_usds/IROS_scenes_aloha_final/scene_sandwich/base
+- domain_randomization: *id003
+  generation_config:
+    action_path: *id004
+    articulation: []
+    reset_tcp: 0.2
+    randomization_hack_flag: true
+    goal:
+    - - - *id005
+        - *id006
+        - obj1_uid:
+          - bread4
+          obj2_uid:
+          - beef
+          position:
+          - top
+          fixed_position: true
+          fixed_position_config: *id007
+          force_fixed_grasp: true
+          fixed_grasp_config: *id002
+          allow_fixed_grasp: true
+          mesh_top_only: true
+          ignored_uid:
+          - plate
+          - bread2
+          arm: auto
+          motion_config: *id008
+    mode: manual
+    planner: curobo
+  instruction: put the box in the basket.
+  layout_config: *id009
+  mode: manual
+  num_episode: 4000
+  object_config: *id010
+  preprocess_config: []
+  robots:
+  - *id011
+  table_uid: instance
+  task_name: IROS_C_Aloha_Simbox/make_sandwich
+  usd_name: scene_usds/IROS_scenes_aloha_final/scene_sandwich/base
+- domain_randomization: *id003
+  generation_config: &id014
+    action_path: *id004
+    articulation: []
+    reset_tcp: 0.2
+    randomization_hack_flag: true
+    goal:
+    - - - *id005
+        - obj1_uid:
+          - lettuce
+          obj2_uid:
+          - bread2
+          position:
+          - top
+          fixed_position: true
+          fixed_position_config: *id012
+          force_fixed_grasp: true
+          fixed_grasp_config: *id001
+          allow_fixed_grasp: true
+          mesh_top_only: true
+          ignored_uid:
+          - plate
+          arm: auto
+          motion_config:
+            pre_grasp_distance: 0.08
+            post_grasp_distance: 0.12
+            pre_place_distance: null
+            post_place_distance: 0.08
+        - obj1_uid:
+          - bread4
+          obj2_uid:
+          - lettuce
+          position:
+          - top
+          fixed_position: true
+          fixed_position_config:
+            translation:
+            - 0.0
+            - -0.02
+            - -0.01
+            orientation:
+            - 0.924
+            - -0.383
+            - 0.0
+            - 0.0
+          force_fixed_grasp: true
+          fixed_grasp_config: *id002
+          allow_fixed_grasp: true
+          mesh_top_only: true
+          ignored_uid:
+          - plate
+          - bread2
+          - beef
+          arm: auto
+          motion_config: *id013
+    mode: manual
+    planner: curobo
+  instruction: put the box in the basket.
+  layout_config: *id009
+  mode: manual
+  num_episode: 6000
+  object_config: *id010
+  preprocess_config: []
+  robots:
+  - *id011
+  table_uid: instance
+  task_name: IROS_C_Aloha_Simbox/make_sandwich
+  usd_name: scene_usds/IROS_scenes_aloha_final/scene_sandwich/base
+evaluation_configs:
+- domain_randomization: *id003
+  generation_config: *id014
+  instruction: put the box in the basket.
+  layout_config: *id009
+  mode: manual
+  num_test: 20
+  object_config: *id010
+  preprocess_config: []
+  robots:
+  - *id011
+  table_uid: instance
+  task_name: IROS_C_Aloha_Simbox_seen_renamed/make_sandwich
+  usd_name: scene_usds/IROS_scenes_aloha_final/scene_sandwich/base
+- domain_randomization: *id003
+  generation_config: *id014
+  instruction: put the box in the basket.
+  layout_config: *id009
+  mode: manual
+  num_test: 20
+  object_config: *id010
+  preprocess_config: []
+  robots:
+  - *id011
+  table_uid: instance
+  task_name: IROS_C_Aloha_Simbox_unseen_renamed/make_sandwich
+  usd_name: scene_usds/IROS_scenes_aloha_final/scene_sandwich/base

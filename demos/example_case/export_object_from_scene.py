@@ -18,13 +18,14 @@ from genmanip.utils.usd_utils.export_utils import export
 from omni.isaac.core.prims import XFormPrim  # type: ignore
 from omni.isaac.core.utils.prims import get_prim_at_path  # type: ignore
 
+source_dir = os.environ.get("GENMANIP_SCENE_DIR", os.path.join(current_dir, "saved/assets/scene_usds"))
 usd_path_list = [
-    os.path.join("/home/gaoning/grasp_vla_assets/GenManip", usd_path)
-    for usd_path in os.listdir("/home/gaoning/grasp_vla_assets/GenManip")
+    os.path.join(source_dir, usd_path)
+    for usd_path in os.listdir(source_dir)
     if usd_path.endswith(".usda")
 ]
 
-export_dir = os.path.join("/home/gaoning/GenManipAssets-New")
+export_dir = os.environ.get("GENMANIP_EXPORT_DIR", os.path.join(current_dir, "tmp/exported_objects"))
 Path(export_dir).mkdir(parents=True, exist_ok=True)
 for usd_path in tqdm(usd_path_list):
     scene_xform, uuid = load_world_xform_prim(usd_path)

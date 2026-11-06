@@ -1,0 +1,151 @@
+demonstration_configs:
+- domain_randomization: &id001
+    cameras:
+      config_path: configs/cameras/fixed_camera_lift2_scientific_experiments.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+    material_overrides:
+    - prim_path: /World/_scene/Looks/liquid_back/Shader
+      attribute: inputs:emissiveColor
+      value: [0.89, 0.33, 0.49]
+  generation_config: &id002
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal: [[]]
+    mode: manual
+    planner: curobo
+  instruction: no instruction
+  layout_config: &id003
+    ignored_objects: []
+    type: None
+  mode: manual
+  num_episode: 50
+  object_config: {}
+  preprocess_config: []
+  robots:
+  - &id006
+    type: manip/lift2/R5a
+    usd_path: robot_usds/lift2_scientific_experiments/robot.usd
+    position: [0.0, -0.7, 0.0]
+    orientation: [0.7071067812, 0.0, 0.0, 0.7071067812]
+  table_uid: table
+  physics_scene_config:
+    BounceThreshold: 0.0
+    BroadphaseType: GPU
+    CollisionSystem: PCM
+    EnableCCD: false
+    EnableEnhancedDeterminism: false
+    EnableExternalForcesEveryIteration: false
+    EnableGPUDynamics: true
+    EnableResidualReporting: false
+    EnableSceneQuerySupport: true
+    EnableStabilization: true
+    FrictionCorrelationDistance: 0.02500000037252903
+    FrictionOffsetThreshold: 0.03999999910593033
+    FrictionType: patch
+    GpuCollisionStackSize: 67108864
+    GpuFoundLostAggregatePairsCapacity: 1024
+    GpuFoundLostPairsCapacity: 262144
+    GpuHeapCapacity: 67108864
+    GpuMaxDeformableSurfaceContacts: 1048576
+    GpuMaxHairContacts: 1048576
+    GpuMaxNumPartitions: 8
+    GpuMaxParticleContacts: 1048576
+    GpuMaxRigidContactCount: 524288
+    GpuMaxRigidPatchCount: 81920
+    GpuMaxSoftBodyContacts: 1048576
+    GpuTempBufferCapacity: 16777216
+    GpuTotalAggregatePairsCapacity: 1024
+    InvertCollisionGroupFilter: false
+    MaxBiasCoefficient: Inf
+    MaxPositionIterationCount: 255
+    MaxVelocityIterationCount: 255
+    MinPositionIterationCount: 1
+    MinVelocityIterationCount: 0
+    ReportKinematicKinematicPairs: false
+    ReportKinematicStaticPairs: false
+    SolverType: TGS
+    TimeStepsPerSecond: 120
+    UpdateType: Synchronous
+  task_name: scientific_experiments/task_03_magnetic_beaker_stirrer/validation_mixed_2
+  usd_name: scene_usds/scientific_experiments/task_03_magnetic_beaker_stirrer/unseen_scene_2/scene
+  env_vars:
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl"
+evaluation_configs:
+- domain_randomization: *id001
+  generation_config: *id002
+  instruction: no instruction
+  layout_config: *id003
+  mode: manual
+  num_test: 1
+  num_steps: 2500
+  preserve_score_on_invalid_state: true
+  warmup_steps: 300
+  physics_dt: 0.0083333333
+  rendering_dt: 0.0083333333
+  object_config: {}
+  physics_scene_config:
+    BounceThreshold: 0.0
+    BroadphaseType: GPU
+    CollisionSystem: PCM
+    EnableCCD: false
+    EnableEnhancedDeterminism: false
+    EnableExternalForcesEveryIteration: false
+    EnableGPUDynamics: true
+    EnableResidualReporting: false
+    EnableSceneQuerySupport: true
+    EnableStabilization: true
+    FrictionCorrelationDistance: 0.02500000037252903
+    FrictionOffsetThreshold: 0.03999999910593033
+    FrictionType: patch
+    GpuCollisionStackSize: 67108864
+    GpuFoundLostAggregatePairsCapacity: 1024
+    GpuFoundLostPairsCapacity: 262144
+    GpuHeapCapacity: 67108864
+    GpuMaxDeformableSurfaceContacts: 1048576
+    GpuMaxHairContacts: 1048576
+    GpuMaxNumPartitions: 8
+    GpuMaxParticleContacts: 1048576
+    GpuMaxRigidContactCount: 524288
+    GpuMaxRigidPatchCount: 81920
+    GpuMaxSoftBodyContacts: 1048576
+    GpuTempBufferCapacity: 16777216
+    GpuTotalAggregatePairsCapacity: 1024
+    InvertCollisionGroupFilter: false
+    MaxBiasCoefficient: Inf
+    MaxPositionIterationCount: 255
+    MaxVelocityIterationCount: 255
+    MinPositionIterationCount: 1
+    MinVelocityIterationCount: 0
+    ReportKinematicKinematicPairs: false
+    ReportKinematicStaticPairs: false
+    SolverType: TGS
+    TimeStepsPerSecond: 120
+    UpdateType: Synchronous
+  preprocess_config:
+  - config:
+      Restitution: 0.0
+      DynamicFriction: 1.5
+      StaticFriction: 1.5
+      FrictionCombineMode: max
+      RestitutionCombineMode: multiply
+      ImprovePatchFriction: true
+    robot_type: lift2
+    type: set_robot_physics_material
+  robots:
+  - *id006
+  table_uid: table
+  task_name: scientific_experiments/task_03_magnetic_beaker_stirrer/validation_mixed_2
+  usd_name: scene_usds/scientific_experiments/task_03_magnetic_beaker_stirrer/unseen_scene_2/scene
+  env_vars:
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl"

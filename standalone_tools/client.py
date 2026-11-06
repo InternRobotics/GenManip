@@ -19,29 +19,6 @@ def parse_args():
     parser.add_argument("-g", "--gripper_type", type=str, default="panda_hand")
     parser.add_argument("-c", "--control_type", type=str, default="joint_position")
     parser.add_argument(
-        "--web_view",
-        action="store_true",
-        help="Start a lightweight web viewer for the stream",
-    )
-    parser.add_argument(
-        "--web_view_port",
-        type=int,
-        default=55090,
-        help="Web viewer port (default: 55090)",
-    )
-    parser.add_argument(
-        "--web_view_interval",
-        type=int,
-        default=10,
-        help="Show one frame every N steps (default: 10)",
-    )
-    parser.add_argument(
-        "--web_view_scale",
-        type=float,
-        default=1.0,
-        help="Scale factor for web viewer frames (default: 1.0)",
-    )
-    parser.add_argument(
         "--frame_save_interval",
         type=int,
         default=0,
@@ -72,10 +49,6 @@ if __name__ == "__main__":
     client = EvalClient(
         base_url,
         worker_ids=worker_ids,
-        web_view=args.web_view,
-        web_view_port=args.web_view_port,
-        web_view_interval=args.web_view_interval,
-        web_view_scale=args.web_view_scale,
         frame_save_interval=args.frame_save_interval,
         plot_on_episode_end=args.plot_on_episode_end,
     )

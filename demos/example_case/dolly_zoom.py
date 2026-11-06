@@ -38,7 +38,7 @@ world = World()
 # scene_xform, uuid = load_world_xform_prim(
 #     os.path.join(ASSETS_DIR, "scene_usds/debug_scenes/kitchen_scenes/base.usda")
 # )
-scene_xform, uuid = load_world_xform_prim("/home/gaoning/grasp_vla_assets/object.usda")
+scene_xform, uuid = load_world_xform_prim(os.environ.get("GENMANIP_SCENE_USD", os.path.join(ASSETS_DIR, "object.usda")))
 print(uuid)
 camera_list = create_camera_list(camera_data, uuid)
 robot_list = [relate_franka_from_data(uuid)]

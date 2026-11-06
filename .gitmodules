@@ -1,3 +1,3 @@
 [submodule "standalone_tools/packages/genmanip_client"]
 	path = standalone_tools/packages/genmanip_client
-	url = https://gitee.pjlab.org.cn/L2/MultimodalVLA/GenManip-Client.git
+	url = https://github.com/InternRobotics/genmanip-client.git

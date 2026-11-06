@@ -1,0 +1,222 @@
+demonstration_configs:
+- domain_randomization: &id010
+    cameras:
+      config_path: configs/cameras/fixed_camera_lift2_simbox.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path: &id011
+      mode: auto
+      robot: 0
+    articulation: []
+    reset_tcp: 0.2
+    randomization_hack_flag: true
+    goal:
+    - - - &id003
+          obj1_uid:
+          - object1
+          obj2_uid:
+          - container2
+          position:
+          - top
+          fixed_position: true
+          force_fixed_grasp: true
+          allow_fixed_grasp: true
+          arm: left
+          mesh_top_only: true
+          fixed_grasp_config: &id001
+            translation:
+            - 0.0
+            - 0.0
+            - -0.04
+          fixed_position_config:
+            translation:
+            - 0.0
+            - 0.05
+            - -0.1
+            orientation:
+            - 1.0
+            - 0.0
+            - 0.0
+            - 0.0
+        - &id002
+          obj1_uid:
+          - object3
+          obj2_uid:
+          - container2
+          position:
+          - top
+          fixed_position: true
+          force_fixed_grasp: true
+          allow_fixed_grasp: true
+          arm: right
+          mesh_top_only: true
+          fixed_grasp_config: *id001
+          fixed_position_config:
+            translation:
+            - 0.0
+            - -0.05
+            - -0.1
+            orientation:
+            - 1.0
+            - 0.0
+            - 0.0
+            - 0.0
+        - &id004
+          obj1_uid:
+          - object2
+          obj2_uid:
+          - container2
+          position:
+          - top
+          fixed_position: true
+          force_fixed_grasp: true
+          allow_fixed_grasp: true
+          arm: left
+          mesh_top_only: true
+          fixed_grasp_config: *id001
+          fixed_position_config: &id005
+            translation:
+            - 0.05
+            - 0.0
+            - -0.1
+            orientation:
+            - 1.0
+            - 0.0
+            - 0.0
+            - 0.0
+    - - - *id002
+        - *id003
+        - *id004
+    - - - *id003
+        - *id002
+        - &id006
+          obj1_uid:
+          - object4
+          obj2_uid:
+          - container2
+          position:
+          - top
+          fixed_position: true
+          force_fixed_grasp: true
+          allow_fixed_grasp: true
+          arm: right
+          mesh_top_only: true
+          fixed_grasp_config: *id001
+          fixed_position_config: *id005
+    - - - *id002
+        - *id003
+        - *id006
+    mode: manual
+    planner: curobo
+  instruction: put the cups to the plates with relative color.
+  layout_config: &id012
+    ignored_objects: []
+    custom_tableset:
+      object1: &id007
+        random_range_x: -0.05
+        random_range_y: 0.2
+        random_range_w: 0.2
+        random_range_h: 0.3
+        random_range_angle: 0
+        additional_height: 0.01
+        reset_orientation: true
+        orientation:
+        - 0.0
+        - 1.0
+        - 0.0
+        - 0.0
+        buffer_size: 0.05
+        type: global_range
+      object2: *id007
+      object3: &id008
+        random_range_x: -0.05
+        random_range_y: -0.5
+        random_range_w: 0.2
+        random_range_h: 0.3
+        random_range_angle: 0
+        additional_height: 0.01
+        reset_orientation: true
+        orientation:
+        - 0.0
+        - 1.0
+        - 0.0
+        - 0.0
+        buffer_size: 0.05
+        type: global_range
+      object4: *id008
+    type: random_custom_tableset
+  mode: manual
+  num_episode: 5000
+  object_config: &id013
+    object1: &id009
+      type: load_object_from_path
+      filter_rule: []
+      max_cached_num: 10
+      path: scene_usds/IROS_scenes_aloha_final/object_place2/glue
+      fixed_scale: 0.001
+      option:
+      - plain_replace
+      without_colliders: true
+    object2: *id009
+    object3: *id009
+    object4: *id009
+    container2:
+      type: existed_object
+      uid_list:
+      - 74c95870e2a141a9903815715d25b8a7
+      without_colliders: true
+      is_not_rigid: true
+  preprocess_config: []
+  robots:
+  - &id014
+    type: manip/lift2/R5a
+  table_uid: instance
+  task_name: IROS_C_Lift2_Simbox/object_select2_refined
+  usd_name: scene_usds/IROS_scenes_aloha_final/object_place2/base
+evaluation_configs:
+- domain_randomization: *id010
+  generation_config: &id015
+    action_path: *id011
+    articulation: []
+    reset_tcp: 0.2
+    randomization_hack_flag: true
+    goal:
+    - - - *id003
+        - *id002
+    - - - *id002
+        - *id003
+    mode: manual
+    planner: curobo
+  instruction: put the cups to the plates with relative color.
+  layout_config: *id012
+  mode: manual
+  num_test: 20
+  object_config: *id013
+  preprocess_config: []
+  robots:
+  - *id014
+  table_uid: instance
+  task_name: IROS_C_Lift2_Simbox_seen_renamed/collect_three_glues
+  usd_name: scene_usds/IROS_scenes_aloha_final/object_place2/base
+- domain_randomization: *id010
+  generation_config: *id015
+  instruction: put the cups to the plates with relative color.
+  layout_config: *id012
+  mode: manual
+  num_test: 20
+  object_config: *id013
+  preprocess_config: []
+  robots:
+  - *id014
+  table_uid: instance
+  task_name: IROS_C_Lift2_Simbox_unseen_renamed/collect_three_glues
+  usd_name: scene_usds/IROS_scenes_aloha_final/object_place2/base

@@ -1,0 +1,6 @@
+[
+    "scientific_experiments/task_04_pour_liquid_with_funnel/validation/mixed/mixed.json",
+    "scientific_experiments/task_04_pour_liquid_with_funnel/validation/unseen_background/unseen_background.json",
+    "scientific_experiments/task_04_pour_liquid_with_funnel/validation/unseen_instruction/unseen_instruction.json",
+    "scientific_experiments/task_04_pour_liquid_with_funnel/validation/unseen_prospect/unseen_prospect.json"
+]

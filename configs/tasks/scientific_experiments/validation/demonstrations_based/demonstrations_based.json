@@ -1,0 +1,16 @@
+[
+    "scientific_experiments/task_01_pour_flask_to_cylinder/validation/validation.json",
+    "scientific_experiments/task_02_pour_liquid_and_stir/validation/validation.json",
+    "scientific_experiments/task_03_magnetic_beaker_stirrer/validation/validation.json",
+    "scientific_experiments/task_04_pour_liquid_with_funnel/validation/validation.json",
+    "scientific_experiments/task_05_remove_container_lid/validation/validation.json",
+    "scientific_experiments/task_06_remove_centrifuge_tubes/validation/validation.json",
+    "scientific_experiments/task_07_insert_centrifuge_tubes/validation/validation.json",
+    "scientific_experiments/task_08_place_container_in_oven/validation/validation.json",
+    "scientific_experiments/task_09_solid_weighing/validation/validation.json",
+    "scientific_experiments/task_10_titration_experiment/validation/validation.json",
+    "scientific_experiments/task_11_remove_container_from_oven/validation/validation.json",
+    "scientific_experiments/task_12_fehling_test/validation/validation.json",
+    "scientific_experiments/task_13_blue_bottle_reaction/validation/validation.json",
+    "scientific_experiments/task_14_fixed_weight_weighing/validation/validation.json"
+]

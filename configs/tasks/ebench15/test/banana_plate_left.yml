@@ -1,0 +1,118 @@
+demonstration_configs:
+- domain_randomization: &id001
+    cameras:
+      config_path: configs/cameras/fixed_camera_lift2_simbox.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '1'
+        obj2_uid:
+        - '2'
+        position:
+        - right
+        fixed_position: true
+        allow_fixed_grasp: true    # comment to use any grasp
+        force_fixed_grasp: true
+        fixed_grasp_config:
+          translation:
+          - 0.0
+          - 0.01
+          - -0.03
+        arm: left
+        grasp_idx: [0, 1, 2, 3, 4]
+        base_motion_list:
+          '0':
+            - x: null
+              y: [-0.05, 0.05]
+              yaw: null
+              type: align
+          '3':
+            - x: null
+              y: [-0.05, 0.05]
+              yaw: null
+              type: align
+    mode: manual
+    planner: curobo
+  instruction: Place the banana to the left of the plate.
+  layout_config:
+    ignored_objects: []
+    type: random_custom_tableset
+    custom_tableset:
+    - '1':
+        random_range_x: -10
+        random_range_y: -10
+        random_range_w: 20
+        random_range_h: 20
+        random_range_angle: 0.0
+        reset_orientation: true
+        orientation:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+        additional_height: 0.01
+        type: global_range
+      '2':
+        random_range_x: -10
+        random_range_y: -10
+        random_range_w: 20
+        random_range_h: 20
+        random_range_angle: 0.0
+        reset_orientation: true
+        additional_height: 0.01
+        type: global_range
+  mode: manual
+  num_episode: 150
+  object_config:
+    '1':
+      type: existed_object
+      uid_list:
+      - '01'
+    '2':
+      type: existed_object
+      uid_list:
+      - '02'
+  preprocess_config: []
+  robots:
+  - &id006
+    type: manip/lift2/R5a
+    position:
+    - 0.0
+    - -0.8
+    - 0.15
+    orientation:
+    - 1.0
+    - 0.0
+    - 0.0
+    - 0.0
+  table_uid: table
+  task_name: ebench15/demo/banana_plate_left
+  usd_name: scene_usds/ebench_15_test/banana_plate/scene
+  env_vars:
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"
+
+evaluation_configs:
+- domain_randomization: *id001
+  num_test: 20
+  num_steps: 1500
+  robots:
+  - *id006
+  table_uid: table
+  task_name: ebench15/demo/banana_plate_left
+  usd_name: scene_usds/ebench_15_test/banana_plate/scene
+  env_vars:
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"

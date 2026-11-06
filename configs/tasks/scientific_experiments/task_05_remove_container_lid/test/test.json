@@ -1,0 +1,7 @@
+[
+    "scientific_experiments/task_05_remove_container_lid/test/mixed/mixed.json",
+    "scientific_experiments/task_05_remove_container_lid/test/unseen_background/unseen_background.json",
+    "scientific_experiments/task_05_remove_container_lid/test/unseen_instruction/unseen_instruction.json",
+    "scientific_experiments/task_05_remove_container_lid/test/unseen_prospect/unseen_prospect.json"
+
+]

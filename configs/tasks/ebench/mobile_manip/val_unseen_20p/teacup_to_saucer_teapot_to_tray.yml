@@ -215,9 +215,9 @@ demonstration_configs:
     # orientation: [0.70711, 0, 0, 0.70711]
   table_uid: table
   task_name: ebench/mobile_manip/teacup_to_saucer_teapot_to_tray
-  usd_name: scene_usds/ebench/simple_pnp/task9/scene
+  usd_name: scene_usds/ebench/simple_pnp_v0.2/task9/scene
   env_vars:
-    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp/task3/SubUSDs/materials"
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"
 
 evaluation_configs:
 - domain_randomization: *id001
@@ -227,6 +227,6 @@ evaluation_configs:
   - *id006
   table_uid: table
   task_name: ebench/mobile_manip/teacup_to_saucer_teapot_to_tray_val_unseen_20p
-  usd_name: scene_usds/ebench/simple_pnp/task9/scene
+  usd_name: scene_usds/ebench/simple_pnp_v0.2/task9/scene
   env_vars:
-    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp/task3/SubUSDs/materials"
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"

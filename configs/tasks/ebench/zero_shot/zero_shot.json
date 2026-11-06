@@ -1,0 +1,7 @@
+[
+    "ebench/zero_shot/salt_from_spice_rack.yml",
+    "ebench/zero_shot/apple_to_fruit_bowl_left.yml",
+    "ebench/zero_shot/orange_to_fruit_bowl_wo_apple.yml",
+    "ebench/zero_shot/orange_to_fruit_bowl_with_apple.yml",
+    "ebench/zero_shot/put_pen_in_box.yml"
+]

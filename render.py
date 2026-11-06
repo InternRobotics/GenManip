@@ -100,8 +100,18 @@ def parse_args() -> argparse.Namespace:
 
 args = parse_args()
 
-simulation_app = SimulationApp({"headless": not args.local})
+cuda_visible = os.environ.get("CUDA_VISIBLE_DEVICES")
+first_visible = cuda_visible.split(",")[0].strip() if cuda_visible else "0"
+active_gpu = int(first_visible) if first_visible.isdigit() else 0
+
+simulation_app = SimulationApp({
+                    "headless": not args.local,
+                    "multi_gpu": False,
+                    "active_gpu": active_gpu,  # Omniverse renderer: physical GPU id
+                    "physics_gpu": 0,
+                })
 simulation_app._carb_settings.set("/physics/cooking/ujitsoCollisionCooking", False)
+simulation_app._carb_settings.set("/app/omni.graph.scriptnode/opt_in", True)
 
 from genmanip.demogen.workflow.render import RenderWorkflow
 

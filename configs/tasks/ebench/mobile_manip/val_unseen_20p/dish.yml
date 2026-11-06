@@ -20,16 +20,16 @@ demonstration_configs:
         assets_pattern: miscs/mdl/ebench/mdl/table/train/.*\.mdl$
       - prim_path: /World/_scene/obj_dish1/Looks/material0/baseColorTex
         type: texture
-        assets_pattern: scene_usds/ebench/long_horizon/scene_dish/textures/dish1_texture/train/.*\.png$
+        assets_pattern: scene_usds/ebench/long_horizon_v0.3/scene_dish/textures/dish1_texture/train/.*\.png$
       - prim_path: /World/_scene/obj_dish2/Looks/material0/baseColorTex
         type: texture
-        assets_pattern: scene_usds/ebench/long_horizon/scene_dish/textures/dish2_texture/train/.*\.png$
+        assets_pattern: scene_usds/ebench/long_horizon_v0.3/scene_dish/textures/dish2_texture/train/.*\.png$
       - prim_path: /World/_scene/obj_dish3/Looks/material0/baseColorTex
         type: texture
-        assets_pattern: scene_usds/ebench/long_horizon/scene_dish/textures/dish3_texture/train/.*\.png$
+        assets_pattern: scene_usds/ebench/long_horizon_v0.3/scene_dish/textures/dish3_texture/train/.*\.png$
       - prim_path: /World/_scene/obj_glass/Looks/material0/baseColorTex
         type: texture
-        assets_pattern: scene_usds/ebench/long_horizon/scene_dish/textures/glass_texture/train/.*\.png$
+        assets_pattern: scene_usds/ebench/long_horizon_v0.3/scene_dish/textures/glass_texture/train/.*\.png$
     rewrite_instruction: false
   generation_config:
     action_path:
@@ -706,9 +706,9 @@ demonstration_configs:
     - 1.0
   table_uid: table
   task_name: ebench/mobile_manip/dish
-  usd_name: scene_usds/ebench/long_horizon/scene_dish/scene
+  usd_name: scene_usds/ebench/long_horizon_v0.3/scene_dish/scene
   env_vars:
-    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp/task3/SubUSDs/materials"
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"
 evaluation_configs:
 - domain_randomization:
     cameras:
@@ -729,6 +729,6 @@ evaluation_configs:
     - 1.0
   table_uid: table
   task_name: ebench/mobile_manip/dish_val_unseen_20p
-  usd_name: scene_usds/ebench/long_horizon/scene_dish/scene
+  usd_name: scene_usds/ebench/long_horizon_v0.3/scene_dish/scene
   env_vars:
-    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp/task3/SubUSDs/materials"
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"

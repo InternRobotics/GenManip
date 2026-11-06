@@ -7,7 +7,7 @@ Licensed under the MIT License.
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 import numpy as np
 import open3d as o3d
 from scipy.spatial.transform import Rotation as R
@@ -18,6 +18,18 @@ from genmanip.core.metrics.utils import MetricFactory
 
 class SRBasedGenmanipRangeConfig(BaseModel):
     obj1_uid: str = Field(..., description="UID of the object to measure the range")
+    obj1_local_offset: tuple[float, float, float] = Field(
+        default=(0.0, 0.0, 0.0),
+        description="Measured point offset in meters, rotated by obj1 pose without USD scale",
+    )
+
+    @field_validator("obj1_local_offset")
+    @classmethod
+    def validate_local_offset(cls, value):
+        if not np.isfinite(value).all():
+            raise ValueError("obj1_local_offset must contain finite values")
+        return value
+
     x_type: str = Field(..., description="Type of the x axis")
     y_type: str = Field(..., description="Type of the y axis")
     z_type: str = Field(..., description="Type of the z axis")
@@ -174,12 +186,15 @@ class SRBasedGenmanipRange(BaseMetric):
         object_1 = scene.object_list[self.goal_setting.obj1_uid]
         object_1_pose = object_1.get_world_pose()
         x_range, y_range, z_range = self._get_axis_range(scene)
-        object_1_pose = object_1.get_world_pose()
-        if object_1_pose[0][0] < x_range[0] or object_1_pose[0][0] > x_range[1]:
+        position = np.asarray(object_1_pose[0], dtype=float)
+        if any(self.goal_setting.obj1_local_offset):
+            rotation = R.from_quat(np.asarray(object_1_pose[1])[[1, 2, 3, 0]])
+            position = position + rotation.apply(self.goal_setting.obj1_local_offset)
+        if position[0] < x_range[0] or position[0] > x_range[1]:
             return False
-        if object_1_pose[0][1] < y_range[0] or object_1_pose[0][1] > y_range[1]:
+        if position[1] < y_range[0] or position[1] > y_range[1]:
             return False
-        if object_1_pose[0][2] < z_range[0] or object_1_pose[0][2] > z_range[1]:
+        if position[2] < z_range[0] or position[2] > z_range[1]:
             return False
         return True
 

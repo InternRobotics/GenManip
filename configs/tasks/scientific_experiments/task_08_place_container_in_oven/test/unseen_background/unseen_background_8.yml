@@ -1,0 +1,143 @@
+demonstration_configs:
+- domain_randomization: &id001
+    cameras:
+      config_path: configs/cameras/fixed_camera_lift2_scientific_experiments.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config: &id002
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal: [[]]
+    mode: manual
+    planner: curobo
+  instruction: no instruction
+  layout_config: &id003
+    ignored_objects: []
+    type: None
+  mode: manual
+  num_episode: 50
+  object_config:
+    oven:
+      type: existed_object
+      is_articulated: true
+      target_positions: null
+      uid_list:
+        - oven
+      articulation_info:
+        is_articulated: true
+        part:
+          body: Body
+          door: Door
+          softkey_0: ControlPanel/Buttons/SoftKey_0
+          softkey_1: ControlPanel/Buttons/SoftKey_1
+          softkey_2: ControlPanel/Buttons/SoftKey_2
+          softkey_3: ControlPanel/Buttons/SoftKey_3
+          softkey_4: ControlPanel/Buttons/SoftKey_4
+          softkey_5: ControlPanel/Buttons/SoftKey_5
+          back_button: ControlPanel/Buttons/Back
+          menu_button: ControlPanel/Buttons/Menu
+          light_button: ControlPanel/Buttons/Light
+          lock_button: ControlPanel/Buttons/Lock
+          control_knob_press_carrier: ControlPanel/ControlKnob/PressCarrier
+          control_knob_rotor: ControlPanel/ControlKnob/Rotor
+          aux_control_knob_press_carrier: ControlPanel/AuxControlKnob/PressCarrier
+          aux_control_knob_rotor: ControlPanel/AuxControlKnob/Rotor
+          mains_switch_rocker: ControlPanel/MainsSwitch/Rocker
+          shelf_0: Shelves/Shelf_0
+  preprocess_config: []
+  robots:
+  - &id006
+    type: manip/lift2/R5a
+    usd_path: robot_usds/lift2_scientific_experiments/robot.usd
+    position: [0.85, -0.9, 0.15]
+    orientation: [0.7071067812, 0.0, 0.0, 0.7071067812]
+  table_uid: table
+  physics_scene_config:
+    EnableStabilization: true
+    BroadphaseType: GPU
+    EnableGPUDynamics: true
+    SolverType: TGS
+    TimeStepsPerSecond: 120
+  task_name: scientific_experiments/task_08_place_container_in_oven/unseen_background_8
+  usd_name: scene_usds/scientific_experiments/task_08_place_container_in_oven/unseen_scene_8/scene
+  env_vars:
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl"
+evaluation_configs:
+- domain_randomization: *id001
+  generation_config: *id002
+  instruction: no instruction
+  layout_config: *id003
+  mode: manual
+  num_test: 1
+  num_steps: 5000
+  preserve_score_on_invalid_state: true
+  warmup_steps: 300
+  physics_dt: 0.0083333333
+  rendering_dt: 0.0083333333
+  object_config:
+    oven:
+      type: existed_object
+      is_articulated: true
+      target_positions: null
+      uid_list:
+        - oven
+      articulation_info:
+        is_articulated: true
+        part:
+          body: Body
+          door: Door
+          softkey_0: ControlPanel/Buttons/SoftKey_0
+          softkey_1: ControlPanel/Buttons/SoftKey_1
+          softkey_2: ControlPanel/Buttons/SoftKey_2
+          softkey_3: ControlPanel/Buttons/SoftKey_3
+          softkey_4: ControlPanel/Buttons/SoftKey_4
+          softkey_5: ControlPanel/Buttons/SoftKey_5
+          back_button: ControlPanel/Buttons/Back
+          menu_button: ControlPanel/Buttons/Menu
+          light_button: ControlPanel/Buttons/Light
+          lock_button: ControlPanel/Buttons/Lock
+          control_knob_press_carrier: ControlPanel/ControlKnob/PressCarrier
+          control_knob_rotor: ControlPanel/ControlKnob/Rotor
+          aux_control_knob_press_carrier: ControlPanel/AuxControlKnob/PressCarrier
+          aux_control_knob_rotor: ControlPanel/AuxControlKnob/Rotor
+          mains_switch_rocker: ControlPanel/MainsSwitch/Rocker
+          shelf_0: Shelves/Shelf_0
+  physics_scene_config:
+    EnableStabilization: true
+    BroadphaseType: GPU
+    EnableGPUDynamics: true
+    SolverType: TGS
+    TimeStepsPerSecond: 120
+  preprocess_config:
+  - config:
+      Restitution: 0.0
+      DynamicFriction: 2
+      StaticFriction: 2
+      FrictionCombineMode: max
+      RestitutionCombineMode: multiply
+      ImprovePatchFriction: true
+    robot_type: lift2
+    type: set_robot_physics_material
+  - config: 0.05
+    robot_type: lift2
+    type: set_robot_contact_offset
+  - config: 0.001
+    robot_type: lift2
+    type: set_robot_rest_offset
+  robots:
+  - *id006
+  table_uid: table
+  task_name: scientific_experiments/task_08_place_container_in_oven/unseen_background_8
+  usd_name: scene_usds/scientific_experiments/task_08_place_container_in_oven/unseen_scene_8/scene
+  env_vars:
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl"

@@ -1,0 +1,398 @@
+demonstration_configs:
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera_lift2_simbox.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: manual
+      actions:
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: left
+            translation:
+            - -0.0
+            - 0.15344310298095626
+            - -0.0
+            orientation:
+            - 0.707
+            - 0.0
+            - 0.0
+            - -0.707
+            grasp: false
+            rel_object_uid: pen1
+            type: object_frame
+          - name: left
+            cnt: 15
+            grasp: true
+            type: pending
+          - name: left
+            translation:
+            - -0.0
+            - 0.34045243488865873
+            - 0.0
+            orientation:
+            - 0.707
+            - 0.0
+            - 0.0
+            - -0.707
+            grasp: true
+            rel_object_uid: pen1
+            type: object_frame
+          - name: left
+            translation:
+            - 0.0
+            - 0.2
+            - 0.15
+            orientation:
+            - -0.5
+            - 0.5
+            - -0.5
+            - -0.5
+            grasp: true
+            rel_object_uid: penholder_big
+            type: object_frame
+          - name: left
+            translation:
+            - 0.0
+            - 0.08
+            - 0.15
+            orientation:
+            - -0.5
+            - 0.5
+            - -0.5
+            - -0.5
+            grasp: true
+            rel_object_uid: penholder_big
+            type: object_frame
+          - name: left
+            translation:
+            - 0.0
+            - 0.2
+            - 0.15
+            orientation:
+            - -0.5
+            - 0.5
+            - -0.5
+            - -0.5
+            grasp: false
+            rel_object_uid: penholder_big
+            type: object_frame
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: left
+            translation:
+            - -0.0
+            - 0.3365594863907217
+            - -0.0
+            orientation:
+            - 0.707
+            - 0.0
+            - 0.0
+            - -0.707
+            grasp: false
+            rel_object_uid: pen6
+            type: object_frame
+          - name: left
+            translation:
+            - -0.0
+            - 0.15346982452568844
+            - -0.0
+            orientation:
+            - 0.707
+            - 0.0
+            - 0.0
+            - -0.707
+            grasp: false
+            rel_object_uid: pen6
+            type: object_frame
+          - name: left
+            cnt: 15
+            grasp: true
+            type: pending
+          - name: left
+            translation:
+            - 0.29
+            - 0.0
+            - 0.25
+            orientation:
+            - 0.70711
+            - 0.0
+            - 0.70711
+            - 0.0
+            grasp: true
+            rel_arm: left
+            type: robot_frame
+          - name: left
+            translation:
+            - 0.0
+            - 0.2
+            - 0.18
+            orientation:
+            - -0.5
+            - 0.5
+            - -0.5
+            - -0.5
+            grasp: true
+            rel_object_uid: penholder_big
+            type: object_frame
+          - name: left
+            translation:
+            - 0.0
+            - 0.1
+            - 0.18
+            orientation:
+            - -0.5
+            - 0.5
+            - -0.5
+            - -0.5
+            grasp: true
+            rel_object_uid: penholder_big
+            type: object_frame
+          - name: left
+            translation:
+            - 0.0
+            - 0.2
+            - 0.18
+            orientation:
+            - -0.5
+            - 0.5
+            - -0.5
+            - -0.5
+            grasp: false
+            rel_object_uid: penholder_big
+            type: object_frame
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: right
+            translation:
+            - -0.0
+            - 0.3093485787844157
+            - 0.0
+            orientation:
+            - 0.707
+            - 0.0
+            - 0.0
+            - -0.707
+            grasp: false
+            rel_object_uid: pen9
+            type: object_frame
+          - name: right
+            translation:
+            - -0.0
+            - 0.14578467900586123
+            - 0.0
+            orientation:
+            - 0.707
+            - 0.0
+            - 0.0
+            - -0.707
+            grasp: false
+            rel_object_uid: pen9
+            type: object_frame
+          - name: right
+            cnt: 15
+            grasp: true
+            type: pending
+          - name: right
+            translation:
+            - 0.34
+            - 0.0
+            - 0.25
+            orientation:
+            - 0.70711
+            - 0.0
+            - 0.70711
+            - 0.0
+            grasp: true
+            rel_arm: right
+            type: robot_frame
+          - name: right
+            translation:
+            - 0.0
+            - 0.2
+            - -0.18
+            orientation:
+            - -0.5
+            - 0.5
+            - 0.5
+            - 0.5
+            grasp: true
+            rel_object_uid: penholder_big
+            type: object_frame
+          - name: right
+            translation:
+            - 0.0
+            - 0.1
+            - -0.18
+            orientation:
+            - -0.5
+            - 0.5
+            - 0.5
+            - 0.5
+            grasp: true
+            rel_object_uid: penholder_big
+            type: object_frame
+          - name: right
+            translation:
+            - 0.0
+            - 0.2
+            - -0.18
+            orientation:
+            - -0.5
+            - 0.5
+            - 0.5
+            - 0.5
+            grasp: false
+            rel_object_uid: penholder_big
+            type: object_frame
+          left:
+          - name: left
+            cnt: 50
+            grasp: false
+            type: reset
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - pen1
+        obj2_uid:
+        - penholder_big
+        position:
+        - in
+      - obj1_uid:
+        - pen6
+        obj2_uid:
+        - penholder_big
+        position:
+        - in
+      - obj1_uid:
+        - pen9
+        obj2_uid:
+        - penholder_big
+        position:
+        - in
+    mode: manual
+    planner: curobo
+  instruction: Put the pens in the penholder.
+  layout_config:
+    ignored_objects: []
+    type: random_custom_tableset
+    custom_tableset:
+    - penholder_big:
+        w: 0.15
+        h: 0.15
+        angle: 0
+        angle_bilateral: false
+        type: centric_range
+      ruler:
+        type: global_range
+        random_range_x: -0.5
+        random_range_y: -0.5
+        random_range_w: 0.5
+        random_range_h: 1.35
+        random_range_angle: 15
+        buffer_size: 0.05
+      pen1:
+        w: 0.15
+        h: 0.15
+        angle: 30
+        angle_bilateral: true
+        type: centric_range
+      pen6:
+        w: 0.15
+        h: 0.15
+        angle: 30
+        angle_bilateral: true
+        type: centric_range
+      pen9:
+        w: 0.15
+        h: 0.15
+        angle: 30
+        angle_bilateral: true
+        type: centric_range
+  mode: manual
+  num_episode: 100
+  object_config:
+    penholder_big:
+      type: existed_object
+      uid_list:
+      - penholder_big
+      is_not_rigid: true
+      without_colliders: true
+    ruler:
+      type: existed_object
+      uid_list:
+      - '04'
+      is_not_rigid: true
+      without_colliders: true
+    pen1:
+      type: existed_object
+      uid_list:
+      - pen1
+      is_not_rigid: true
+      without_colliders: true
+    pen6:
+      type: existed_object
+      uid_list:
+      - pen6
+      is_not_rigid: true
+      without_colliders: true
+    pen9:
+      type: existed_object
+      uid_list:
+      - pen9
+      is_not_rigid: true
+      without_colliders: true
+  preprocess_config: []
+  robots:
+  - type: manip/lift2/R5a
+    position:
+    - -0.85
+    - 0.0
+    - -0.6
+    orientation:
+    - 1.0
+    - 0.0
+    - 0.0
+    - 0.0
+  table_uid: table
+  task_name: ebench15/desk/test/pen_in_holder
+  usd_name: scene_usds/ebench15/desk/scene
+  env_vars:
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"
+evaluation_configs:
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera_lift2_simbox.yml
+      type: fixed
+  num_test: 10
+  num_steps: 2000
+  robots:
+  - type: manip/lift2/R5a
+    position:
+    - -0.85
+    - 0.0
+    - -0.6
+    orientation:
+    - 1.0
+    - 0.0
+    - 0.0
+    - 0.0
+  table_uid: table
+  task_name: ebench15/desk/test/pen_in_holder
+  usd_name: scene_usds/ebench15/desk/scene
+  env_vars:
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"

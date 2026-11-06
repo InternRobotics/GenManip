@@ -1412,7 +1412,7 @@ demonstration_configs:
       without_colliders: true
     bottle1:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_bottle/bottle/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_bottle/bottle/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -1420,7 +1420,7 @@ demonstration_configs:
       - plain_replace
     bottle2:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_bottle/bottle/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_bottle/bottle/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -1428,7 +1428,7 @@ demonstration_configs:
       - plain_replace
     bottle3:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_bottle/bottle/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_bottle/bottle/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -1436,7 +1436,7 @@ demonstration_configs:
       - plain_replace
     bottle4:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_bottle/bottle/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_bottle/bottle/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -1444,7 +1444,7 @@ demonstration_configs:
       - plain_replace
     bottle5:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_bottle/bottle/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_bottle/bottle/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -1452,7 +1452,7 @@ demonstration_configs:
       - plain_replace
     bottle6:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_bottle/bottle/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_bottle/bottle/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -1460,7 +1460,7 @@ demonstration_configs:
       - plain_replace
     bottle7:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_bottle/bottle/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_bottle/bottle/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -1468,7 +1468,7 @@ demonstration_configs:
       - plain_replace
     bottle8:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_bottle/bottle/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_bottle/bottle/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -1476,14 +1476,14 @@ demonstration_configs:
       - plain_replace
     bottle9:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_bottle/bottle/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_bottle/bottle/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       option:
       - plain_replace
     bottle10:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_bottle/bottle/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_bottle/bottle/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -1491,7 +1491,7 @@ demonstration_configs:
       - plain_replace
     bottle11:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_bottle/bottle/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_bottle/bottle/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -1499,7 +1499,7 @@ demonstration_configs:
       - plain_replace
     bottle12:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_bottle/bottle/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_bottle/bottle/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -1519,9 +1519,9 @@ demonstration_configs:
     - -1.0
   table_uid: table
   task_name: ebench/mobile_manip/bottle_test_mini
-  usd_name: scene_usds/ebench/long_horizon/scene_bottle/scene
+  usd_name: scene_usds/ebench/long_horizon_v0.3/scene_bottle/scene
   env_vars:
-    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp/task3/SubUSDs/materials"
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"
 evaluation_configs:
 - domain_randomization:
     cameras:
@@ -1542,6 +1542,6 @@ evaluation_configs:
     - -1.0
   table_uid: table
   task_name: ebench/mobile_manip/bottle_test_mini
-  usd_name: scene_usds/ebench/long_horizon/scene_bottle/scene
+  usd_name: scene_usds/ebench/long_horizon_v0.3/scene_bottle/scene
   env_vars:
-    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp/task3/SubUSDs/materials"
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"

@@ -119,9 +119,9 @@ demonstration_configs:
   # update following
   table_uid: table
   task_name: ebench/mobile_manip/soap_to_dish
-  usd_name: scene_usds/ebench/simple_pnp/task3/scene
+  usd_name: scene_usds/ebench/simple_pnp_v0.2/task3/scene
   env_vars:
-    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp/task3/SubUSDs/materials"
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"
 
 evaluation_configs:
 - domain_randomization: *id001
@@ -131,6 +131,6 @@ evaluation_configs:
   - *id006
   table_uid: table
   task_name: ebench/mobile_manip/soap_to_dish_val_train
-  usd_name: scene_usds/ebench/simple_pnp/task3/scene
+  usd_name: scene_usds/ebench/simple_pnp_v0.2/task3/scene
   env_vars:
-    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp/task3/SubUSDs/materials"
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"

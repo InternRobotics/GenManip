@@ -1,0 +1,185 @@
+demonstration_configs:
+- domain_randomization: &id003
+    cameras:
+      config_path: configs/cameras/fixed_camera_robotiq_simbox.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+      camera_randomization:
+        realsense:
+          max_translation_noise: 0.02
+          max_orientation_noise: 2.5
+        obs_camera:
+          max_translation_noise: 0.05
+          max_orientation_noise: 10.0
+    rewrite_instruction: false
+  generation_config: &id004
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - drink1
+        obj2_uid:
+        - basket
+        position:
+        - top
+        fixed_position: true
+        force_fixed_grasp: true
+        allow_fixed_grasp: true
+    mode: manual
+    planner: curobo
+  instruction: put the box in the basket.
+  layout_config: &id005
+    ignored_objects: []
+    custom_tableset:
+      drink1: &id001
+        random_range_x: -0.05
+        random_range_y: -0.15
+        random_range_w: 0.2
+        random_range_h: 0.3
+        random_range_angle: 360
+        additional_height: 0.01
+        reset_orientation: true
+        buffer_size: 0.05
+        type: global_range
+      drink2: *id001
+      drink3: *id001
+    type: random_custom_tableset
+  mode: manual
+  num_episode: 5000
+  object_config: &id006
+    drink1: &id002
+      type: load_object_from_path
+      filter_rule: []
+      max_cached_num: 20
+      path: scene_usds/IROS_scenes_final/scene_drink/bottles
+      fixed_scale: 0.001
+      option:
+      - plain_replace
+      without_colliders: true
+    drink2: *id002
+    drink3: *id002
+    basket:
+      type: existed_object
+      uid_list:
+      - base_glb_09
+    knife:
+      type: existed_object
+      uid_list:
+      - 8a6aed1dff24e57b6836ade47a46ead
+      is_not_rigid: true
+    cutboard:
+      type: existed_object
+      uid_list:
+      - 76f8b64886f4edbae88e74f68d065c9
+      is_not_rigid: true
+    vegetable1:
+      type: existed_object
+      uid_list:
+      - 91d0e4cb6a1409ea72d960d0ab144ea
+      is_not_rigid: true
+    vegetable2:
+      type: existed_object
+      uid_list:
+      - acdfc046a5149cc890c992da89b48c0
+      is_not_rigid: true
+    vegetable3:
+      type: existed_object
+      uid_list:
+      - 96181392c1f4e2d9316bf2eeafc3042
+      is_not_rigid: true
+    vegetable4:
+      type: existed_object
+      uid_list:
+      - d56e83387b64684ae7a1b4a20040d67
+      is_not_rigid: true
+    vegetable5:
+      type: existed_object
+      uid_list:
+      - b87502ac41f4eb2b2ba7b0cce6517aa
+      is_not_rigid: true
+    plant:
+      type: existed_object
+      uid_list:
+      - f9f025d995c4554bcc39b97eed20c7d
+      is_not_rigid: true
+    plate:
+      type: existed_object
+      uid_list:
+      - eced95f9f49e4ef9b6f8d576f908bc6b
+      is_not_rigid: true
+    fruit1:
+      type: existed_object
+      uid_list:
+      - 3e2323f49db4793bd087e67b20ac350
+      is_not_rigid: true
+    fruit2:
+      type: existed_object
+      uid_list:
+      - c7aa636f24e345b3b831271bf7f1fe02
+      is_not_rigid: true
+    fruit3:
+      type: existed_object
+      uid_list:
+      - 8d23f3cd9254e38a696060a962ebb7f
+      is_not_rigid: true
+  preprocess_config:
+  - &id007
+    type: apply_default_physics_material
+  robots:
+  - &id008
+    type: manip/franka/robotiq_simbox
+  table_uid: instance
+  task_name: IROS_C_RoboTiq_Simbox/select_drink
+  usd_name: scene_usds/IROS_scenes_final/scene_drink/base
+evaluation_configs:
+- domain_randomization: *id003
+  generation_config: *id004
+  instruction: put the box in the basket.
+  layout_config: *id005
+  mode: manual
+  num_test: 20
+  object_config: *id006
+  preprocess_config:
+  - *id007
+  robots:
+  - *id008
+  table_uid: instance
+  task_name: IROS_C_RoboTiq_Simbox_seen/select_drink
+  usd_name: scene_usds/IROS_scenes_final/scene_drink/base
+- domain_randomization: *id003
+  generation_config: *id004
+  instruction: put the box in the basket.
+  layout_config: *id005
+  mode: manual
+  num_test: 20
+  object_config: *id006
+  preprocess_config:
+  - *id007
+  robots:
+  - *id008
+  table_uid: instance
+  task_name: IROS_C_RoboTiq_Simbox_unseen/select_drink
+  usd_name: scene_usds/IROS_scenes_final/scene_drink/base
+- domain_randomization: *id003
+  generation_config: *id004
+  instruction: put the box in the basket.
+  layout_config: *id005
+  mode: manual
+  num_test: 20
+  object_config: *id006
+  preprocess_config:
+  - *id007
+  robots:
+  - *id008
+  table_uid: instance
+  task_name: IROS_C_RoboTiq_Simbox_val_unseen/select_drink
+  usd_name: scene_usds/IROS_scenes_final/scene_drink/base

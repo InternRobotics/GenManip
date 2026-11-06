@@ -9,7 +9,7 @@ This directory contains the task configuration files for **EBench**. The benchma
 
 The recommended benchmark version is `v0.1.0-260128-alpha`. Clone and check out the matching branch:
 ```bash
-git clone https://gitee.pjlab.org.cn/L2/SimPlatform/EBench.git
+git clone https://github.com/InternRobotics/EBench.git
 cd EBench
 git checkout v0.1.0-260128-alpha
 ```

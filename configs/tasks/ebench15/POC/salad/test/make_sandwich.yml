@@ -1,0 +1,1248 @@
+# Four-layer sandwich; support/plate containment and 20-degree planarity for every layer.
+demonstration_configs: []
+evaluation_configs:
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera_lift2_simbox.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: manual
+      robot: 0
+      actions:
+      - type: move_to
+        name: align_base_to_bread
+        linear_step: 0.003
+        move_type: alignv2
+        arm: left
+        grasp: false
+        rel_object_uid: bread2
+        delta_position:
+          x: -0.55
+          y: 0.1
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: settle_at_bread
+            type: pending
+            grasp: false
+            cnt: 15
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: approach_bread
+            type: object_frame
+            grasp: false
+            rel_object_uid: bread2
+            translation:
+            - -0.32
+            - 0.0
+            - 0.18
+            orientation:
+            - 0.96592583
+            - 0.0
+            - 0.25881905
+            - 0.0
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: align_bread_edge
+            type: object_frame
+            grasp: false
+            rel_object_uid: bread2
+            translation:
+            - -0.24
+            - 0.0
+            - 0.07
+            orientation:
+            - 0.96592583
+            - 0.0
+            - 0.25881905
+            - 0.0
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: grasp_bread_edge
+            type: object_frame
+            grasp: false
+            rel_object_uid: bread2
+            translation:
+            - -0.15
+            - 0.0
+            - -0.015
+            orientation:
+            - 0.96592583
+            - 0.0
+            - 0.25881905
+            - 0.0
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: close_gripper
+            type: pending
+            grasp: true
+            cnt: 45
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: lift_bread
+            type: object_frame
+            grasp: true
+            rel_object_uid: bread2
+            translation:
+            - -0.15
+            - 0.0
+            - 0.20500000000000002
+            orientation:
+            - 0.96592583
+            - 0.0
+            - 0.25881905
+            - 0.0
+      - type: move_to
+        name: align_base_to_plate
+        linear_step: 0.002
+        move_type: alignv2
+        arm: left
+        grasp: true
+        rel_object_uid: plate
+        delta_position:
+          x: -0.5
+          y: 0.24842
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: settle_at_plate
+            type: pending
+            grasp: true
+            cnt: 15
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: above_plate_upright
+            type: object_frame
+            grasp: true
+            rel_object_uid: plate
+            translation:
+            - -0.15
+            - 0.35602178
+            - -5.35e-05
+            orientation:
+            - 0.6830127
+            - -0.6830127
+            - 0.1830127
+            - -0.1830127
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: flatten_45_degrees
+            type: object_frame
+            grasp: true
+            rel_object_uid: plate
+            translation:
+            - -0.15
+            - 0.33672228
+            - 0.04664661
+            orientation:
+            - 0.8923991
+            - -0.36964381
+            - 0.23911762
+            - -0.09904576
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: flatten_bread
+            type: object_frame
+            grasp: true
+            rel_object_uid: plate
+            translation:
+            - -0.15
+            - 0.30713937
+            - 0.06375829
+            orientation:
+            - 0.9576622
+            - -0.12607862
+            - 0.25660481
+            - -0.03378266
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: lower_bread
+            type: object_frame
+            grasp: true
+            rel_object_uid: plate
+            translation:
+            - -0.15
+            - 0.07713937
+            - 0.06375829
+            orientation:
+            - 0.9576622
+            - -0.12607862
+            - 0.25660481
+            - -0.03378266
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: release_bread
+            type: pending
+            grasp: false
+            cnt: 30
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: retreat_from_plate
+            type: object_frame
+            grasp: false
+            rel_object_uid: plate
+            translation:
+            - -0.23
+            - 0.25713937
+            - 0.06375829
+            orientation:
+            - 0.9576622
+            - -0.12607862
+            - 0.25660481
+            - -0.03378266
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: settle_on_plate
+            type: pending
+            grasp: false
+            cnt: 90
+      - type: move_to
+        name: align_base_to_beef
+        arm: left
+        grasp: false
+        move_type: alignv2
+        linear_step: 0.003
+        rel_object_uid: beef
+        delta_position:
+          x: -0.45
+          y: 0.1
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: settle_at_beef
+            type: pending
+            grasp: false
+            cnt: 15
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: approach_beef
+            type: object_frame
+            grasp: false
+            translation:
+            - -0.252319349
+            - 0.000799525
+            - -0.0487286
+            orientation:
+            - 0.996190886
+            - -0.00029279
+            - -0.087184586
+            - -0.001575161
+            rel_object_uid: beef
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: align_beef
+            type: object_frame
+            grasp: false
+            translation:
+            - -0.227414482
+            - 0.000719422
+            - -0.050906033
+            orientation:
+            - 0.996190886
+            - -0.00029279
+            - -0.087184586
+            - -0.001575161
+            rel_object_uid: beef
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: grasp_beef
+            type: object_frame
+            grasp: false
+            translation:
+            - -0.207490589
+            - 0.000655339
+            - -0.05264798
+            orientation:
+            - 0.996190886
+            - -0.00029279
+            - -0.087184586
+            - -0.001575161
+            rel_object_uid: beef
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: close_beef
+            type: pending
+            grasp: true
+            cnt: 45
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: lift_beef
+            type: object_frame
+            grasp: true
+            translation:
+            - -0.386805627
+            - 0.001232084
+            - -0.036970459
+            orientation:
+            - 0.996190886
+            - -0.00029279
+            - -0.087184586
+            - -0.001575161
+            rel_object_uid: beef
+      - type: move_to
+        name: carry_beef_to_plate
+        arm: left
+        grasp: true
+        move_type: alignv2
+        linear_step: 0.002
+        rel_object_uid: plate
+        delta_position:
+          x: -0.45
+          y: 0.24842
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: settle_before_placing_beef
+            type: pending
+            grasp: true
+            cnt: 15
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: above_beef
+            type: object_position
+            grasp: true
+            translation:
+            - -0.013822857000000003
+            - 0.0
+            - 0.4048888740000001
+            orientation:
+            - 0.7933533401086657
+            - 0.0
+            - 0.6087614292466498
+            - 0.0
+            rel_object_uid: bread2
+            rel_object_point:
+            - 0
+            - -5.32e-05
+            - -0.0810218
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: turn_half_beef
+            type: object_position
+            grasp: true
+            translation:
+            - -0.013822857000000003
+            - 0.12472844400000002
+            - 0.36254927300000006
+            orientation:
+            - 0.7512501812369706
+            - -0.25501507311851573
+            - 0.5764545389192484
+            - -0.1956799484698761
+            rel_object_uid: bread2
+            rel_object_point:
+            - 0
+            - -5.32e-05
+            - -0.0810218
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: flatten_beef
+            type: object_position
+            grasp: true
+            translation:
+            - -0.013822857000000003
+            - 0.19790745500000007
+            - 0.25302914300000007
+            orientation:
+            - 0.6294095225698515
+            - -0.4829629125706427
+            - 0.4829629132777496
+            - -0.3705904779914649
+            rel_object_uid: bread2
+            rel_object_point:
+            - 0
+            - -5.32e-05
+            - -0.0810218
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: lower_beef
+            type: object_position
+            grasp: true
+            translation:
+            - -0.013822857000000003
+            - 0.19790745500000007
+            - 0.11802914300000003
+            orientation:
+            - 0.6294095225698515
+            - -0.4829629125706427
+            - 0.4829629132777496
+            - -0.3705904779914649
+            rel_object_uid: bread2
+            rel_object_point:
+            - 0
+            - -5.32e-05
+            - -0.0810218
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: release_beef
+            type: pending
+            grasp: false
+            cnt: 30
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: withdraw_beef
+            type: object_position
+            grasp: false
+            translation:
+            - -0.013822857000000022
+            - 0.19790745500000007
+            - 0.268029143
+            orientation:
+            - 0.6294095225698515
+            - -0.4829629125706427
+            - 0.4829629132777496
+            - -0.3705904779914649
+            rel_object_uid: bread2
+            rel_object_point:
+            - 0
+            - -5.32e-05
+            - -0.0810218
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: retreat_beef
+            type: object_position
+            grasp: false
+            translation:
+            - -0.13382285700000002
+            - 0.19790745500000007
+            - 0.29802914300000005
+            orientation:
+            - 0.6294095225698515
+            - -0.4829629125706427
+            - 0.4829629132777496
+            - -0.3705904779914649
+            rel_object_uid: bread2
+            rel_object_point:
+            - 0
+            - -5.32e-05
+            - -0.0810218
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: settle_beef
+            type: pending
+            grasp: false
+            cnt: 90
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: park_left_arm
+            type: robot_frame
+            grasp: false
+            translation:
+            - 0.25
+            - 0.08
+            - 0.2
+            orientation:
+            - 0.79335334
+            - 0.0
+            - 0.608761429
+            - 0.0
+            rel_arm: left
+      - type: move_to
+        name: align_base_to_lettuce
+        arm: right
+        grasp: false
+        move_type: alignv2
+        linear_step: 0.003
+        rel_object_uid: lettuce
+        delta_position:
+          x: -0.45
+          y: -0.1
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: settle_at_lettuce
+            type: pending
+            grasp: false
+            cnt: 15
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: approach_lettuce
+            type: object_frame
+            grasp: false
+            translation:
+            - 0.156467445
+            - -0.004508614
+            - 0.19866958
+            orientation:
+            - 0.484397178
+            - -8.92e-07
+            - 0.8748482
+            - -2.24e-07
+            rel_object_uid: lettuce
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: align_lettuce
+            type: object_frame
+            grasp: false
+            translation:
+            - 0.138167533
+            - -0.00450866
+            - 0.181636871
+            orientation:
+            - 0.484397178
+            - -8.92e-07
+            - 0.8748482
+            - -2.24e-07
+            rel_object_uid: lettuce
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: grasp_lettuce
+            type: object_frame
+            grasp: false
+            translation:
+            - 0.123527603
+            - -0.004508697
+            - 0.168010703
+            orientation:
+            - 0.484397178
+            - -8.92e-07
+            - 0.8748482
+            - -2.24e-07
+            rel_object_uid: lettuce
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: close_lettuce
+            type: pending
+            grasp: true
+            cnt: 45
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: lift_lettuce
+            type: object_frame
+            grasp: true
+            translation:
+            - 0.255286974
+            - -0.004508366
+            - 0.290646212
+            orientation:
+            - 0.484397178
+            - -8.92e-07
+            - 0.8748482
+            - -2.24e-07
+            rel_object_uid: lettuce
+      - type: move_to
+        name: carry_lettuce_to_plate
+        arm: right
+        grasp: true
+        move_type: alignv2
+        linear_step: 0.002
+        rel_object_uid: beef
+        delta_position:
+          x: -0.38
+          y: -0.1
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: settle_before_placing_lettuce
+            type: pending
+            grasp: true
+            cnt: 15
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: above_lettuce
+            type: object_position
+            grasp: true
+            translation:
+            - -0.018822857
+            - 0.0
+            - 0.404888874
+            orientation:
+            - 0.79335334
+            - 0.0
+            - 0.608761429
+            - 0.0
+            rel_object_uid: beef
+            rel_object_point:
+            - 0.0
+            - 0.0
+            - -0.0318179347
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: turn_half_lettuce
+            type: object_position
+            grasp: true
+            translation:
+            - -0.018822857
+            - -0.124728444
+            - 0.362549273
+            orientation:
+            - 0.751250181
+            - 0.255015073
+            - 0.576454539
+            - 0.195679948
+            rel_object_uid: beef
+            rel_object_point:
+            - 0.0
+            - 0.0
+            - -0.0318179347
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: flatten_lettuce
+            type: object_position
+            grasp: true
+            translation:
+            - -0.018822857
+            - -0.197907455
+            - 0.253029143
+            orientation:
+            - 0.629409523
+            - 0.482962913
+            - 0.482962913
+            - 0.370590477
+            rel_object_uid: beef
+            rel_object_point:
+            - 0.0
+            - 0.0
+            - -0.0318179347
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: lower_lettuce
+            type: object_position
+            grasp: true
+            translation:
+            - -0.018822857
+            - -0.197907455
+            - 0.118029143
+            orientation:
+            - 0.629409523
+            - 0.482962913
+            - 0.482962913
+            - 0.370590477
+            rel_object_uid: beef
+            rel_object_point:
+            - 0.0
+            - 0.0
+            - -0.0318179347
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: release_lettuce
+            type: pending
+            grasp: false
+            cnt: 30
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: withdraw_lettuce
+            type: object_position
+            grasp: false
+            translation:
+            - -0.018822857
+            - -0.197907455
+            - 0.268029143
+            orientation:
+            - 0.629409523
+            - 0.482962913
+            - 0.482962913
+            - 0.370590477
+            rel_object_uid: beef
+            rel_object_point:
+            - 0.0
+            - 0.0
+            - -0.0318179347
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: retreat_lettuce
+            type: object_position
+            grasp: false
+            translation:
+            - -0.138822857
+            - -0.197907455
+            - 0.298029143
+            orientation:
+            - 0.629409523
+            - 0.482962913
+            - 0.482962913
+            - 0.370590477
+            rel_object_uid: beef
+            rel_object_point:
+            - 0.0
+            - 0.0
+            - -0.0318179347
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: settle_lettuce
+            type: pending
+            grasp: false
+            cnt: 90
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: park_right_arm
+            type: robot_frame
+            grasp: false
+            translation:
+            - 0.25
+            - -0.08
+            - 0.2
+            orientation:
+            - 0.79335334
+            - 0.0
+            - 0.608761429
+            - 0.0
+            rel_arm: right
+      - type: move_to
+        name: align_base_to_bread
+        arm: right
+        grasp: false
+        move_type: alignv2
+        linear_step: 0.003
+        rel_object_uid: bread4
+        delta_position:
+          x: -0.45
+          y: -0.1
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: settle_at_bread
+            type: pending
+            grasp: false
+            cnt: 15
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: approach_bread
+            type: object_frame
+            grasp: false
+            translation:
+            - -0.038822857
+            - -5.32e-05
+            - 0.168867074
+            orientation:
+            - 0.79335334
+            - 0.0
+            - 0.608761429
+            - 0.0
+            rel_object_uid: bread4
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: align_bread
+            type: object_frame
+            grasp: false
+            translation:
+            - -0.038822857
+            - -5.32e-05
+            - 0.143867074
+            orientation:
+            - 0.79335334
+            - 0.0
+            - 0.608761429
+            - 0.0
+            rel_object_uid: bread4
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: grasp_bread
+            type: object_frame
+            grasp: false
+            translation:
+            - -0.038822857
+            - -5.32e-05
+            - 0.123867074
+            orientation:
+            - 0.79335334
+            - 0.0
+            - 0.608761429
+            - 0.0
+            rel_object_uid: bread4
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: close_bread
+            type: pending
+            grasp: true
+            cnt: 45
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: lift_bread
+            type: object_frame
+            grasp: true
+            translation:
+            - -0.038822857
+            - -5.32e-05
+            - 0.363867074
+            orientation:
+            - 0.79335334
+            - 0.0
+            - 0.608761429
+            - 0.0
+            rel_object_uid: bread4
+      - type: move_to
+        name: carry_bread_to_plate
+        arm: right
+        grasp: true
+        move_type: alignv2
+        linear_step: 0.002
+        rel_object_uid: lettuce
+        delta_position:
+          x: -0.38
+          y: -0.1
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: settle_before_placing_bread
+            type: pending
+            grasp: true
+            cnt: 15
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: above_bread
+            type: object_position
+            grasp: true
+            translation:
+            - -0.018822857
+            - 0.0
+            - 0.404888874
+            orientation:
+            - 0.79335334
+            - 0.0
+            - 0.608761429
+            - 0.0
+            rel_object_uid: lettuce
+            rel_object_point:
+            - 0
+            - -0.00450907422
+            - 0
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: turn_half_bread
+            type: object_position
+            grasp: true
+            translation:
+            - -0.018822857
+            - -0.124728444
+            - 0.362549273
+            orientation:
+            - 0.751250181
+            - 0.255015073
+            - 0.576454539
+            - 0.195679948
+            rel_object_uid: lettuce
+            rel_object_point:
+            - 0
+            - -0.00450907422
+            - 0
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: flatten_bread
+            type: object_position
+            grasp: true
+            translation:
+            - -0.018822857
+            - -0.197907455
+            - 0.253029143
+            orientation:
+            - 0.629409523
+            - 0.482962913
+            - 0.482962913
+            - 0.370590477
+            rel_object_uid: lettuce
+            rel_object_point:
+            - 0
+            - -0.00450907422
+            - 0
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: lower_bread
+            type: object_position
+            grasp: true
+            translation:
+            - -0.018822857
+            - -0.197907455
+            - 0.118029143
+            orientation:
+            - 0.629409523
+            - 0.482962913
+            - 0.482962913
+            - 0.370590477
+            rel_object_uid: lettuce
+            rel_object_point:
+            - 0
+            - -0.00450907422
+            - 0
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: release_bread
+            type: pending
+            grasp: false
+            cnt: 30
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: withdraw_bread
+            type: object_position
+            grasp: false
+            translation:
+            - -0.018822857
+            - -0.197907455
+            - 0.268029143
+            orientation:
+            - 0.629409523
+            - 0.482962913
+            - 0.482962913
+            - 0.370590477
+            rel_object_uid: lettuce
+            rel_object_point:
+            - 0
+            - -0.00450907422
+            - 0
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: retreat_bread
+            type: object_position
+            grasp: false
+            translation:
+            - -0.138822857
+            - -0.197907455
+            - 0.298029143
+            orientation:
+            - 0.629409523
+            - 0.482962913
+            - 0.482962913
+            - 0.370590477
+            rel_object_uid: lettuce
+            rel_object_point:
+            - 0
+            - -0.00450907422
+            - 0
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: settle_bread
+            type: pending
+            grasp: false
+            cnt: 90
+    articulation: {}
+    goal:
+    - - type: manip/default/sr_based_genmanip_relationship
+        not_set_mass: true
+        obj1_uid: bread2
+        obj2_uid: plate
+        position: top
+        support_mode: contact
+        support_min_overlap: 0.95
+        support_max_gap: 0.015
+        support_max_penetration: 0.01
+        support_container_uid: plate
+        support_container_min_overlap: 0.95
+      - type: manip/default/sr_based_genmanip_axis_align
+        not_set_mass: true
+        obj1_uid: bread2
+        obj2_uid: plate
+        obj1_axis: y
+        obj2_axis: y
+        comparison: <=
+        threshold_deg: 20
+      - type: manip/default/sr_based_genmanip_range
+        not_set_mass: true
+        obj1_uid: bread2
+        x_type: none
+        y_type: none
+        z_type: relative
+        z_range:
+        - 0.005
+        - 0.045
+        z_rel_object_uid: plate
+        obj1_local_offset:
+        - 0
+        - -5.32e-05
+        - -0.0810218
+      - type: manip/default/sr_based_genmanip_relationship
+        not_set_mass: true
+        obj1_uid: beef
+        obj2_uid: bread2
+        position: top
+        support_mode: contact
+        support_min_overlap: 0.6
+        support_max_gap: 0.015
+        support_max_penetration: 0.01
+        support_container_uid: plate
+        support_container_min_overlap: 0.95
+      - type: manip/default/sr_based_genmanip_axis_align
+        not_set_mass: true
+        obj1_uid: beef
+        obj2_uid: plate
+        obj1_axis: -y
+        obj2_axis: y
+        comparison: <=
+        threshold_deg: 20
+      - type: manip/default/sr_based_genmanip_range
+        not_set_mass: true
+        obj1_uid: beef
+        obj1_local_offset:
+        - 0.0
+        - 0.0
+        - -0.0318179347
+        x_type: none
+        y_type: none
+        z_type: relative
+        z_rel_object_uid: plate
+        z_range:
+        - 0.02
+        - 0.1
+      - type: manip/default/sr_based_genmanip_relationship
+        not_set_mass: true
+        obj1_uid: lettuce
+        obj2_uid: beef
+        position: top
+        support_mode: contact
+        support_min_overlap: 0.6
+        support_max_gap: 0.015
+        support_max_penetration: 0.01
+        support_container_uid: plate
+        support_container_min_overlap: 0.95
+      - type: manip/default/sr_based_genmanip_axis_align
+        not_set_mass: true
+        obj1_uid: lettuce
+        obj2_uid: plate
+        obj1_axis: y
+        obj2_axis: y
+        comparison: <=
+        threshold_deg: 20
+      - type: manip/default/sr_based_genmanip_range
+        not_set_mass: true
+        obj1_uid: lettuce
+        obj1_local_offset:
+        - 0.0
+        - -0.00450907422
+        - 0.0
+        x_type: none
+        y_type: none
+        z_type: relative
+        z_rel_object_uid: plate
+        z_range:
+        - 0.03
+        - 0.14
+      - type: manip/default/sr_based_genmanip_relationship
+        not_set_mass: true
+        obj1_uid: bread4
+        obj2_uid: lettuce
+        position: top
+        support_mode: contact
+        support_min_overlap: 0.6
+        support_max_gap: 0.015
+        support_max_penetration: 0.01
+        support_container_uid: plate
+        support_container_min_overlap: 0.95
+      - type: manip/default/sr_based_genmanip_axis_align
+        not_set_mass: true
+        obj1_uid: bread4
+        obj2_uid: plate
+        obj1_axis: y
+        obj2_axis: y
+        comparison: <=
+        threshold_deg: 20
+    mode: manual
+    planner: curobo
+  instruction: 'Make a sandwich on the plate: bottom bread, steak, lettuce, then top
+    bread.'
+  layout_config:
+    type: random_custom_tableset
+    in_order: true
+    custom_tableset:
+      plate:
+        type: global_range
+        keep_original_orientation: true
+        allow_rotation_fallback: false
+        random_range_x: -0.29
+        random_range_y: -0.2
+        random_range_w: 0.335
+        random_range_h: 0.63
+        random_range_angle: 0
+        buffer_size: 0.01
+      bowl:
+        type: global_range
+        keep_original_orientation: true
+        allow_rotation_fallback: false
+        random_range_x: -0.29
+        random_range_y: -0.2
+        random_range_w: 0.335
+        random_range_h: 0.63
+        random_range_angle: 0
+        buffer_size: 0.01
+      salt:
+        type: global_range
+        keep_original_orientation: true
+        allow_rotation_fallback: false
+        random_range_x: 0.065
+        random_range_y: -0.12
+        random_range_w: 0.125
+        random_range_h: 0.42
+        random_range_angle: 0
+        buffer_size: 0.06
+      pepper:
+        type: global_range
+        keep_original_orientation: true
+        allow_rotation_fallback: false
+        random_range_x: 0.065
+        random_range_y: -0.12
+        random_range_w: 0.125
+        random_range_h: 0.42
+        random_range_angle: 0
+        buffer_size: 0.06
+      banana:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      bread2:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      bread4:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      apple:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      green_apple:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      beef:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      lettuce:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+  mode: manual
+  object_config:
+    apple:
+      type: existed_object
+      uid_list:
+      - apple
+      is_not_rigid: true
+      without_colliders: true
+    green_apple:
+      type: existed_object
+      uid_list:
+      - apple1
+      is_not_rigid: true
+      without_colliders: true
+    banana:
+      type: existed_object
+      uid_list:
+      - banana
+    salt:
+      type: existed_object
+      mass: 0.18
+      uid_list:
+      - salt
+    pepper:
+      type: existed_object
+      uid_list:
+      - pepper
+    bowl:
+      type: existed_object
+      uid_list:
+      - bowl
+    beef:
+      type: existed_object
+      uid_list:
+      - beef
+      is_not_rigid: true
+      without_colliders: true
+    plate:
+      type: existed_object
+      uid_list:
+      - plate
+      is_not_rigid: true
+      without_colliders: true
+    bread2:
+      type: existed_object
+      uid_list:
+      - bread2
+      is_not_rigid: true
+      without_colliders: true
+    lettuce:
+      type: existed_object
+      uid_list:
+      - lettuce
+      is_not_rigid: true
+      without_colliders: true
+    bread4:
+      type: existed_object
+      uid_list:
+      - bread4
+      is_not_rigid: true
+      without_colliders: true
+  preprocess_config: []
+  robots:
+  - type: manip/lift2/R5a
+    position:
+    - -0.7
+    - 0.0
+    - 0.5
+  table_uid: instance
+  task_name: ebench15/salad/test/make_sandwich
+  usd_name: scene_usds/ebench15/salad/base
+  env_vars:
+    MDL_SYSTEM_PATH: /isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench15/salad/SubUSDs/materials
+  num_test: 20
+  num_steps: 4500

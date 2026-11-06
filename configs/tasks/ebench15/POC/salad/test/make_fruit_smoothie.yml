@@ -1,0 +1,297 @@
+# Task-local wide mixing cup; upright Y axis, lowered walls and above-rim release.
+demonstration_configs: []
+evaluation_configs:
+- domain_randomization:
+    cameras:
+      config_path: configs/cameras/fixed_camera_lift2_simbox.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config:
+    action_path:
+      mode: manual
+      robot: 0
+      actions:
+      - obj1_uid: apple
+        obj2_uid: mixing_cup
+        position: in
+        fixed_position: true
+        allow_fixed_grasp: true
+        force_fixed_grasp: true
+        arm: right
+        motion_config:
+          post_grasp_distance: 0.22
+          pre_place_distance: 0.08
+          post_place_distance: 0.12
+        grasp_idx:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        base_motion_list:
+          '0':
+          - x: null
+            y:
+            - -0.05
+            - 0.05
+            yaw: null
+            type: align
+          '3':
+          - x: null
+            y:
+            - -0.05
+            - 0.05
+            yaw: null
+            type: align
+        type: pick_and_place
+        fixed_position_config:
+          translation:
+          - 0
+          - 0
+          - 0.06
+          orientation:
+          - 1
+          - 0
+          - 0
+          - 0
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: settle_fruit
+            type: pending
+            grasp: false
+            cnt: 90
+      - type: custom_motion
+        motion_list:
+          right:
+          - name: park_right_arm
+            type: robot_frame
+            rel_arm: right
+            translation:
+            - 0.25
+            - -0.08
+            - 0.2
+            orientation:
+            - 0.79335334
+            - 0
+            - 0.608761429
+            - 0
+            grasp: false
+      - obj1_uid: banana
+        obj2_uid: mixing_cup
+        position: in
+        fixed_position: true
+        allow_fixed_grasp: true
+        force_fixed_grasp: true
+        arm: left
+        motion_config:
+          post_grasp_distance: 0.22
+          pre_place_distance: 0.06
+          post_place_distance: 0.06
+        grasp_idx:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        base_motion_list:
+          '0':
+          - x: null
+            y:
+            - -0.05
+            - 0.05
+            yaw: null
+            type: align
+          '3':
+          - x: null
+            y:
+            - -0.05
+            - 0.05
+            yaw: null
+            type: align
+        type: pick_and_place
+        fixed_position_config:
+          translation:
+          - 0.06
+          - 0
+          - 0
+          orientation:
+          - 1
+          - 0
+          - 0
+          - 0
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: settle_banana
+            type: pending
+            grasp: false
+            cnt: 90
+    articulation: {}
+    goal:
+    - - type: manip/default/sr_based_genmanip_relationship
+        not_set_mass: true
+        obj1_uid: apple
+        obj2_uid: mixing_cup
+        position: in
+      - type: manip/default/sr_based_genmanip_relationship
+        not_set_mass: true
+        obj1_uid: banana
+        obj2_uid: mixing_cup
+        position: in
+      - type: manip/default/sr_based_genmanip_axis_align
+        not_set_mass: true
+        obj1_uid: mixing_cup
+        obj2_uid: salt
+        obj1_axis: y
+        obj2_axis: z
+        comparison: <=
+        threshold_deg: 10
+    mode: manual
+    planner: curobo
+  instruction: Make a fruit smoothie by putting the fruit into the mixing cup.
+  layout_config:
+    type: random_custom_tableset
+    in_order: true
+    custom_tableset:
+      mixing_cup:
+        type: global_range
+        reset_orientation: true
+        orientation:
+        - 0.70710678
+        - 0.70710678
+        - 0.0
+        - 0.0
+        random_range_x: -0.29
+        random_range_y: -0.13
+        random_range_w: 0.44
+        random_range_h: 0.43
+        random_range_angle: 0
+        additional_height: 0.005
+        buffer_size: 0.005
+      apple:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      green_apple:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      banana:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      salt:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      pepper:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      beef:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      bread2:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      lettuce:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+      bread4:
+        type: local_jitter
+        w: 0.02
+        h: 0.02
+  mode: manual
+  object_config:
+    apple:
+      type: existed_object
+      uid_list:
+      - apple
+      is_not_rigid: true
+      without_colliders: true
+    green_apple:
+      type: existed_object
+      uid_list:
+      - apple1
+      is_not_rigid: true
+      without_colliders: true
+    banana:
+      type: existed_object
+      uid_list:
+      - banana
+    salt:
+      type: existed_object
+      mass: 0.18
+      uid_list:
+      - salt
+    pepper:
+      type: existed_object
+      uid_list:
+      - pepper
+    beef:
+      type: existed_object
+      uid_list:
+      - beef
+      is_not_rigid: true
+      without_colliders: true
+    bread2:
+      type: existed_object
+      uid_list:
+      - bread2
+      is_not_rigid: true
+      without_colliders: true
+    lettuce:
+      type: existed_object
+      uid_list:
+      - lettuce
+      is_not_rigid: true
+      without_colliders: true
+    bread4:
+      type: existed_object
+      uid_list:
+      - bread4
+      is_not_rigid: true
+      without_colliders: true
+    mixing_cup:
+      type: load_object_from_path
+      path: object_usds/custom_usd/ebench_usds/cup/ready/ee786bc8e2e744b7ab6ba56114780e8b/ee786bc8e2e744b7ab6ba56114780e8b.usd
+      filter_rule: []
+      max_cached_num: 1
+      relative_scale:
+      - 2.5
+      - 1.5
+      - 2.5
+      option:
+      - plain_replace
+      without_colliders: false
+  preprocess_config:
+  - type: remove_objects
+    config:
+      uids:
+      - bowl
+      - plate
+  robots:
+  - type: manip/lift2/R5a
+    position:
+    - -0.45
+    - 0.0
+    - 0.5
+  table_uid: instance
+  task_name: ebench15/salad/test/make_fruit_smoothie
+  usd_name: scene_usds/ebench15/salad/base
+  env_vars:
+    MDL_SYSTEM_PATH: /isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench15/salad/SubUSDs/materials
+  num_test: 20
+  num_steps: 2000

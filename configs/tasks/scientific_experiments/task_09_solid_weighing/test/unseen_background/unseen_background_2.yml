@@ -1,0 +1,215 @@
+demonstration_configs:
+- domain_randomization: &id001
+    cameras:
+      config_path: configs/cameras/fixed_camera_lift2_scientific_experiments.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config: &id002
+    action_path:
+      mode: auto
+      robot: 0
+    articulation: []
+    goal:
+    - - - type: manip/scientific_experiments/task_09_solid_weighing
+          skip_steps: 50
+          succ_cnts: 100
+          weighing_bottle_body_uid: weighing_bottle_body
+          analytical_balance_Chassis_uid: analytical_balance_Chassis
+          articulation_obj_uid: analytical_balance
+          joint_name: RightTarePress
+          condition_type: weighing
+          metric_weight: 0.5
+          require_supported_inventory: true
+          require_empty: true
+    - - - type: manip/scientific_experiments/task_09_solid_weighing
+          skip_steps: 1
+          succ_cnts: 3
+          weighing_bottle_body_uid: weighing_bottle_body
+          analytical_balance_Chassis_uid: analytical_balance_Chassis
+          articulation_obj_uid: analytical_balance
+          joint_name: RightTarePress
+          condition_type: touch_button
+          metric_weight: 0.5
+          require_supported_inventory: true
+          require_empty: false
+    - - - type: manip/scientific_experiments/task_09_solid_weighing
+          skip_steps: 50
+          succ_cnts: 100
+          weighing_bottle_body_uid: weighing_bottle_body
+          analytical_balance_Chassis_uid: analytical_balance_Chassis
+          articulation_obj_uid: analytical_balance
+          joint_name: RightTarePress
+          condition_type: not_weighing
+          metric_weight: 0.5
+          require_supported_inventory: true
+          require_empty: false
+    - - - type: manip/default/sr_based_genmanip_relationship
+          skip_steps: 50
+          succ_cnts: 100
+          obj1_uid: grain_01
+          obj2_uid: weighing_bottle_body
+          position: in
+          not_set_mass: true
+          metric_weight: 2.5
+        - type: manip/default/sr_based_genmanip_relationship
+          skip_steps: 50
+          succ_cnts: 100
+          obj1_uid: grain_02
+          obj2_uid: weighing_bottle_body
+          position: in
+          not_set_mass: true
+          metric_weight: 2.5
+        - type: manip/default/sr_based_genmanip_relationship
+          skip_steps: 50
+          succ_cnts: 100
+          obj1_uid: grain_03
+          obj2_uid: weighing_bottle_body
+          position: in
+          not_set_mass: true
+          metric_weight: 2.5
+        - type: manip/default/sr_based_genmanip_relationship
+          skip_steps: 50
+          succ_cnts: 100
+          obj1_uid: grain_04
+          obj2_uid: weighing_bottle_body
+          position: in
+          not_set_mass: true
+          metric_weight: 2.5
+        - type: manip/default/sr_based_genmanip_relationship
+          skip_steps: 50
+          succ_cnts: 100
+          obj1_uid: grain_05
+          obj2_uid: weighing_bottle_body
+          position: in
+          not_set_mass: true
+          metric_weight: 2.5
+    - - - type: manip/scientific_experiments/task_09_solid_weighing
+          skip_steps: 1
+          succ_cnts: 0
+          weighing_bottle_body_uid: weighing_bottle_body
+          analytical_balance_Chassis_uid: analytical_balance_Chassis
+          articulation_obj_uid: analytical_balance
+          joint_name: RightTarePress
+          condition_type: weighing
+          metric_weight: 1.0
+          require_supported_inventory: true
+          require_empty: false
+          require_stable: false
+          reading_range_g:
+          - 4.0
+          - 5.0
+        - type: manip/default/count_multi_object_relationship
+          skip_steps: 1
+          succ_cnts: 0
+          obj1_uid_list:
+          - grain_01
+          - grain_02
+          - grain_03
+          - grain_04
+          - grain_05
+          obj2_uid: weighing_bottle_body
+          position: in
+          min_num_threshold: 5
+          not_set_mass: true
+          obj1_pc_num: 100
+          metric_weight: 1.0
+    mode: manual
+    planner: curobo
+  instruction: no instruction
+  layout_config: &id003
+    ignored_objects: []
+    type: None
+  mode: manual
+  num_episode: 50
+  object_config:
+    analytical_balance:
+      type: existed_object
+      is_articulated: true
+      reset_joint_positions: false
+      target_positions: null
+      uid_list:
+      - analytical_balance
+      articulation_info:
+        is_articulated: true
+        part:
+          Chassis: Body
+  preprocess_config: []
+  robots:
+  - &id004
+    type: manip/lift2/R5a
+    usd_path: robot_usds/lift2_scientific_experiments/robot.usd
+    position:
+    - 0.0
+    - -0.8
+    - 0.0
+    orientation:
+    - 0.7071067812
+    - 0.0
+    - 0.0
+    - 0.7071067812
+  table_uid: table
+  physics_scene_config:
+    EnableStabilization: true
+    BroadphaseType: GPU
+    EnableGPUDynamics: true
+    SolverType: TGS
+    TimeStepsPerSecond: 120
+  task_name: scientific_experiments/task_09_solid_weighing/unseen_background_2
+  usd_name: scene_usds/scientific_experiments/task_09_solid_weighing/unseen_scene_2/scene
+  env_vars:
+    MDL_SYSTEM_PATH: /isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl
+evaluation_configs:
+- domain_randomization: *id001
+  generation_config: *id002
+  instruction: no instruction
+  layout_config: *id003
+  mode: manual
+  num_test: 1
+  num_steps: 4000
+  preserve_score_on_invalid_state: true
+  warmup_steps: 300
+  physics_dt: 0.0083333333
+  rendering_dt: 0.0083333333
+  object_config:
+    analytical_balance:
+      type: existed_object
+      is_articulated: true
+      reset_joint_positions: false
+      target_positions: null
+      uid_list:
+      - analytical_balance
+      articulation_info:
+        is_articulated: true
+        part:
+          Chassis: Body
+  physics_scene_config:
+    EnableStabilization: true
+    BroadphaseType: GPU
+    EnableGPUDynamics: true
+    SolverType: TGS
+    TimeStepsPerSecond: 120
+  preprocess_config:
+  - config:
+      Restitution: 0.0
+      DynamicFriction: 0.5
+      StaticFriction: 0.5
+      FrictionCombineMode: max
+      RestitutionCombineMode: multiply
+      ImprovePatchFriction: true
+    robot_type: lift2
+    type: set_robot_physics_material
+  robots:
+  - *id004
+  table_uid: table
+  task_name: scientific_experiments/task_09_solid_weighing/unseen_background_2
+  usd_name: scene_usds/scientific_experiments/task_09_solid_weighing/unseen_scene_2/scene
+  env_vars:
+    MDL_SYSTEM_PATH: /isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl

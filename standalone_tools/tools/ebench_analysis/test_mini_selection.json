@@ -1,5 +1,5 @@
 {
-  "source_summary": "/mnt/data/wangyukai/sync/GenManip-Sim/tmp/ebench_test_mini_rebuilt/all_test_mini_summary.json",
+  "source_summary": "tmp/ebench_test_mini_rebuilt/all_test_mini_summary.json",
   "tasks": {
     "mobile_manip/apple_from_shelf": [
       "000",

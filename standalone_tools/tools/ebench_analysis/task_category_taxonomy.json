@@ -9,6 +9,7 @@
         "move"
       ],
       "range": "short-horizon",
+      "horizon": 3,
       "precision": "low",
       "mobility": "mobile",
       "atomic_skill_count": 2
@@ -23,6 +24,7 @@
         "move"
       ],
       "range": "short-horizon",
+      "horizon": 4,
       "precision": "low",
       "mobility": "mobile",
       "atomic_skill_count": 3
@@ -37,6 +39,7 @@
         "move"
       ],
       "range": "short-horizon",
+      "horizon": 4,
       "precision": "low",
       "mobility": "mobile",
       "atomic_skill_count": 3
@@ -51,6 +54,7 @@
         "move"
       ],
       "range": "long-horizon",
+      "horizon": 64,
       "precision": "medium",
       "mobility": "mobile",
       "atomic_skill_count": 3
@@ -65,6 +69,7 @@
         "move"
       ],
       "range": "short-horizon",
+      "horizon": 4,
       "precision": "low",
       "mobility": "mobile",
       "atomic_skill_count": 3
@@ -79,6 +84,7 @@
         "handover"
       ],
       "range": "long-horizon",
+      "horizon": 9,
       "precision": "low",
       "mobility": "mobile",
       "atomic_skill_count": 3
@@ -93,6 +99,7 @@
         "move"
       ],
       "range": "long-horizon",
+      "horizon": 18,
       "precision": "medium",
       "mobility": "mobile",
       "atomic_skill_count": 3
@@ -110,6 +117,7 @@
         "push"
       ],
       "range": "long-horizon",
+      "horizon": 12,
       "precision": "low",
       "mobility": "mobile",
       "atomic_skill_count": 6
@@ -126,6 +134,7 @@
         "pour"
       ],
       "range": "long-horizon",
+      "horizon": 13,
       "precision": "low",
       "mobility": "mobile",
       "atomic_skill_count": 5
@@ -141,6 +150,7 @@
         "sweep"
       ],
       "range": "long-horizon",
+      "horizon": 10,
       "precision": "medium",
       "mobility": "mobile",
       "atomic_skill_count": 4
@@ -157,6 +167,7 @@
         "sweep"
       ],
       "range": "short-horizon",
+      "horizon": 7,
       "precision": "low",
       "mobility": "mobile",
       "atomic_skill_count": 5
@@ -170,6 +181,7 @@
         "insert"
       ],
       "range": "short-horizon",
+      "horizon": 6,
       "precision": "medium",
       "mobility": "mobile",
       "atomic_skill_count": 2
@@ -184,6 +196,7 @@
         "move"
       ],
       "range": "short-horizon",
+      "horizon": 4,
       "precision": "low",
       "mobility": "mobile",
       "atomic_skill_count": 3
@@ -198,6 +211,7 @@
         "move"
       ],
       "range": "short-horizon",
+      "horizon": 4,
       "precision": "low",
       "mobility": "mobile",
       "atomic_skill_count": 3
@@ -212,6 +226,7 @@
         "move"
       ],
       "range": "short-horizon",
+      "horizon": 4,
       "precision": "low",
       "mobility": "mobile",
       "atomic_skill_count": 3
@@ -228,6 +243,7 @@
         "handover"
       ],
       "range": "long-horizon",
+      "horizon": 29,
       "precision": "low",
       "mobility": "mobile",
       "atomic_skill_count": 5
@@ -242,6 +258,7 @@
         "move"
       ],
       "range": "short-horizon",
+      "horizon": 3,
       "precision": "medium",
       "mobility": "mobile",
       "atomic_skill_count": 3
@@ -256,6 +273,7 @@
         "move"
       ],
       "range": "short-horizon",
+      "horizon": 8,
       "precision": "medium",
       "mobility": "mobile",
       "atomic_skill_count": 3
@@ -270,6 +288,7 @@
         "move"
       ],
       "range": "short-horizon",
+      "horizon": 7,
       "precision": "low",
       "mobility": "mobile",
       "atomic_skill_count": 3
@@ -285,6 +304,7 @@
         "insert"
       ],
       "range": "short-horizon",
+      "horizon": 7,
       "precision": "high",
       "mobility": "fixed",
       "atomic_skill_count": 4
@@ -301,6 +321,7 @@
         "pour"
       ],
       "range": "short-horizon",
+      "horizon": 7,
       "precision": "medium",
       "mobility": "fixed",
       "atomic_skill_count": 5
@@ -316,6 +337,7 @@
         "place"
       ],
       "range": "short-horizon",
+      "horizon": 3,
       "precision": "low",
       "mobility": "fixed",
       "atomic_skill_count": 4
@@ -329,6 +351,7 @@
         "place"
       ],
       "range": "short-horizon",
+      "horizon": 2,
       "precision": "high",
       "mobility": "fixed",
       "atomic_skill_count": 2
@@ -343,6 +366,7 @@
         "insert"
       ],
       "range": "short-horizon",
+      "horizon": 4,
       "precision": "high",
       "mobility": "fixed",
       "atomic_skill_count": 3
@@ -357,6 +381,7 @@
         "press"
       ],
       "range": "short-horizon",
+      "horizon": 6,
       "precision": "medium",
       "mobility": "fixed",
       "atomic_skill_count": 3
@@ -370,6 +395,7 @@
         "place"
       ],
       "range": "short-horizon",
+      "horizon": 2,
       "precision": "high",
       "mobility": "fixed",
       "atomic_skill_count": 2

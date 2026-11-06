@@ -14,25 +14,25 @@ demonstration_configs:
       random_visuals:
       - prim_path: /World/_scene/obj_table/Looks/material0/baseColorTex
         type: texture
-        assets_pattern: scene_usds/ebench/long_horizon/scene_shop/textures/table/train/.*\.png$
+        assets_pattern: scene_usds/ebench/long_horizon_v0.3/scene_shop/textures/table/train/.*\.png$
       - prim_path: /World/_scene/obj_box0/Looks/material0/baseColorTex
         type: texture
-        assets_pattern: scene_usds/ebench/long_horizon/scene_shop/textures/box0_texture/train/.*\.png$
+        assets_pattern: scene_usds/ebench/long_horizon_v0.3/scene_shop/textures/box0_texture/train/.*\.png$
       - prim_path: /World/_scene/obj_bottle/Looks/material0/baseColorTex
         type: texture
-        assets_pattern: scene_usds/ebench/long_horizon/scene_shop/textures/bottle_texture/train/.*\.png$
+        assets_pattern: scene_usds/ebench/long_horizon_v0.3/scene_shop/textures/bottle_texture/train/.*\.png$
       - prim_path: /World/_scene/obj_milk/Looks/material0/baseColorTex
         type: texture
-        assets_pattern: scene_usds/ebench/long_horizon/scene_shop/textures/milk_texture/train/.*\.png$
+        assets_pattern: scene_usds/ebench/long_horizon_v0.3/scene_shop/textures/milk_texture/train/.*\.png$
       - prim_path: /World/_scene/obj_can0/Looks/material0/baseColorTex
         type: texture
-        assets_pattern: scene_usds/ebench/long_horizon/scene_shop/textures/can0_texture/train/.*\.png$
+        assets_pattern: scene_usds/ebench/long_horizon_v0.3/scene_shop/textures/can0_texture/train/.*\.png$
       - prim_path: /World/_scene/obj_can1/Looks/material0/baseColorTex
         type: texture
-        assets_pattern: scene_usds/ebench/long_horizon/scene_shop/textures/can1_texture/train/.*\.png$
+        assets_pattern: scene_usds/ebench/long_horizon_v0.3/scene_shop/textures/can1_texture/train/.*\.png$
       - prim_path: /World/_scene/obj_box1/Looks/material0/baseColorTex
         type: texture
-        assets_pattern: scene_usds/ebench/long_horizon/scene_shop/textures/box1_texture/train/.*\.png$
+        assets_pattern: scene_usds/ebench/long_horizon_v0.3/scene_shop/textures/box1_texture/train/.*\.png$
     rewrite_instruction: false
   generation_config:
     action_path:
@@ -1450,9 +1450,9 @@ demonstration_configs:
     - -0.70711
   table_uid: table
   task_name: ebench/mobile_manip/shop_test_mini
-  usd_name: scene_usds/ebench/long_horizon/scene_shop/scene
+  usd_name: scene_usds/ebench/long_horizon_v0.3/scene_shop/scene
   env_vars:
-    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp/task3/SubUSDs/materials"
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"
 evaluation_configs:
 - domain_randomization:
     cameras:
@@ -1473,6 +1473,6 @@ evaluation_configs:
     - -0.70711
   table_uid: table
   task_name: ebench/mobile_manip/shop_test_mini
-  usd_name: scene_usds/ebench/long_horizon/scene_shop/scene
+  usd_name: scene_usds/ebench/long_horizon_v0.3/scene_shop/scene
   env_vars:
-    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp/task3/SubUSDs/materials"
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"

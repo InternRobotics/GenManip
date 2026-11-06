@@ -1,0 +1,6 @@
+# Simulator-free unit tests; install in a separate Python 3.10+ virtualenv.
+numpy>=1.23,<3
+scipy>=1.9,<2
+pydantic==2.12.5
+shapely==2.1.1
+PyYAML>=6,<7

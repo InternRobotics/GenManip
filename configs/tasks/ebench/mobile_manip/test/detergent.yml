@@ -14,7 +14,7 @@ demonstration_configs:
       random_visuals:
       - prim_path: /World/_scene/layout/DomeLight
         type: dome_light
-        assets_pattern: scene_usds/ebench/long_horizon/scene_detergent/dome_light/train/.*\.exr$
+        assets_pattern: scene_usds/ebench/long_horizon_v0.3/scene_detergent/dome_light/train/.*\.exr$
       - prim_path: /World/_scene/layout/Meshes/BaseAnimation/cabinet/model_8501f1c9aca40c19149a452243e223e8_0/Looks/_e94205b7fdaa4000170a2a5_index120274/Num5dd77cea7d6a630001bffad3
         type: mdl
         assets_pattern: miscs/mdl/ebench/mdl/table/train/.*\.mdl$
@@ -693,7 +693,7 @@ demonstration_configs:
   object_config:
     detergent1:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_detergent/detergent/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_detergent/detergent/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -701,7 +701,7 @@ demonstration_configs:
       - plain_replace
     detergent2:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_detergent/detergent/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_detergent/detergent/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -709,7 +709,7 @@ demonstration_configs:
       - plain_replace
     detergent3:
       type: load_object_from_path
-      path: re:scene_usds/ebench/long_horizon/scene_detergent/detergent/train/.*/.*\.usd
+      path: re:scene_usds/ebench/long_horizon_v0.3/scene_detergent/detergent/train/.*/.*\.usd
       max_cached_num: 1000
       relative_scale: 1.0
       mass: 0.1
@@ -735,9 +735,9 @@ demonstration_configs:
     - 0.0
   table_uid: table
   task_name: ebench/mobile_manip/detergent
-  usd_name: scene_usds/ebench/long_horizon/scene_detergent/scene
+  usd_name: scene_usds/ebench/long_horizon_v0.3/scene_detergent/scene
   env_vars:
-    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp/task3/SubUSDs/materials"
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"
 evaluation_configs:
 - domain_randomization:
     cameras:
@@ -758,6 +758,6 @@ evaluation_configs:
     - 0.0
   table_uid: table
   task_name: ebench/mobile_manip/detergent
-  usd_name: scene_usds/ebench/long_horizon/scene_detergent/scene
+  usd_name: scene_usds/ebench/long_horizon_v0.3/scene_detergent/scene
   env_vars:
-    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp/task3/SubUSDs/materials"
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"

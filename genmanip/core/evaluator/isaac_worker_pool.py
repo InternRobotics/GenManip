@@ -1,3 +1,6 @@
+from genmanip.core.evaluator.request_logging import (
+    remote_call, ray_get, submit_traced, traced,
+)
 from datetime import datetime
 from concurrent.futures import Future, ThreadPoolExecutor
 import logging
@@ -383,6 +386,7 @@ class IsaacWorkerPool:
 
     # ==================== Evaluation Execution ====================
 
+    @traced("pool.refresh_locks")
     def _refresh_locks(self, worker_ids: List[str]) -> set[str]:
         """Refresh locks for a list of workers (best-effort)."""
         if self.progress_manager is None:
@@ -416,6 +420,7 @@ class IsaacWorkerPool:
             lost.add(str(w_id))
         return lost
 
+    @traced("pool.wait_for_next_task")
     def _wait_for_next_task(
         self, w_id: str, timeout_seconds: float = NEXT_TASK_WAIT_TIMEOUT_SECONDS
     ) -> tuple[dict | None, str | None]:
@@ -466,6 +471,7 @@ class IsaacWorkerPool:
             cancel_event = self._worker_cancel_events.get(str(w_id))
         return bool(cancel_event is not None and cancel_event.is_set())
 
+    @traced("pool.reset_worker")
     def _reset_worker(
         self,
         w_id: str,
@@ -497,8 +503,8 @@ class IsaacWorkerPool:
                 raise RuntimeError(f"Worker {w_id} reset cancelled before RPC dispatch")
             worker = self.workers[w_id]
             if include_default_config:
-                return worker.reset.remote(task_seed, config, self.default_config)
-            return worker.reset.remote(task_seed, config)
+                return remote_call(worker.reset, task_seed, config, self.default_config, _trace_worker_id=w_id)
+            return remote_call(worker.reset, task_seed, config, _trace_worker_id=w_id)
 
         def _should_retry_reset(error: Exception) -> bool:
             if self._worker_cancelled(w_id):
@@ -647,7 +653,7 @@ class IsaacWorkerPool:
             future = self._pending_finalize_futures.get(episode_id)
             if future is not None and not future.done():
                 return
-            future = self._finalize_executor.submit(_run_finalize)
+            future = submit_traced(self._finalize_executor, _run_finalize)
             self._pending_finalize_futures[episode_id] = future
             self._pending_finalize_episodes[episode_id] = (
                 task_name,
@@ -691,6 +697,7 @@ class IsaacWorkerPool:
 
         future.add_done_callback(_cleanup)
 
+    @traced("pool.wait_for_pending_finalizers")
     def _wait_for_pending_finalizers(self) -> None:
         while True:
             with self.lock:
@@ -759,6 +766,7 @@ class IsaacWorkerPool:
                     )
             raise
 
+    @traced("pool.spawn_worker")
     def _spawn_worker(self, w_id: str):
         return IsaacWorker.options(
             runtime_env={"env_vars": self.worker_env_vars}
@@ -771,6 +779,7 @@ class IsaacWorkerPool:
             self.benchmark_id,
         )
 
+    @traced("pool.replace_worker")
     def _replace_worker(self, w_id: str, reason: Exception | None = None) -> None:
         reason_text = f"{type(reason).__name__}: {reason}" if reason is not None else ""
         if self._worker_cancelled(w_id):
@@ -799,7 +808,7 @@ class IsaacWorkerPool:
             return {}
         try:
             return self._ray_get_with_timeout(
-                call_remote=lambda: worker.get_memory_snapshot.remote(),
+                call_remote=lambda: remote_call(worker.get_memory_snapshot, _trace_worker_id=w_id),
                 timeout=min(10.0, self.reset_call_timeout),
                 context=f"Worker {w_id} get_memory_snapshot",
             )
@@ -865,7 +874,7 @@ class IsaacWorkerPool:
             attempt_start = time.monotonic()
             try:
                 ref = call_remote()
-                result = ray.get(ref, timeout=timeout)
+                result = ray_get(ref, timeout=timeout)
                 return result
             except GetTimeoutError:
                 last_error = TimeoutError(f"{context} timed out after {timeout}s")
@@ -911,7 +920,7 @@ class IsaacWorkerPool:
         with self.lock:
             future = self._pending_reset_futures.get(str(w_id))
             if future is None or future.done():
-                self._pending_reset_futures[str(w_id)] = self._reset_executor.submit(
+                self._pending_reset_futures[str(w_id)] = submit_traced(self._reset_executor,
                     self._handle_done, w_id, info
                 )
         return self._make_reset_pending_response()
@@ -964,7 +973,7 @@ class IsaacWorkerPool:
         with self.lock:
             future = self._pending_reset_futures.get(str(w_id))
             if future is None or future.done():
-                self._pending_reset_futures[str(w_id)] = self._reset_executor.submit(
+                self._pending_reset_futures[str(w_id)] = submit_traced(self._reset_executor,
                     self._run_reset_task,
                     w_id,
                     task_seed,
@@ -1025,9 +1034,9 @@ class IsaacWorkerPool:
         lost = self._refresh_locks(list(actionable_dict.keys()))
         futures = []
         for w_id, action in actionable_dict.items():
-            futures.append(self.workers[w_id].step.remote(action))
+            futures.append(remote_call(self.workers[w_id].step, action, _trace_worker_id=w_id))
 
-        results = ray.get(futures)
+        results = ray_get(futures)
         lost.update(self._refresh_locks(list(actionable_dict.keys())))
 
         for i, w_id in enumerate(actionable_dict.keys()):
@@ -1039,7 +1048,7 @@ class IsaacWorkerPool:
             }
 
             if str(w_id) in lost:
-                ray.get(self.workers[w_id].abort_episode.remote())
+                ray_get(remote_call(self.workers[w_id].abort_episode, _trace_worker_id=w_id))
                 # Requeue the task so it can be retried by any worker
                 self.progress_manager.release_worker_task(str(w_id))
                 resp = self._handle_done(w_id, {"error": "lock_lost", "info": "Done"})
@@ -1115,10 +1124,10 @@ class IsaacWorkerPool:
                 # Lock lost before we even dispatched — fall through to slow path
                 pass
             else:
-                future = self.workers[single_wid].step_chunk.remote(
-                    per_worker, render_mode, subframes, render_suffix
+                future = remote_call(self.workers[single_wid].step_chunk,
+                    per_worker, render_mode, subframes, render_suffix, _trace_worker_id=single_wid
                 )
-                result = ray.get(future)
+                result = ray_get(future)
                 final_obs, final_done, final_info, executed_steps = result
                 lost.update(self._refresh_locks([single_wid]))
 
@@ -1126,7 +1135,7 @@ class IsaacWorkerPool:
                 stopped_early = bool(final_done) or executed_steps < len(action_chunk)
 
                 if single_wid in lost:
-                    ray.get(self.workers[single_wid].abort_episode.remote())
+                    ray_get(remote_call(self.workers[single_wid].abort_episode, _trace_worker_id=single_wid))
                     self.progress_manager.release_worker_task(str(single_wid))
                     resp = self._handle_done(
                         single_wid, {"error": "lock_lost", "info": "Done"}
@@ -1183,6 +1192,7 @@ class IsaacWorkerPool:
             "stopped_early": stopped_early,
         }
 
+    @traced("pool.handle_done")
     def _handle_done(self, w_id: str, info: dict) -> dict:
         """Handle episode completion for a worker."""
         if self.progress_manager is None:
@@ -1200,9 +1210,9 @@ class IsaacWorkerPool:
         if "error" not in info and "info" in info and info["info"] != "Done":
             try:
                 result = self._ray_get_with_timeout(
-                    call_remote=lambda: self.workers[
+                    call_remote=lambda: remote_call(self.workers[
                         w_id
-                    ].post_episode_process.remote(),
+                    ].post_episode_process, _trace_worker_id=w_id),
                     timeout=self.step_call_timeout,
                     context=f"Worker {w_id} post_episode_process",
                 )
@@ -1310,6 +1320,7 @@ class IsaacWorkerPool:
             "episode_result": episode_result,
         }
 
+    @traced("pool.save_final_result")
     def _save_final_result(self):
         """Save final evaluation result."""
         if self.progress_manager is None or self.benchmark_id is None:
@@ -1360,8 +1371,8 @@ class IsaacWorkerPool:
 
     def close(self):
         """Close all workers."""
-        futures = [worker.close.remote() for worker in self.workers.values()]
-        ray.get(futures)
+        futures = [remote_call(worker.close, _trace_worker_id=w_id) for w_id, worker in self.workers.items()]
+        ray_get(futures)
         self._heartbeat_stop_event.set()
         self._heartbeat_thread.join(timeout=1.0)
         self._reset_executor.shutdown(wait=False, cancel_futures=True)

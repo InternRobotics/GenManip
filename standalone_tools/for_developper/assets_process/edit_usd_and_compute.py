@@ -361,7 +361,7 @@ def bbox_to_polygon(x, y, w, h):
 
 if __name__ == "__main__":
     stage = Usd.Stage.Open(
-        os.path.join("/home/gaoning/grasp_vla_assets/scenes/test_mona_lisa/scene.usd")
+        os.environ.get("GENMANIP_SCENE_USD", "saved/assets/scene_usds/test_mona_lisa/scene.usd")
     )
 
     print_prim_tree(stage.GetPseudoRoot())

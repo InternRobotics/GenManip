@@ -25,7 +25,7 @@ from omni.isaac.core.robots.robot import Robot  # type: ignore
 from omni.isaac.core.utils.prims import delete_prim, is_prim_path_valid  # type: ignore
 from omni.isaac.sensor import Camera  # type: ignore
 
-from pxr import UsdGeom, Usd  # type: ignore
+from pxr import Gf, UsdGeom, Usd, UsdPhysics, Vt  # type: ignore
 
 from genmanip.core.scene.scene_config import SceneConfig, RobotConfig
 from genmanip.utils.loader.asset_search import (
@@ -59,6 +59,7 @@ from genmanip.utils.usd_utils import (
     remove_colliders,
     set_colliders,
     set_contact_offset,
+    set_drive_max_force,
     set_gravity,
     set_mass,
     set_rigid_body,
@@ -905,6 +906,15 @@ def collect_assets(assets_dir: str) -> dict:
 def preprocess_scene(scene: "Scene", demogen_config: SceneConfig) -> None:
     preprocess_config = demogen_config.preprocess_config
     for preprocess_info in preprocess_config:
+        if preprocess_info["type"] == "recompute_inertia":
+            for uid in preprocess_info["config"]["uids"]:
+                prim = scene.object_list[uid].prim
+                # Zero selects PhysX's automatic inertia calculation from the
+                # current mass and collision geometry, instead of stale values
+                # authored for a different mass in the asset.
+                UsdPhysics.MassAPI.Apply(prim).CreateDiagonalInertiaAttr().Set(
+                    Gf.Vec3f(0.0)
+                )
         if preprocess_info["type"] == "disable_contact_offset":
             for object in scene.object_list.values():
                 remove_contact_offset(object.prim_path)
@@ -930,9 +940,19 @@ def preprocess_scene(scene: "Scene", demogen_config: SceneConfig) -> None:
                 ):
                     set_rigid_body_CCD(object.prim_path, True)
         if preprocess_info["type"] == "collider":
+            target_uids = preprocess_info.get("config", {}).get("uids")
+            if target_uids is not None:
+                if not isinstance(target_uids, list) or any(
+                    not isinstance(uid, str) for uid in target_uids
+                ):
+                    raise ValueError("collider.config.uids must be a list of strings")
+                missing = set(target_uids) - scene.object_list.keys()
+                if missing:
+                    raise ValueError(f"Collider objects not found: {sorted(missing)}")
             for name, object in scene.object_list.items():
                 if (
                     name != "defaultGroundPlane"
+                    and (target_uids is None or name in target_uids)
                     and name not in scene.articulation_part_list.keys()
                     and name not in scene.articulation_list
                 ):
@@ -959,6 +979,18 @@ def preprocess_scene(scene: "Scene", demogen_config: SceneConfig) -> None:
                     scene.object_list.pop(key)
                     if key in scene.cache_library.mesh_dict:
                         scene.cache_library.mesh_dict.pop(key)
+        if preprocess_info["type"] == "remove_objects":
+            object_uids = preprocess_info.get("config", {}).get("uids", [])
+            if not isinstance(object_uids, list):
+                raise ValueError("remove_objects.config.uids must be a list")
+            for uid in object_uids:
+                if uid not in scene.object_list:
+                    print(f"Object {uid} not found in scene, skipping removal")
+                    continue
+                if scene.object_list[uid].prim.IsActive():
+                    scene.object_list[uid].prim.SetActive(False)
+                scene.object_list.pop(uid)
+                scene.cache_library.mesh_dict.pop(uid, None)
         if preprocess_info["type"] == "apply_rigid_body_solution":
             for name, object in scene.object_list.items():
                 schema_list = object.prim.GetAppliedSchemas()
@@ -980,6 +1012,16 @@ def preprocess_scene(scene: "Scene", demogen_config: SceneConfig) -> None:
             for name, object in scene.object_list.items():
                 if has_collision_api(object.prim):
                     add_physics_material(object.prim_path)
+        if preprocess_info["type"] == "set_robot_joint_max_force":
+            for robot in scene.robot_list:
+                if robot.robot.name != preprocess_info["robot_type"]:
+                    continue
+                for joint_name, max_force in preprocess_info["config"].items():
+                    max_force = float(max_force)
+                    if not np.isfinite(max_force) or max_force <= 0:
+                        raise ValueError("Joint max force must be finite and positive")
+                    joint = robot.joint_dict[joint_name]
+                    set_drive_max_force(str(joint.GetPath()), max_force)
         if preprocess_info["type"] == "set_robot_physics_material":
             prim_path = None
             if preprocess_info["robot_type"] == "lift2":
@@ -1097,6 +1139,149 @@ def update_meta_infos(scene: "Scene") -> None:
         scene.meta_infos["world_pose_list"][part_id] = part_xform.get_world_pose()
 
 
+def capture_particle_layout_references(scene: "Scene") -> None:
+    """Save the asset's particle frames before physics or episode recovery."""
+    references = {}
+    layout_references = scene.scene_config.particle_layout_references
+    for parent_path, object_id in layout_references.items():
+        parent_path = parent_path.replace("/World/_scene", f"/World/{scene.uuid}", 1)
+        if not scene.world.stage.GetPrimAtPath(parent_path).IsValid():
+            raise ValueError(f"Particle layout parent not found: {parent_path}")
+        parent_position, _ = XFormPrim(parent_path).get_world_pose()
+        reference_position, _ = scene.object_list[object_id].get_world_pose()
+        references[parent_path] = {
+            "position": np.array(parent_position, dtype=np.float64, copy=True),
+            "reference_position": np.array(
+                reference_position, dtype=np.float64, copy=True
+            ),
+            "object_id": object_id,
+        }
+    scene.meta_infos["particle_layout_references"] = references
+
+
+def restore_particle_layout(scene: "Scene", task_data: dict) -> None:
+    """Restore the fixed particle frame's initial XY layout randomization.
+
+    Particle arrays contain local coordinates. Their parent shares the reference
+    object's initial XY layout offset, but must not follow its subsequent motion.
+    Z settling is excluded because it is not part of XY layout randomization.
+    Always use the saved asset layout so repeated resets cannot accumulate offsets.
+    """
+    if not scene.scene_config.particle_layout_references:
+        return
+    references = scene.meta_infos.get("particle_layout_references")
+    if references is None:
+        raise RuntimeError(
+            "Particle layout references were not captured at scene initialization"
+        )
+    for parent_path, info in references.items():
+        reference = task_data["initial_layout"][info["object_id"]]
+        offset = np.zeros(3, dtype=np.float64)
+        offset[:2] = (
+            np.asarray(reference["position"])[:2] - info["reference_position"][:2]
+        )
+        XFormPrim(parent_path).set_world_pose(position=info["position"] + offset)
+        print(f"[OK] Restored particle layout {parent_path}: XY offset {offset[:2]}")
+
+
+def restore_initial_particle_states(scene: "Scene", task_data: dict) -> None:
+    restore_particle_layout(scene, task_data)
+    particle_states = task_data.get("initial_particle_states")
+    if not particle_states:
+        return
+
+    stage = scene.world.stage
+    for particle_id, particle_info in particle_states.items():
+        original_prim_path = particle_info.get("prim_path")
+        points = particle_info.get("points")
+        if not original_prim_path or points is None:
+            print(
+                f"[WARN] Skip initial particle state {particle_id}: "
+                "missing prim_path or points"
+            )
+            continue
+
+        current_prim_path = original_prim_path.replace(
+            "/World/_scene", f"/World/{scene.uuid}", 1
+        )
+        particle_prim = stage.GetPrimAtPath(current_prim_path)
+        if particle_prim is None or not particle_prim.IsValid():
+            print(
+                f"[WARN] Skip initial particle state {particle_id}: "
+                f"invalid prim path {current_prim_path}"
+            )
+            continue
+
+        points_array = np.ascontiguousarray(points, dtype=np.float32)
+        if points_array.ndim != 2 or points_array.shape[1] != 3:
+            print(
+                f"[WARN] Skip initial particle state {particle_id}: "
+                f"expected Nx3 points, got shape {points_array.shape}"
+            )
+            continue
+
+        usd_points = Vt.Vec3fArray.FromNumpy(points_array)
+        restored_attributes = 0
+        for attribute_name in ("points", "physxParticle:simulationPoints"):
+            attribute = particle_prim.GetAttribute(attribute_name)
+            if attribute and attribute.IsValid():
+                attribute.Set(usd_points)
+                restored_attributes += 1
+
+        velocity_attribute = particle_prim.GetAttribute("velocities")
+        if velocity_attribute and velocity_attribute.IsValid():
+            zero_velocities = np.zeros_like(points_array, dtype=np.float32)
+            velocity_attribute.Set(Vt.Vec3fArray.FromNumpy(zero_velocities))
+
+        widths_attribute = particle_prim.GetAttribute("widths")
+        if widths_attribute and widths_attribute.IsValid():
+            current_widths = widths_attribute.Get()
+            if current_widths and len(current_widths) != len(points_array):
+                particle_widths = np.full(
+                    len(points_array), float(current_widths[0]), dtype=np.float32
+                )
+                widths_attribute.Set(Vt.FloatArray.FromNumpy(particle_widths))
+
+        if restored_attributes == 0:
+            print(
+                f"[WARN] Initial particle state {particle_id} has no writable "
+                "points attributes"
+            )
+
+
+def restore_initial_prim_attributes(scene: "Scene", task_data: dict) -> None:
+    """Restore optional <prim>::<attribute> snapshots from the recording's first frame."""
+    stage = scene.world.stage
+    for path, value in task_data.get("initial_prim_attributes", {}).items():
+        prim_path, attribute_name = path.rsplit("::", 1)
+        # Match recorded object roots, including children such as material shaders.
+        for object_id, info in task_data.get("initial_layout", {}).items():
+            original = info.get("prim_path")
+            obj = scene.object_list.get(object_id) or scene.articulation_list.get(
+                object_id
+            )
+            if (
+                original
+                and obj is not None
+                and (prim_path == original or prim_path.startswith(original + "/"))
+            ):
+                prim_path = str(obj.prim_path) + prim_path[len(original) :]
+                break
+        prim_path = prim_path.replace("/World/_scene/", f"/World/{scene.uuid}/", 1)
+        prim = stage.GetPrimAtPath(prim_path)
+        attribute = prim.GetAttribute(attribute_name) if prim else None
+        if not attribute:
+            raise ValueError(
+                f"Initial USD attribute not found: {prim_path}::{attribute_name}"
+            )
+        if isinstance(value, np.ndarray):
+            value = value.tolist()
+        usd_type = attribute.GetTypeName().type.pythonClass
+        if usd_type is not None:
+            value = usd_type(value)
+        attribute.Set(value)
+
+
 def recovery_scene(
     scene: "Scene",
     task_data: dict,
@@ -1117,6 +1302,13 @@ def recovery_scene(
     object_list_keys = list(scene.object_list.keys())
     for key in object_list_keys:
         if key not in layout:
+            object_prim_path = str(scene.object_list[key].prim_path).rstrip("/")
+            has_layout_descendant = any(
+                str(object_info.get("prim_path", "")).startswith(object_prim_path + "/")
+                for object_info in layout.values()
+            )
+            if has_layout_descendant:
+                continue
             if scene.object_list[key].prim.IsActive():
                 scene.object_list[key].prim.SetActive(False)
             scene.object_list.pop(key)
@@ -1187,14 +1379,31 @@ def recovery_scene(
         if not is_prim_path_valid(current_prim_path):
             continue
 
-        scene.articulation_list[key].set_world_pose(
-            articulation_info["position"], articulation_info["orientation"]
+        articulation = scene.articulation_list[key]
+        root_pose = articulation_info
+        physics_view = getattr(
+            getattr(articulation, "_articulation_view", None), "_physics_view", None
         )
-        scene.articulation_list[key].set_local_scale(articulation_info["scale"])
+        if physics_view is not None:
+            # PhysX poses address the root rigid body, which can have a different
+            # origin from the enclosing USD prim stored in articulation_info.
+            root_path = physics_view.link_paths[0][0]
+            for part_info in layout.values():
+                part_path = part_info.get("prim_path", "").replace(
+                    f"/World/{original_uuid}", f"/World/{scene.uuid}", 1
+                )
+                if part_path == root_path:
+                    root_pose = part_info
+                    break
+        articulation.set_world_pose(root_pose["position"], root_pose["orientation"])
+        articulation.set_local_scale(articulation_info["scale"])
         if "joint_positions" in articulation_info:
             scene.articulation_list[key].set_joint_positions(
                 articulation_info["joint_positions"]
             )
+
+    restore_initial_prim_attributes(scene, task_data)
+    restore_initial_particle_states(scene, task_data)
 
     for key, robot_info in layout.items():
         if robot_info.get("type", "object") != "robot":
@@ -1314,6 +1523,7 @@ def recovery_scene_render(
 
     if "initial_layout" not in task_data:
         return None
+    restore_particle_layout(scene, task_data)
     layout = copy.deepcopy(task_data["initial_layout"])
     scene.robot_list[0].robot.set_world_pose(
         layout[scene.robot_list[0].robot.name]["position"],
@@ -1332,6 +1542,13 @@ def recovery_scene_render(
     object_list_keys = list(scene.object_list.keys())
     for key in object_list_keys:
         if key not in layout:
+            object_prim_path = str(scene.object_list[key].prim_path).rstrip("/")
+            has_layout_descendant = any(
+                str(object_info.get("prim_path", "")).startswith(object_prim_path + "/")
+                for object_info in layout.values()
+            )
+            if has_layout_descendant:
+                continue
             if scene.object_list[key].prim.IsActive():
                 scene.object_list[key].prim.SetActive(False)
             scene.object_list.pop(key)
@@ -1380,6 +1597,8 @@ def recovery_scene_render(
     #         eval_config["task_name"],
     #     ),
     # )
+    restore_initial_prim_attributes(scene, task_data)
+
     if remove_table:
         if scene.object_list["00000000000000000000000000000000"].prim.IsActive():
             scene.object_list["00000000000000000000000000000000"].prim.SetActive(False)

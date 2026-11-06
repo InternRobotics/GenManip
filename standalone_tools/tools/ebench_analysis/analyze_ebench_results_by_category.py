@@ -3,7 +3,7 @@
 
 Usage:
     /isaac-sim/python.sh standalone_tools/tools/ebench_analysis/analyze_ebench_results_by_category.py \
-        --result-root /mnt/data/wangyukai/sync/GenManip-Sim/saved/eval_results/ebench/test_release
+        --result-root saved/eval_results/ebench/test_release
 
 Optional:
     --taxonomy-json defaults to the task_category_taxonomy.json next to this script.

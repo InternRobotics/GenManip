@@ -1,0 +1,183 @@
+demonstration_configs:
+- domain_randomization: &id001
+    cameras:
+      config_path: configs/cameras/fixed_camera_lift2_simbox.yml
+      type: fixed
+    random_environment:
+      has_wall: false
+      hdr: false
+      robot_base_position: false
+      robot_eepose: false
+      table_texture: false
+      table_type: false
+      wall_texture: false
+    rewrite_instruction: false
+  generation_config: &id002
+    action_path:
+      # mode: auto
+      mode: manual
+      actions:
+      - type: move_to
+        move_type: align
+        rel_object_uid: '0'
+        arm: left
+        delta_position:
+          x: null
+          y: 0.0
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          left:
+          - name: left
+            type: object_frame
+            rel_object_uid: '0'
+            translation: [0.04025069159961103, -0.006003941678023761, 0.23709615386223307]
+            orientation: [0.45347115005165284, -0.447426161640379, 0.5551673270717081, 0.5347550700111631]
+            grasp: false
+            cnt: 500
+          - name: left
+            type: object_frame
+            rel_object_uid: '0'
+            translation: [0.04023398626959951, -0.006421130946207609, 0.17745335804826548]
+            orientation: [0.45347115959064266, -0.4474261524840231, 0.5551673165894618, 0.5347550804655506]
+            grasp: false
+            cnt: 500
+          - name: left
+            type: object_frame
+            rel_object_uid: '0'
+            translation: [0.04025069159961103, -0.006003941678023761, 0.23709615386223307]
+            orientation: [0.45347115959064266, -0.4474261524840231, 0.5551673165894618, 0.5347550804655506]
+            grasp: true
+            cnt: 500
+      - type: move_to
+        move_type: align
+        rel_object_uid: '1'
+        arm: left
+        grasp: true
+        delta_position:
+          x: null
+          y: -0.2
+          yaw: null
+      - type: custom_motion
+        motion_list:
+          left:
+          # - name: left
+          #   type: debug
+          #   rel_arm: left
+          #   debug_rel_object_uid: '1'
+          #   translation: [0.3952634170328001, 0.11772970147272999, 0.17548448026328192]
+          #   orientation: [0.7654433867505236, -0.19289249240742917, 0.6111491896494338, -0.058185703085712394]
+          #   grasp: true
+          #   cnt: 300
+          - name: left
+            type: object_frame
+            rel_object_uid: '1'
+            translation: [0.2660124321271593, 0.2916367728444086, -0.03201628703855547]
+            orientation: [-0.5182896033640277, -0.18069008329705077, 0.2207086811602171, 0.806234865844551]
+            grasp: true
+            cnt: 300
+          - name: left
+            type: object_frame
+            rel_object_uid: '1'
+            translation: [0.10756372851614115, 0.2906924433124878, -0.05229314348081909]
+            orientation: [-0.5182896033640277, -0.18069008329705077, 0.2207086811602171, 0.806234865844551]
+            grasp: true
+            cnt: 500
+          - name: left
+            type: object_frame
+            rel_object_uid: '1'
+            translation: [0.10756372851614115, 0.2906924433124878, -0.05229314348081909]
+            orientation: [-0.5182896033640277, -0.18069008329705077, 0.2207086811602171, 0.806234865844551]
+            grasp: false
+            cnt: 500
+      robot: 0
+    articulation: []
+    goal:
+    - - obj1_uid:
+        - '0'
+        obj2_uid:
+        - '1'
+        position:
+        - top
+    mode: manual
+    planner: curobo
+  instruction: Pick up the salt from the countertop and place it into the spice rack.    # update instruction
+  layout_config: &id003
+    type: random_custom_tableset
+    in_order: true
+    custom_tableset:
+      '0':
+        random_range_x: 0.29
+        random_range_y: -1.3
+        random_range_w: 0.1
+        random_range_h: 0.2
+        random_range_angle: 15
+        additional_height: 0.01
+        reset_orientation: true
+        orientation: [0.7, 0.0, 0.0, 0.7]
+        buffer_size: 0.01
+        type: global_range
+      # '1':
+      #   type: centric_range
+      #   angle_bilateral: true
+      #   angle: 15
+      #   w: 0.1
+      #   h: 0.1
+      #   buffer_size: 0.01
+      # '2':
+      #   type: centric_range
+      #   angle_bilateral: true
+      #   angle: 15
+      #   w: 0.1
+      #   h: 0.1
+      #   buffer_size: 0.01
+  mode: manual
+  num_episode: 400
+  object_config: &id004
+    '0':
+      type: load_object_from_path
+      filter_rule: []
+      max_cached_num: 10
+      path: "regex:^object_usds/custom_usd/ebench_usds/salt_new/GRScenes_assets/bottle/.*\\.usd$"
+      relative_scale: 0.008
+      option:
+      - plain_replace
+      without_colliders: false
+    '1':
+      type: existed_object
+      uid_list:
+      - '_06'    # update uid
+    # '2':
+    #   type: existed_object
+    #   uid_list:
+    #   - '_05'    # update uid
+  preprocess_config:
+  - &id005
+    config:
+      config: default
+      type: convexDecomposition
+    type: collider
+  # - type: rigid_body
+  robots:
+  - &id006
+    type: manip/lift2/R5a
+    position: [0.9, -0.99, -0.5]  # update to fit the scene
+    orientation: [0, 0, 0, 1]
+  # update following
+  table_uid: table
+  task_name: ebench/mobile_manip/salt_to_spice_rack
+  usd_name: scene_usds/ebench/simple_pnp_v0.2/task7/scene
+  env_vars:
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"
+
+evaluation_configs:
+- domain_randomization: *id001
+  num_test: 5
+  num_steps: 1000
+  robots:
+  - *id006
+  table_uid: table
+  task_name: ebench/zero_shot/salt_from_spice_rack
+  usd_name: scene_usds/ebench/simple_pnp_v0.2/task7/scene
+  env_vars:
+    MDL_SYSTEM_PATH: "/isaac-sim/materials/:{ASSETS_DIR}/miscs/mdl/ebench/mdl:{ASSETS_DIR}/scene_usds/ebench/simple_pnp_v0.2/task3/SubUSDs/materials"
