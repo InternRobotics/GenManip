@@ -1,3 +1,4 @@
+from genmanip.core.evaluator.request_logging import traced_worker
 import os
 import logging
 import sys
@@ -13,6 +14,9 @@ from genmanip.core.evaluator.logging_utils import (
     redirect_std_streams,
 )
 
+cuda_visible = os.environ.get("CUDA_VISIBLE_DEVICES")
+first_visible = cuda_visible.split(",")[0].strip() if cuda_visible else "0"
+active_gpu = int(first_visible) if first_visible.isdigit() else 0
 
 GPU_MEMORY = torch.cuda.get_device_properties(0).total_memory
 JOB_MEMORY_GB = (
@@ -101,11 +105,19 @@ class IsaacWorker:
         from isaacsim import SimulationApp  # type: ignore
 
         self.simulation_app = SimulationApp(
-            {"headless": not args.local, "multi_gpu": False}
+            {
+                "headless": not args.local,
+                "multi_gpu": False,
+                "active_gpu": active_gpu,  # Omniverse renderer: physical GPU id
+                "physics_gpu": 0,
+            }
         )
 
         self.simulation_app._carb_settings.set(
             "/physics/cooking/ujitsoCollisionCooking", False
+        )
+        self.simulation_app._carb_settings.set(
+            "/app/omni.graph.scriptnode/opt_in", True
         )
 
         from genmanip.core.evaluator.env import IsaacEvalEnvRay
@@ -140,12 +152,14 @@ class IsaacWorker:
             mem.get("VmSwap", 0) / 1024 / 1024,
         )
 
+    @traced_worker
     def get_memory_snapshot(self) -> dict[str, float]:
         mem = _read_proc_status_memory_kb()
         if not mem:
             return {}
         return {key: value / 1024 / 1024 for key, value in mem.items()}
 
+    @traced_worker
     def reset(
         self, seed: str, current_eval_config: dict, default_config: dict | None = None
     ):
@@ -180,6 +194,7 @@ class IsaacWorker:
             self.logger.exception("Worker %s reset failed", self.worker_id)
             raise
 
+    @traced_worker
     def step(self, action):
         try:
             start_time = time.time()
@@ -205,6 +220,7 @@ class IsaacWorker:
             self.logger.exception("Worker %s step failed", self.worker_id)
             raise
 
+    @traced_worker
     def step_chunk(
         self,
         action_list,
@@ -317,6 +333,7 @@ class IsaacWorker:
             self.logger.exception("Worker %s step failed", self.worker_id)
             raise
 
+    @traced_worker
     def post_episode_process(self):
         process_start = time.perf_counter()
         try:
@@ -340,6 +357,7 @@ class IsaacWorker:
             )
             raise
 
+    @traced_worker
     def abort_episode(self):
         try:
             self.logger.info("abort_episode called.")
@@ -348,6 +366,7 @@ class IsaacWorker:
             self.logger.exception("Worker %s abort_episode failed", self.worker_id)
             raise
 
+    @traced_worker
     def close(self):
         try:
             self.logger.info("Closing IsaacWorker...")
@@ -358,5 +377,6 @@ class IsaacWorker:
             self.logger.exception("Worker %s close failed", self.worker_id)
             raise
 
+    @traced_worker
     def is_done(self):
         return self.env.done

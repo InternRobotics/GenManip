@@ -5,6 +5,7 @@ All rights reserved.
 Licensed under the MIT License.
 """
 
+from copy import deepcopy
 import json
 import os
 import pickle
@@ -42,6 +43,33 @@ def _compose_action(
     return np.concatenate([arm_action, gripper_action])
 
 
+def downsample_planning_result(data_list: list[dict], factor: int) -> list[dict]:
+    """Downsample states while preserving each sampled transition target."""
+    if factor < 1:
+        raise ValueError(f"Downsample factor must be positive, got {factor}")
+    if factor == 1:
+        return data_list
+
+    sampled_data = []
+    for start in range(0, len(data_list), factor):
+        stop = min(start + factor, len(data_list))
+        state_frame = data_list[start].copy()
+        action_frame = data_list[stop - 1]
+
+        # action[stop - 1] is the target that produces state[stop], which is
+        # the next retained state for a complete downsampling window.
+        state_frame["action"] = np.array(action_frame["action"], copy=True)
+        state_frame["gripper_close"] = deepcopy(action_frame["gripper_close"])
+        state_frame["name"] = action_frame["name"]
+        state_frame["base_motion"] = np.sum(
+            [np.asarray(frame["base_motion"]) for frame in data_list[start:stop]],
+            axis=0,
+        )
+        sampled_data.append(state_frame)
+
+    return sampled_data
+
+
 def parse_planning_result(
     dir: str,
     default_config: dict,
@@ -61,6 +89,7 @@ def parse_planning_result(
         articulation_mapping = json_data["observation/articulation_mapping"]
     else:
         articulation_mapping = {}
+    points_mapping = json_data.get("observation/points_mapping", {})
 
     qpos_data = get_scalar_data_from_lmdb(data_dir, b"observation/robot/qpos")
     qvel_data = get_scalar_data_from_lmdb(data_dir, b"observation/robot/qvel")
@@ -72,6 +101,13 @@ def parse_planning_result(
     except Exception:
         base_motion_data = [np.array([0.0, 0.0, 0.0])] * len(arm_action_data)
     name_data = get_scalar_data_from_lmdb(data_dir, b"name")
+    meta_info = pickle.load(open(os.path.join(data_dir, "meta_info.pkl"), "rb"))
+    scalar_keys = set(meta_info["keys"]["scalar_data"])
+
+    prim_attributes_data = None
+    prim_attributes_key = b"observation/prim_attributes"
+    if prim_attributes_key in scalar_keys:
+        prim_attributes_data = get_scalar_data_from_lmdb(data_dir, prim_attributes_key)
 
     try:
         joint_world_pose_data = get_scalar_data_from_lmdb(
@@ -80,7 +116,7 @@ def parse_planning_result(
     except Exception:
         joint_world_pose_data = None
 
-    for (
+    for frame_index, (
         qpos,
         qvel,
         arm_action,
@@ -89,19 +125,21 @@ def parse_planning_result(
         base_motion,
         name,
         joint_world_pose,
-    ) in zip(
-        qpos_data,
-        qvel_data,
-        arm_action_data,
-        gripper_action_data,
-        gripper_close_data,
-        base_motion_data,
-        name_data,
-        (
-            joint_world_pose_data
-            if joint_world_pose_data is not None
-            else [None] * len(qpos_data)
-        ),
+    ) in enumerate(
+        zip(
+            qpos_data,
+            qvel_data,
+            arm_action_data,
+            gripper_action_data,
+            gripper_close_data,
+            base_motion_data,
+            name_data,
+            (
+                joint_world_pose_data
+                if joint_world_pose_data is not None
+                else [None] * len(qpos_data)
+            ),
+        )
     ):
         data = {}
         data["qpos"] = qpos
@@ -112,16 +150,30 @@ def parse_planning_result(
         data["name"] = name
         data["obj_info"] = {}
         data["articulation_info"] = {}
+        data["points_info"] = {}
+        data["prim_attributes"] = (
+            prim_attributes_data[frame_index]
+            if prim_attributes_data is not None
+            and frame_index < len(prim_attributes_data)
+            else {}
+        )
         if joint_world_pose is not None:
             data["joint_world_pose"] = joint_world_pose
         data_list.append(data)
 
+    for key, mapping in points_mapping.items():
+        points_key = f"observation/points/{key}/points".encode("utf-8")
+        if points_key not in scalar_keys:
+            continue
+        points_data = get_scalar_data_from_lmdb(data_dir, points_key)
+        for data, points in zip(data_list, points_data):
+            data["points_info"][key] = {
+                "prim_path": mapping["prim_path"],
+                "points": points,
+            }
+
     for key in object_list:
-        meta_data = pickle.load(open(os.path.join(data_dir, "meta_info.pkl"), "rb"))
-        if (
-            not f"observation/obj_pose/{key}/position".encode("utf-8")
-            in meta_data["keys"]["scalar_data"]
-        ):
+        if not f"observation/obj_pose/{key}/position".encode("utf-8") in scalar_keys:
             continue
         position_data = get_scalar_data_from_lmdb(
             data_dir, f"observation/obj_pose/{key}/position".encode("utf-8")

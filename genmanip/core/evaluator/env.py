@@ -14,6 +14,7 @@ from genmanip.core.evaluator.utils import (
     remove_dir_best_effort,
 )
 from genmanip.utils.loader.domain_randomization import (
+    apply_material_overrides,
     random_texture_for_eval,
     reset_scene,
 )
@@ -76,6 +77,7 @@ class IsaacEvalEnvRay:
         self.episode_end_time = None
         self.invalid_state_tail_steps = 30
         self.forced_episode_score: float | None = None
+        self._policy_inference_started_at: float | None = None
 
     def _detect_invalid_state(
         self,
@@ -288,6 +290,7 @@ class IsaacEvalEnvRay:
             "seed": self.current_seed,
         }
         self.logger.info("Reset complete: task=%s seed=%s", info["task"], info["seed"])
+        self._policy_inference_started_at = time.perf_counter()
         return obs, info
 
     def _init_last_ee_pose(self) -> list[tuple[np.ndarray, np.ndarray]]:
@@ -459,6 +462,13 @@ class IsaacEvalEnvRay:
         if self.done:
             return None, 0, True, {"info": "Done"}
 
+        if self._policy_inference_started_at is not None:
+            inference_time_ms = (
+                time.perf_counter() - self._policy_inference_started_at
+            ) * 1000.0
+            self._recorder.policy_inference_time_total_ms += inference_time_ms
+            self._policy_inference_started_at = None
+
         # 3-1. Set joint targets
         embodiment = self.scene.robot_list[0]
 
@@ -551,14 +561,19 @@ class IsaacEvalEnvRay:
                 invalid_reason,
             )
             self._record_invalid_state_tail()
-            self.forced_episode_score = 0.0
+            # Metrics are not updated on the invalid frame or during the tail.
+            self.forced_episode_score = (
+                self.scene.metric_manager.calc_overall_score()
+                if self.scene_config.preserve_score_on_invalid_state
+                else 0.0
+            )
             self.done = True
             return (
                 self.get_obs(cached_joint_positions=cur_full_jp),
-                0.0,
+                self.forced_episode_score,
                 True,
                 {
-                    "info": 0.0,
+                    "info": self.forced_episode_score,
                     "termination_reason": invalid_reason,
                 },
             )
@@ -599,6 +614,9 @@ class IsaacEvalEnvRay:
         if self._step_cnt % 100 == 0:
             self._phase_report()
 
+        if not skip_obs:
+            self._policy_inference_started_at = time.perf_counter()
+
         return (
             obs,
             score,
@@ -630,6 +648,7 @@ class IsaacEvalEnvRay:
             self.episode_start_time,
             self.episode_end_time,
             self.scene.metric_manager.metric_score,
+            self._step_cnt,
         )
         self._recorder = None
         self.traj_log_dir = None
@@ -676,6 +695,7 @@ class IsaacEvalEnvRay:
         # Randomization
         if self.args.random_randomization:
             random_texture_for_eval(scene, self.default_config, scene_config)
+        apply_material_overrides(scene.world.stage, scene_config)
 
         # Update Config & Evaluator
         self.instruction = meta_info["task_data"]["instruction"]
@@ -685,7 +705,7 @@ class IsaacEvalEnvRay:
             remove_colliders(scene.object_list["defaultGroundPlane"].prim_path)
 
         # Warmup
-        for _ in range(50):
+        for _ in range(scene_config.warmup_steps):
             scene.world.step()
 
         base_traj_dir = os.path.join(

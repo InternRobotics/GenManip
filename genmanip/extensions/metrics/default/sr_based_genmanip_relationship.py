@@ -5,14 +5,14 @@ All rights reserved.
 Licensed under the MIT License.
 """
 
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 import open3d as o3d
 from pydantic import BaseModel, Field
 import scipy
 from scipy.spatial import QhullError
-from shapely.geometry import Point
+from shapely.geometry import Point, Polygon
 from shapely.vectorized import contains
 from sklearn.neighbors import NearestNeighbors
 
@@ -38,6 +38,12 @@ ANGLE_THRESHOLD = 45
 
 
 class SRBasedGenmanipRelationshipConfig(BaseModel):
+    support_mode: Literal["legacy", "contact"] = "legacy"
+    support_min_overlap: float = Field(default=0.6, gt=0, le=1, allow_inf_nan=False)
+    support_max_gap: float = Field(default=0.015, ge=0, allow_inf_nan=False)
+    support_max_penetration: float = Field(default=0.01, ge=0, allow_inf_nan=False)
+    support_container_uid: str | None = None
+    support_container_min_overlap: float = Field(default=0.95, gt=0, le=1, allow_inf_nan=False)
     obj1_uid: str = Field(
         ..., description="UID of the object to measure the relationship"
     )
@@ -117,6 +123,8 @@ class SRBasedGenmanipRelationship(BaseMetric):
                 target_uids.append(self.goal_setting.obj2_uid)
             if self.goal_setting.another_obj2_uid:
                 target_uids.append(self.goal_setting.another_obj2_uid)
+            if self.goal_setting.support_container_uid:
+                target_uids.append(self.goal_setting.support_container_uid)
 
             pclist = SRBasedGenmanipRelationship.get_target_pc_list(scene, target_uids)
 
@@ -126,6 +134,18 @@ class SRBasedGenmanipRelationship(BaseMetric):
                 pcd3 = None
             if self.goal_setting.obj2_uid is None:
                 raise ValueError("obj2_uid is required for position relationship")
+            if (self.goal_setting.support_mode == "contact"
+                    and self.goal_setting.position in ("top", "on")):
+                return support_contact_diagnostics(
+                    pclist[self.goal_setting.obj1_uid],
+                    pclist[self.goal_setting.obj2_uid],
+                    min_overlap=self.goal_setting.support_min_overlap,
+                    max_gap=self.goal_setting.support_max_gap,
+                    max_penetration=self.goal_setting.support_max_penetration,
+                    container=pclist[self.goal_setting.support_container_uid]
+                    if self.goal_setting.support_container_uid else None,
+                    min_container_overlap=self.goal_setting.support_container_min_overlap,
+                )["supported"]
             check_status_flag = check_subgoal_finished_rigid(
                 self.goal_setting.position,
                 pclist[self.goal_setting.obj1_uid],
@@ -142,7 +162,83 @@ class SRBasedGenmanipRelationship(BaseMetric):
         return check_status_flag
 
     def get_info(self):
-        return f"put {self.goal_setting.obj1_uid} to the {self.goal_setting.position} of {self.goal_setting.obj2_uid}"
+        suffix = " (contact support)" if self.goal_setting.support_mode == "contact" else ""
+        if self.goal_setting.support_mode == "contact" and self.goal_setting.support_container_uid:
+            suffix = f" (contact support; footprint in {self.goal_setting.support_container_uid})"
+        return f"put {self.goal_setting.obj1_uid} to the {self.goal_setting.position} of {self.goal_setting.obj2_uid}{suffix}"
+
+
+def support_contact_diagnostics(
+    upper: np.ndarray,
+    lower: np.ndarray,
+    min_overlap: float = 0.6,
+    max_gap: float = 0.015,
+    max_penetration: float = 0.01,
+    container: np.ndarray | None = None,
+    min_container_overlap: float = 0.95,
+) -> dict:
+    """Geometric support proxy for overhanging stacks, not a contact sensor.
+
+    Compare local surfaces in the overlapping footprint, so a plate rim or
+    overhanging leaf does not define the support height. Legacy top/in behavior
+    remains unchanged unless a goal explicitly selects contact mode.
+    """
+    result = {"supported": False}
+    if any(p.ndim != 2 or p.shape[1] != 3 or len(p) < 4
+           or not np.isfinite(p).all() for p in (upper, lower)):
+        return result
+    try:
+        upper_outline, lower_outline = [
+            Polygon(p[scipy.spatial.ConvexHull(p[:, :2]).vertices, :2])
+            for p in (upper, lower)
+        ]
+    except (QhullError, ValueError):
+        return result
+    smaller_area = min(upper_outline.area, lower_outline.area)
+    if smaller_area <= 1e-10:
+        return result
+    if container is not None:
+        if (container.ndim != 2 or container.shape[1] != 3 or len(container) < 4
+                or not np.isfinite(container).all()):
+            return result
+        try:
+            boundary = Polygon(container[scipy.spatial.ConvexHull(container[:, :2]).vertices, :2])
+        except (QhullError, ValueError):
+            return result
+        coverage = upper_outline.intersection(boundary).area / upper_outline.area
+        result["container_coverage"] = float(coverage)
+        if coverage < min_container_overlap:
+            return result
+    overlap = upper_outline.intersection(lower_outline)
+    ratio = overlap.area / smaller_area
+    result.update(overlap_ratio=float(ratio))
+    if ratio < min_overlap:
+        return result
+    region = overlap.buffer(0.001)
+    upper_region = upper[contains(region, upper[:, 0], upper[:, 1])]
+    lower_region = lower[contains(region, lower[:, 0], lower[:, 1])]
+    if min(len(upper_region), len(lower_region)) < 4:
+        return result
+    upper_z, lower_z = upper_region[:, 2], lower_region[:, 2]
+    center_dz = float((upper_z.min() + upper_z.max() - lower_z.min() - lower_z.max()) / 2)
+    # Pair surfaces in 1 cm XY cells; extrema at opposite ends of a tilted
+    # stack are not a penetration measurement. Require a robust contact patch.
+    columns = []
+    for points in (upper_region, lower_region):
+        cells = np.floor(points[:, :2] / 0.01).astype(np.int64)
+        _, inverse = np.unique(cells, axis=0, return_inverse=True)
+        order = np.argsort(inverse)
+        groups = np.split(order, np.flatnonzero(np.diff(inverse[order])) + 1)
+        columns.append({tuple(cells[g[0]]): np.quantile(points[g, 2], [.05, .95])
+                        for g in groups if len(g) >= 3})
+    common = columns[0].keys() & columns[1].keys()
+    if len(common) < 3:
+        return result
+    gaps = np.array([columns[0][cell][0] - columns[1][cell][1] for cell in common])
+    gap = float(np.quantile(gaps, .1))
+    result.update(center_dz=center_dz, surface_gap=gap, matched_cells=len(common),
+                  supported=bool(center_dz > 0.001 and -max_penetration <= gap <= max_gap))
+    return result
 
 
 def assign_point_to_shelf(point: np.ndarray | list[float], shelves: list[Shelf]) -> int:

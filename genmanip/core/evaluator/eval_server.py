@@ -1,10 +1,17 @@
 import asyncio
+from genmanip.core.evaluator.request_logging import (
+    RequestLoggingMiddleware, event, submit_traced,
+)
 from concurrent.futures import ThreadPoolExecutor
 import logging
 from fastapi import FastAPI, APIRouter, Request, HTTPException, Response
+from fastapi.responses import JSONResponse
 import traceback
 import uvicorn
 import pickle
+from urllib.parse import urlencode
+
+from genmanip.core.evaluator.reliable_requests import RequestLedger, ProtocolError
 
 from genmanip.core.evaluator.logging_utils import (
     build_file_logger,
@@ -73,7 +80,10 @@ class EvalServer:
             max_workers=DEFAULT_CONTROL_EXECUTOR_WORKERS,
             thread_name_prefix="eval-control",
         )
+        self._request_ledger = RequestLedger()
+        self.replay_wait = 5.0
         self.app = FastAPI(title="Eval Service")
+        self.app.add_middleware(RequestLoggingMiddleware, server=self)
         self._router = APIRouter()
         self._register_routes()
         self.app.include_router(self._router)
@@ -98,6 +108,8 @@ class EvalServer:
 
     def _register_routes(self):
         route_config = [
+            ("/request_protocol", self.request_protocol, ["GET"]),
+            ("/reliable_request", self.reliable_request, ["POST"]),
             ("/step", self.step, ["POST"]),
             ("/step_chunk", self.step_chunk, ["POST"]),
             ("/reset_result", self.reset_result, ["POST"]),
@@ -120,12 +132,112 @@ class EvalServer:
         return f"{type(exc).__name__}: {exc}"
 
     async def _run_in_data_executor(self, func, *args):
-        loop = asyncio.get_running_loop()
-        return await loop.run_in_executor(self._data_executor, func, *args)
+        self._log_dispatch(func, args)
+        return await asyncio.wrap_future(submit_traced(self._data_executor, func, *args))
 
     async def _run_in_control_executor(self, func, *args):
-        loop = asyncio.get_running_loop()
-        return await loop.run_in_executor(self._control_executor, func, *args)
+        self._log_dispatch(func, args)
+        return await asyncio.wrap_future(submit_traced(self._control_executor, func, *args))
+
+    @staticmethod
+    def _log_dispatch(func, args):
+        operation = func.__name__
+        workers = None
+        chunk_length = None
+        if args and operation == "step" and isinstance(args[0], dict):
+            workers = list(args[0])
+        elif args and operation == "step_chunk" and isinstance(args[0], list):
+            chunk_length = len(args[0])
+            workers = sorted({str(w) for action in args[0] if isinstance(action, dict) for w in action})
+        elif args and operation in ("reset", "get_pending_reset_results", "create_workers", "kill_workers"):
+            workers = args[0]
+        event("request.parsed", operation=operation, worker_ids=workers, chunk_length=chunk_length)
+
+    async def request_protocol(self):
+        return JSONResponse(
+            {"protocol": "genmanip-replay-v1", "epoch": self._request_ledger.epoch,
+             "worker_generations": dict(self._request_ledger.generations)},
+            headers={"Cache-Control": "no-store"})
+
+    async def reliable_request(self, request: Request) -> Response:
+        """Submit or retrieve a request. Disconnects do not cancel its execution."""
+        def reply(data, status=200):
+            return Response(pickle.dumps(data, protocol=pickle.HIGHEST_PROTOCOL),
+                            status_code=status, media_type="application/octet-stream",
+                            headers={"Cache-Control": "no-store"})
+
+        try:
+            envelope = pickle.loads(await request.body())
+            if not isinstance(envelope, dict):
+                raise ProtocolError("Expected a request envelope")
+            operation = envelope.get("operation")
+            if operation not in ("step", "step_chunk", "reset", "reset_result"):
+                raise ProtocolError("Unsupported reliable operation")
+            payload = envelope.get("payload")
+            if not isinstance(payload, bytes):
+                raise ProtocolError("payload must be bytes")
+            data = pickle.loads(payload)
+            workers = envelope.get("worker_ids")
+            if not isinstance(workers, list) or not workers or any(not isinstance(w, str) for w in workers):
+                raise ProtocolError("worker_ids must be a non-empty list of strings")
+            if operation in ("reset", "reset_result"):
+                used = data.get("worker_ids") if isinstance(data, dict) else None
+                if not isinstance(used, list) or not used:
+                    raise ProtocolError("Explicit worker_ids are required")
+            else:
+                actions = data if operation == "step_chunk" else [data]
+                if not isinstance(actions, list) or not actions or any(not isinstance(a, dict) or not a for a in actions):
+                    raise ProtocolError("Expected non-empty action dictionaries")
+                used = [w for action in actions for w in action]
+            if any(not isinstance(w, str) or w not in workers for w in used):
+                raise ProtocolError("Payload refers to workers outside this stream")
+            # Keep run routing metadata; only explicit rendering options affect execution.
+            options = {k: request.query_params[k] for k in ("render_mode", "subframes", "render_suffix")
+                       if k in request.query_params}
+            identity = pickle.dumps((operation, payload, sorted(options.items())))
+            scope = dict(request.scope)
+            scope["genmanip_reliable"] = True
+            scope["path"] = "/" + operation
+            scope["query_string"] = urlencode(options).encode()
+
+            async def receive():
+                return {"type": "http.request", "body": payload, "more_body": False}
+
+            async def execute():
+                try:
+                    response = await getattr(self, operation)(Request(scope, receive))
+                    return {"status_code": response.status_code, "body": response.body}
+                except HTTPException as exc:
+                    return {"status_code": exc.status_code, "detail": exc.detail}
+                except Exception as exc:
+                    self._log_exception("Unhandled reliable request exception")
+                    return {"status_code": 500, "detail": self._internal_error_detail(exc)}
+
+            event("replay.received", replay_id=f"{envelope.get('stream_id')}:{envelope.get('sequence')}",
+                  operation=operation, worker_ids=workers)
+            task = self._request_ledger.submit(
+                envelope.get("epoch"), envelope.get("stream_id"), envelope.get("sequence"),
+                workers, envelope.get("worker_generations"), identity, execute)
+            info = {"protocol": "genmanip-replay-v1", "epoch": self._request_ledger.epoch,
+                    "stream_id": envelope["stream_id"], "sequence": envelope["sequence"]}
+            try:
+                result = await asyncio.wait_for(asyncio.shield(task), timeout=self.replay_wait)
+            except asyncio.TimeoutError:
+                event("replay.pending", replay_id=f"{info['stream_id']}:{info['sequence']}")
+                return reply({**info, "state": "pending"}, 202)
+            event("replay.completed", replay_id=f"{info['stream_id']}:{info['sequence']}",
+                  operation_status=result["status_code"])
+            return reply({**info, "state": "completed", **result})
+        except (ProtocolError, ValueError, TypeError, KeyError, EOFError, pickle.UnpicklingError) as exc:
+            # An application error travels in a 200 envelope so proxies cannot replace it.
+            return reply({"protocol": "genmanip-replay-v1", "state": "rejected", "detail": str(exc)})
+
+    def _guard_legacy(self, request, workers):
+        if not request.scope.get("genmanip_reliable"):
+            try:
+                self._request_ledger.check_unclaimed(workers)
+            except ProtocolError as exc:
+                raise HTTPException(status_code=409, detail=str(exc))
 
     # ================= Registered routes =================
     async def step(self, request: Request) -> Response:
@@ -162,12 +274,14 @@ class EvalServer:
                     status_code=400, detail=f"Invalid pickle in request body: {e}"
                 )
 
+            self._guard_legacy(request, action_dict.keys())
             try:
                 response_data = await asyncio.wait_for(
                     self._run_in_data_executor(pool.step, action_dict),
                     timeout=self.step_timeout,
                 )
             except asyncio.TimeoutError:
+                event("http.timeout", operation=request.url.path)
                 raise HTTPException(
                     status_code=504,
                     detail=f"Step timed out after {self.step_timeout}s",
@@ -217,6 +331,7 @@ class EvalServer:
                     status_code=400, detail="action_chunk must be a list[action_dict]"
                 )
 
+            self._guard_legacy(request, [w for a in action_chunk for w in a])
             try:
                 chunk_timeout = self.step_timeout * max(1, len(action_chunk))
                 try:
@@ -241,6 +356,7 @@ class EvalServer:
                     timeout=chunk_timeout,
                 )
             except asyncio.TimeoutError:
+                event("http.timeout", operation=request.url.path)
                 raise HTTPException(
                     status_code=504,
                     detail=f"Step chunk timed out after {chunk_timeout}s",
@@ -251,16 +367,9 @@ class EvalServer:
 
         except HTTPException:
             raise
-        except (
-            AttributeError,
-            EOFError,
-            RuntimeError,
-            TypeError,
-            ValueError,
-            pickle.PickleError,
-        ) as e:
+        except Exception as e:
             self._log_exception("Unhandled exception in /step_chunk")
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail=self._internal_error_detail(e))
 
     async def kill(self, request: Request):
         """
@@ -279,17 +388,19 @@ class EvalServer:
                     status_code=400, detail="Request body must contain data.worker_ids"
                 )
             worker_ids = data["worker_ids"]
-            try:
-                await asyncio.wait_for(
-                    self._run_in_control_executor(pool.kill_workers, worker_ids),
-                    timeout=self.kill_timeout,
-                )
-            except asyncio.TimeoutError:
-                raise HTTPException(
-                    status_code=504,
-                    detail=f"Kill timed out after {self.kill_timeout}s",
-                )
-            return {"data": {"success": True}}
+            with self._request_ledger.changing(worker_ids):
+                try:
+                    await asyncio.wait_for(
+                        self._run_in_control_executor(pool.kill_workers, worker_ids),
+                        timeout=self.kill_timeout,
+                    )
+                except asyncio.TimeoutError:
+                    event("http.timeout", operation=request.url.path)
+                    raise HTTPException(
+                        status_code=504,
+                        detail=f"Kill timed out after {self.kill_timeout}s",
+                    )
+                return {"data": {"success": True}}
         except HTTPException:
             raise
         except Exception as e:
@@ -330,12 +441,14 @@ class EvalServer:
             else:
                 worker_ids = None
 
+            self._guard_legacy(request, worker_ids)
             try:
                 obs_dict = await asyncio.wait_for(
                     self._run_in_control_executor(pool.reset, worker_ids),
                     timeout=self.reset_timeout,
                 )
             except asyncio.TimeoutError:
+                event("http.timeout", operation=request.url.path)
                 raise HTTPException(
                     status_code=504,
                     detail=f"Reset timed out after {self.reset_timeout}s",
@@ -386,6 +499,7 @@ class EvalServer:
             else:
                 worker_ids = None
 
+            self._guard_legacy(request, worker_ids)
             result_dict = await asyncio.wait_for(
                 self._run_in_control_executor(
                     pool.get_pending_reset_results, worker_ids
@@ -417,17 +531,19 @@ class EvalServer:
                     status_code=400, detail="Request body must contain data.worker_ids"
                 )
             worker_ids = data["worker_ids"]
-            try:
-                await asyncio.wait_for(
-                    self._run_in_control_executor(pool.create_workers, worker_ids),
-                    timeout=self.create_timeout,
-                )
-            except asyncio.TimeoutError:
-                raise HTTPException(
-                    status_code=504,
-                    detail=f"Create workers timed out after {self.create_timeout}s",
-                )
-            return {"data": {"success": True}}
+            with self._request_ledger.changing(worker_ids):
+                try:
+                    await asyncio.wait_for(
+                        self._run_in_control_executor(pool.create_workers, worker_ids),
+                        timeout=self.create_timeout,
+                    )
+                except asyncio.TimeoutError:
+                    event("http.timeout", operation=request.url.path)
+                    raise HTTPException(
+                        status_code=504,
+                        detail=f"Create workers timed out after {self.create_timeout}s",
+                    )
+                return {"data": {"success": True}}
         except HTTPException:
             raise
         except Exception as e:
@@ -471,27 +587,29 @@ class EvalServer:
                     status_code=400,
                     detail="run_id must be a string when provided",
                 )
-            try:
-                await asyncio.wait_for(
-                    self._run_in_control_executor(
-                        pool.start_new_job, run_id, config_path
-                    ),
-                    timeout=self.load_config_timeout,
-                )
-            except asyncio.TimeoutError:
-                raise HTTPException(
-                    status_code=504,
-                    detail=f"Load config timed out after {self.load_config_timeout}s",
-                )
-            effective_run_id = getattr(pool.args, "run_id", run_id)
-            self.configure_logging(pool.current_dir, effective_run_id)
-            if self.logger is not None:
-                self.logger.info(
-                    "Started new job. run_id=%s config_count=%s",
-                    effective_run_id,
-                    len(config_path),
-                )
-            return {"data": {"success": True}}
+            with self._request_ledger.changing():
+                try:
+                    await asyncio.wait_for(
+                        self._run_in_control_executor(
+                            pool.start_new_job, run_id, config_path
+                        ),
+                        timeout=self.load_config_timeout,
+                    )
+                except asyncio.TimeoutError:
+                    event("http.timeout", operation=request.url.path)
+                    raise HTTPException(
+                        status_code=504,
+                        detail=f"Load config timed out after {self.load_config_timeout}s",
+                    )
+                effective_run_id = getattr(pool.args, "run_id", run_id)
+                self.configure_logging(pool.current_dir, effective_run_id)
+                if self.logger is not None:
+                    self.logger.info(
+                        "Started new job. run_id=%s config_count=%s",
+                        effective_run_id,
+                        len(config_path),
+                    )
+                return {"data": {"success": True}}
         except HTTPException:
             raise
         except Exception as e:

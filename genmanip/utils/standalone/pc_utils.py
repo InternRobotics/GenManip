@@ -418,7 +418,9 @@ def pcd_to_points(pcd: o3d.geometry.PointCloud) -> np.ndarray:
 
 
 def get_xy_contour(
-    points: o3d.geometry.PointCloud | np.ndarray, contour_type: str = "convex_hull"
+    points: o3d.geometry.PointCloud | np.ndarray,
+    contour_type: str = "convex_hull",
+    num_points: float = 1000,
 ) -> BaseGeometry:
     if isinstance(points, o3d.geometry.PointCloud):
         points = pcd_to_points(points)
@@ -426,12 +428,16 @@ def get_xy_contour(
         points = points[:, :2]
     if contour_type == "convex_hull":
         xy_points = points
+        len_points = len(xy_points)
+        xy_points = xy_points[:: (len_points // num_points)]
         hull = ConvexHull(xy_points)
         hull_points = xy_points[hull.vertices]
         sorted_points = sort_points_clockwise(hull_points)
         polygon = Polygon(sorted_points)
     elif contour_type == "concave_hull":
         xy_points = points
+        len_points = len(xy_points)
+        xy_points = xy_points[:: (len_points // num_points)]
         concave_hull_points = concave_hull(xy_points)
         polygon = Polygon(concave_hull_points)
     else:

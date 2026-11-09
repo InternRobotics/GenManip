@@ -26,6 +26,10 @@ class MoveToConfig(SkillConfig):
     name: str = "move_to"
     move_type: str = Field(..., description="Type of the move to skill")
     grasp: bool = Field(default=False, description="Grasp")
+    linear_step: float = Field(
+        default=0.01, gt=0.0, le=0.015,
+        description="Maximum base translation per axis per physics step, in meters",
+    )
     rel_object_uid: str | None = Field(
         default=None,
         description="UID of the relative object",
@@ -144,8 +148,8 @@ class MoveToSkill(BaseSkill):
             x_step = 0.0
             y_step = 0.0
         else:
-            x_step = delta_move_config["x"] / max_xy * 0.01
-            y_step = delta_move_config["y"] / max_xy * 0.01
+            x_step = delta_move_config["x"] / max_xy * self.config.linear_step
+            y_step = delta_move_config["y"] / max_xy * self.config.linear_step
         x_remaining = delta_move_config["x"]
         y_remaining = delta_move_config["y"]
         if delta_move_config["yaw"] is not None:
