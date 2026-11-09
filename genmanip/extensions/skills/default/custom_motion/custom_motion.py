@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 
 from curobo.util.trajectory import get_smooth_trajectory
 import numpy as np
-from pydantic import Field, BaseModel
+from pydantic import Field, BaseModel, field_validator
 import torch
 from tqdm import tqdm
 
@@ -46,6 +46,17 @@ class SingleArmMotion(BaseModel):
     grasp: bool = Field(..., description="Grasp")
     type: str = Field(..., description="Type")
     rel_object_uid: str | None = Field(default=None, description="Relative object UID")
+    rel_object_point: tuple[float, float, float] = Field(
+        default=(0.0, 0.0, 0.0),
+        description="Object-position anchor in rotation-only local meters; no USD scale",
+    )
+
+    @field_validator("rel_object_point")
+    @classmethod
+    def validate_object_point(cls, value):
+        if not np.isfinite(value).all():
+            raise ValueError("rel_object_point must contain finite values")
+        return value
     rel_arm: str | None = Field(default=None, description="Relative arm")
     debug_rel_object_uid: str | None = Field(
         default=None,
@@ -155,6 +166,17 @@ class CustomMotionSkill(BaseSkill):
                 if info.type == "world_frame":
                     info.translation = info.translation
                     info.orientation = info.orientation
+                elif info.type == "object_position":
+                    if info.rel_object_uid is None:
+                        raise ValueError("Relative object is required for object_position")
+                    frame_in_world = scene.object_list[info.rel_object_uid].get_world_pose()
+                    anchor, _ = pose_frame_to_world(
+                        (np.array(info.rel_object_point), np.array([1.0, 0.0, 0.0, 0.0])),
+                        frame_in_world,
+                    )
+                    # Follow the object's point without inheriting its yaw/tilt.
+                    # Translation offset and orientation remain in world axes.
+                    info.translation = (anchor + np.array(info.translation)).tolist()
                 elif info.type == "object_frame":
                     if info.rel_object_uid is not None:
                         rel_object = scene.object_list[info.rel_object_uid]

@@ -67,12 +67,14 @@ class Lift2Embodiment(DualArmEmbodiment):
             orientation = robot_config.orientation
         else:
             orientation = np.array([1.0, 0.0, 0.0, 0.0])
+        usd_path = os.path.join(
+            default_config["ASSETS_DIR"],
+            robot_config.usd_path or "robot_usds/lift2/robot.usd",
+        )
         prim = create_prim(
             prim_path=f"/World/{scene_uid}/lift2",
             prim_type="Xform",
-            usd_path=os.path.join(
-                default_config["ASSETS_DIR"], "robot_usds/lift2/robot.usd"
-            ),
+            usd_path=usd_path,
             position=position,
             orientation=orientation,
         )

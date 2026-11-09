@@ -325,6 +325,7 @@ def randomly_place_object_on_object(
     ),
     fixed_position: bool = False,
     mesh_top_only: bool = False,
+    allow_rotation_fallback: bool = True,
 ) -> int:
     object1_polygon = get_xy_contour(object1_pc, contour_type="concave_hull")
     object1_pc_bottom = object1_pc[np.argmin(object1_pc[:, 2])][2]
@@ -350,21 +351,16 @@ def randomly_place_object_on_object(
         valid_placements = find_polygon_placement(
             object2_polygon, object1_polygon, 10000
         )
-        if len(valid_placements) == 0:
+        if len(valid_placements) == 0 and allow_rotation_fallback:
             valid_placements = find_polygon_placement_with_rotation(
                 object2_polygon, object1_polygon, object1_center, 10000
             )
-            if len(valid_placements) == 0:
-                _dump_polygon_debug(
-                    [
-                        available_polygon,
-                        collider_polygon,
-                        object2_polygon,
-                        object1_polygon,
-                    ],
-                    reason="no_valid_placement",
-                )
-                return -1
+    if len(valid_placements) == 0:
+        _dump_polygon_debug(
+            [available_polygon, collider_polygon, object2_polygon, object1_polygon],
+            reason="no_valid_placement",
+        )
+        return -1
     translation, angle = valid_placements[-1]
     position, orientation = object1.get_world_pose()
     position[:2] += translation
@@ -476,7 +472,7 @@ def setup_random_custom_tableset(
     if not in_order:
         random.shuffle(custom_tableset_config_keys)
     for key in custom_tableset_config:
-        if custom_tableset_config[key]["type"] == "centric_range":
+        if custom_tableset_config[key]["type"] in ("centric_range", "local_jitter"):
             if "position" in custom_tableset_config[key]:
                 object_list[key].set_world_pose(
                     position=custom_tableset_config[key]["position"]
@@ -493,6 +489,21 @@ def setup_random_custom_tableset(
         if key not in object_list and key not in articulation_list:
             continue
         if key in object_list:
+            if custom_tableset_config[key]["type"] == "local_jitter":
+                # Perturb a prearranged pose without reprojecting its height onto a table.
+                # This mode does not perform footprint packing; use only for local noise.
+                w = float(custom_tableset_config[key]["w"])
+                h = float(custom_tableset_config[key]["h"])
+                if not np.isfinite([w, h]).all() or min(w, h) < 0:
+                    raise ValueError("local_jitter w/h must be finite and nonnegative")
+                position, orientation = object_list[key].get_world_pose()
+                position = np.array(position, dtype=float, copy=True)
+                position[:2] += [
+                    random.uniform(-w / 2, w / 2),
+                    random.uniform(-h / 2, h / 2),
+                ]
+                object_list[key].set_world_pose(position, orientation)
+                continue
             additional_height = custom_tableset_config[key].get("additional_height", 0)
             buffer_size = custom_tableset_config[key].get("buffer_size", 0.0)
             if custom_tableset_config[key].get("reset_orientation", False):
@@ -604,6 +615,9 @@ def setup_random_custom_tableset(
                     object_list[key],
                     available_polygon=available_polygon,
                     collider_polygon=available_area,
+                    allow_rotation_fallback=global_range.get(
+                        "allow_rotation_fallback", True
+                    ),
                 )
                 current_pose = object_list[key].get_world_pose()
                 current_pose[0][2] += additional_height
@@ -1184,7 +1198,12 @@ def verify_placement(object1: XFormPrim, world: World) -> bool:
     if np.linalg.norm(obj1_translation - translation) > 0.1:
         print(f"translation not correct, {obj1_translation} vs {translation}")
         return False
-    if np.linalg.norm(obj1_orientation - orientation) > 1:
+    # q and -q encode the same rotation; PhysX may switch hemisphere at rest.
+    orientation_delta = min(
+        np.linalg.norm(obj1_orientation - orientation),
+        np.linalg.norm(obj1_orientation + orientation),
+    )
+    if orientation_delta > 1:
         print(f"orientation not correct, {obj1_orientation} vs {orientation}")
         return False
     return True

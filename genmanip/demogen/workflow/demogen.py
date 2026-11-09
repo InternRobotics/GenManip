@@ -355,7 +355,7 @@ class DemoGenWorkflow:
                 )
                 if not is_success:
                     raise RuntimeError("Subgoal not completed")
-            except (RuntimeError, ValueError, TypeError, KeyError, IndexError) as e:
+            except Exception as e:
                 self.logger.error(str(e))
                 self.logger.error(traceback.format_exc())
                 record_log(save_dir, str(e))

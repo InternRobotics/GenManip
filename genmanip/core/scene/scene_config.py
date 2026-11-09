@@ -10,6 +10,9 @@ class CameraConfig(BaseModel):
 
 class RobotConfig(BaseModel):
     type: str = Field(..., description="Type of the robot")
+    usd_path: str | None = Field(
+        default=None, description="Optional robot USD path relative to ASSETS_DIR"
+    )
     default_joint_positions: list[float] | None = Field(
         default=None, description="Default joint positions"
     )
@@ -31,6 +34,15 @@ class RandomVisualConfig(BaseModel):
     prim_path: str = Field(default="", description="Prim path of the visual")
     type: str = Field(default="", description="Type of the visual")
     assets_pattern: str = Field(default="", description="Assets pattern of the visual")
+
+
+class MaterialOverrideConfig(BaseModel):
+    prim_path: str = Field(..., description="Absolute path of the shader prim")
+    attribute: str = Field(
+        default="inputs:diffuseColor",
+        description="Shader color attribute to override",
+    )
+    value: tuple[float, float, float] = Field(..., description="RGB color value")
 
 
 class RandomEnvironmentConfig(BaseModel):
@@ -112,6 +124,10 @@ class ObjectConfig(BaseModel):
     articulation_info: dict | None = Field(
         default=None, description="Articulation information of the object"
     )
+    reset_joint_positions: bool = Field(
+        default=True,
+        description="Whether to restore the articulation joint positions during scene reset",
+    )
 
 
 class GenerationConfig(BaseModel):
@@ -161,6 +177,9 @@ class DomainRandomizationConfig(BaseModel):
     )
     camera_randomization: dict[str, dict] | None = Field(
         default=None, description="Camera randomization configurations"
+    )
+    material_overrides: list[MaterialOverrideConfig] = Field(
+        default=[], description="Fixed material overrides applied after randomization"
     )
 
 
@@ -220,6 +239,13 @@ class SceneConfig(BaseModel):
     physics_scene_config: dict[str, Any] = Field(
         default={}, description="physicsScene configurations"
     )
+    particle_layout_references: dict[str, str] = Field(
+        default_factory=dict,
+        description=(
+            "Particle parent prim paths mapped to object IDs whose initial XY "
+            "layout translation was shared with those parents during recording"
+        ),
+    )
     preprocess_config: list[dict] = Field(
         default=[], description="Preprocess configurations"
     )
@@ -231,6 +257,13 @@ class SceneConfig(BaseModel):
     num_episode: int | None = Field(default=None, description="Number of episodes")
     num_test: int | None = Field(default=None, description="Number of tests")
     num_steps: int = Field(default=600, description="Number of steps")
+    preserve_score_on_invalid_state: bool = Field(
+        default=False,
+        description="Keep the existing metric score when invalid robot state ends evaluation",
+    )
+    warmup_steps: int = Field(
+        default=50, ge=0, description="Number of warmup steps before evaluation"
+    )
     instruction: str = Field(default="", description="Instruction")
     physics_dt: float = Field(default=1 / 30, description="physics_dt")
     rendering_dt: float = Field(default=1 / 30, description="physics_dt")

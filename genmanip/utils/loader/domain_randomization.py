@@ -20,7 +20,7 @@ from omni.isaac.core.prims import XFormPrim  # type: ignore
 from omni.isaac.core.robots.robot import Robot  # type: ignore
 from omni.isaac.core.utils.prims import get_prim_at_path, delete_prim  # type: ignore
 from omni.isaac.sensor import Camera  # type: ignore
-from pxr import Usd  # type: ignore
+from pxr import Gf, Sdf, Usd  # type: ignore
 
 from genmanip.core.scene.scene_config import LayoutConfig, ObjectConfig, SceneConfig
 from genmanip.utils.loader.asset_search import get_asset_search_root
@@ -821,6 +821,55 @@ def random_visuals(
             "asset_path": normalized_asset_path,
         }
     return result
+
+
+def set_shader_color(
+    stage: Usd.Stage,
+    prim_path: str,
+    color: tuple[float, float, float] | list[float],
+    attribute: str = "inputs:diffuseColor",
+) -> None:
+    """Set a shader color input on the current in-memory USD stage."""
+    path = Sdf.Path(prim_path)
+    if not path.IsAbsolutePath():
+        raise ValueError(f"Shader prim path must be absolute: {prim_path}")
+
+    prim = stage.GetPrimAtPath(path)
+    if not prim.IsValid():
+        raise RuntimeError(f"Shader prim does not exist: {prim_path}")
+
+    color_attr = prim.GetAttribute(attribute)
+    if not color_attr.IsValid() and attribute == "inputs:diffuseColor":
+        color_attr = prim.GetAttribute("inputs:diffuse_color")
+
+    if not color_attr.IsValid():
+        available = sorted(
+            attr.GetName()
+            for attr in prim.GetAttributes()
+            if "color" in attr.GetName().lower()
+        )
+        raise RuntimeError(
+            f"Shader color input {attribute!r} is missing on {prim_path}; "
+            f"available color attributes: {available}"
+        )
+
+    if len(color) != 3:
+        raise ValueError(f"Color must contain 3 values, got: {color}")
+
+    value = Gf.Vec3f(*(float(component) for component in color))
+    if not color_attr.Set(value):
+        raise RuntimeError(f"Failed to set {color_attr.GetPath()} to {value}")
+
+
+def apply_material_overrides(stage: Usd.Stage, scene_config: SceneConfig) -> None:
+    """Apply fixed material colors after scene recovery and randomization."""
+    for override in scene_config.domain_randomization.material_overrides:
+        set_shader_color(
+            stage=stage,
+            prim_path=override.prim_path,
+            attribute=override.attribute,
+            color=override.value,
+        )
 
 
 def reset_scene(scene: "Scene") -> None:

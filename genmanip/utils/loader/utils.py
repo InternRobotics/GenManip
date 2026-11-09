@@ -63,7 +63,15 @@ def reset_articulation_positions(scene: "Scene") -> None:
         return
     articulation_list = scene.articulation_list
     articulation_pose_list = scene.meta_infos["articulation_pose_list"]
+    skip_joint_position_reset = {
+        uid
+        for object_config in scene.scene_config.object_config.values()
+        if not object_config.reset_joint_positions
+        for uid in object_config.uid_list
+    }
     for articulation_id, articulation in articulation_list.items():
+        if articulation_id in skip_joint_position_reset:
+            continue
         if scene.articulation_data[articulation_id]["is_articulated"]:
             articulation_joint_positions = articulation_pose_list[articulation_id]
             articulation.set_joint_positions(articulation_joint_positions)

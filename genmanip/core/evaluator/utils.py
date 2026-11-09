@@ -421,6 +421,8 @@ class EpisodeRecorder:
     image_list: dict[str, list[Any]] = field(default_factory=dict)
     meta_record: dict[str, Any] = field(default_factory=dict)
     steps: int = 0
+    policy_inference_time_total_ms: float = 0.0
+    episode_steps: int = 0
 
     @classmethod
     def create(
@@ -449,6 +451,7 @@ class EpisodeRecorder:
             "joint_positions": [],
             "gripper_positions": [],
             "base_positions": [],
+            "ee_pose": [],
             "instruction": instruction,
             "model_output": [],
             "robot_id": None,
@@ -566,6 +569,8 @@ class EpisodeRecorder:
             self.meta_record["gripper_positions"].append(obs["state.gripper"])
         if "state.base" in obs:
             self.meta_record["base_positions"].append(obs["state.base"])
+        if "state.ee_pose" in obs:
+            self.meta_record["ee_pose"].append(obs["state.ee_pose"])
         if self.meta_record.get("robot_id") is None and "robot_id" in obs:
             self.meta_record["robot_id"] = obs["robot_id"]
         self.steps += 1
@@ -581,6 +586,7 @@ class EpisodeRecorder:
         episode_start_time: str,
         episode_end_time: str,
         metric_score: list,
+        episode_steps: int,
     ) -> dict[str, Any]:
         return {
             "traj_log_dir": self.traj_log_dir,
@@ -589,6 +595,8 @@ class EpisodeRecorder:
             "save_process": self.save_process,
             "image_list": self.image_list,
             "meta_record": self.meta_record,
+            "policy_inference_time_total_ms": self.policy_inference_time_total_ms,
+            "episode_steps": episode_steps,
             "score": score,
             "episode_start_time": episode_start_time,
             "episode_end_time": episode_end_time,
@@ -667,6 +675,12 @@ class EpisodeRecorder:
         save_dict_to_json_atomic(
             {
                 "score": score,
+                "policy_avg_inference_time_ms": (
+                    self.policy_inference_time_total_ms / self.episode_steps
+                    if self.episode_steps > 0
+                    else -1
+                ),
+                "steps": self.episode_steps,
                 "success_rate": 1 if abs(score - 1) < 1e-6 else 0,
                 "log_info": {
                     "episode_start_time": episode_start_time,
@@ -687,6 +701,8 @@ def finalize_episode_recorder_payload(payload: dict[str, Any]) -> None:
         save_process=bool(payload["save_process"]),
         image_list=payload["image_list"],
         meta_record=payload["meta_record"],
+        policy_inference_time_total_ms=float(payload["policy_inference_time_total_ms"]),
+        episode_steps=int(payload["episode_steps"]),
     )
     recorder.finalize(
         float(payload["score"]),

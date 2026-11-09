@@ -62,6 +62,18 @@ def decompose_affine_transform(
 
 
 def resolve_prim_local_transform(prim: Usd.Prim) -> UsdLocalTransform:
+    # Baked meshes can retain inactive xformOp attributes from their source layer.
+    # An explicitly empty order means identity, regardless of those attributes.
+    order_attr = prim.GetAttribute("xformOpOrder")
+    order = order_attr.Get() if order_attr else None
+    if order is not None and len(order) == 0:
+        return UsdLocalTransform(
+            translation=np.zeros(3, dtype=float),
+            scale=np.ones(3, dtype=float),
+            quat_wxyz=np.array([1.0, 0.0, 0.0, 0.0]),
+            rotation_matrix=np.eye(3, dtype=float),
+        )
+
     translation_attr = prim.GetAttribute("xformOp:translate").Get()
     scale_attr = prim.GetAttribute("xformOp:scale").Get()
     scale_units_resolve = prim.GetAttribute("xformOp:scale:unitsResolve").Get()

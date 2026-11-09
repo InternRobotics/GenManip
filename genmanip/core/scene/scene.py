@@ -18,6 +18,7 @@ from genmanip.core.robot.base import BaseEmbodiment
 from genmanip.core.robot.utils import RobotFactory
 from genmanip.core.scene.scene_config import SceneConfig
 from genmanip.utils.loader.scene import (
+    capture_particle_layout_references,
     clean_prim_velocity,
     create_camera_list,
     get_object_list,
@@ -155,6 +156,7 @@ class Scene:
             self.uuid, self.scene_xform, self.scene_config.table_uid
         )
         self.meta_infos["world_pose_list"] = collect_world_pose_list(self.object_list)
+        capture_particle_layout_references(self)
 
         # Load articulation data
         self.articulation_list = {}
